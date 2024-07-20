@@ -1,4 +1,4 @@
-import PatientCard from "@/components/PatentCard";
+import PatientCard from "@/components/PatientCard";
 
 export default function Home() {
     return (

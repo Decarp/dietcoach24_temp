@@ -1,4 +1,4 @@
-import PatientCard from "@/components/PatentCard";
+import PatientCard from "@/components/PatientCard";
 import dynamic from 'next/dynamic';
 
 const EnergyChartMacro = dynamic(() => import('@/components/purchases/analysis/EnergyChartMacro'), {
