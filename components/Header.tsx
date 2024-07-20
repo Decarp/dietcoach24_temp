@@ -35,8 +35,8 @@ export default function Header({ children }: { children: ReactNode }) {
   return (
     <>
       <div className="min-h-full">
-        <Disclosure as="nav" className="border-b border-gray-200 bg-white">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Disclosure as="nav">
+          <div className="bg-white border-x border-b border-gray-200 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <Link className="flex flex-shrink-0 items-center" href="/">
@@ -159,7 +159,7 @@ export default function Header({ children }: { children: ReactNode }) {
           </DisclosurePanel>
         </Disclosure>
 
-        <div className="mx-auto max-w-7xl">
+        <div className="h-[calc(100vh-64px)] bg-white border-x mx-auto max-w-7xl">
           {children}
         </div>
       </div>
