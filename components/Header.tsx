@@ -1,12 +1,13 @@
 'use client'
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, useMemo } from "react";
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { ShoppingCartIcon } from '@heroicons/react/24/solid'
 import { usePathname } from 'next/navigation';
 import { classNames } from "@/utils/classNames";
 import Link from "next/link";
+import Image from "next/image";
 
 const user = {
   name: 'Tom Cook',
@@ -14,9 +15,11 @@ const user = {
   imageUrl:
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
+
 const navigation = [
   { name: 'Patienten', href: '/patients' },
 ]
+
 const userNavigation = [
   { name: 'Abmelden', href: '#' },
 ]
@@ -24,10 +27,10 @@ const userNavigation = [
 export default function Header({ children }: { children: ReactNode }) {
   const currentPath = usePathname();
 
-  const updatedNavigation = navigation.map((item) => ({
+  const updatedNavigation = useMemo(() => navigation.map((item) => ({
     ...item,
-    current: usePathname().includes("patients"),
-  }));
+    current: currentPath.includes(item.href),
+  })), [currentPath]);
 
   return (
     <>
@@ -42,7 +45,7 @@ export default function Header({ children }: { children: ReactNode }) {
                 </Link>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                   {updatedNavigation.map((item) => (
-                    <a
+                    <Link
                       key={item.name}
                       href={item.href}
                       aria-current={item.current ? 'page' : undefined}
@@ -54,7 +57,7 @@ export default function Header({ children }: { children: ReactNode }) {
                       )}
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -74,7 +77,7 @@ export default function Header({ children }: { children: ReactNode }) {
                     <MenuButton className="relative flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
-                      <img alt="" src={user.imageUrl} className="h-8 w-8 rounded-full" />
+                      <Image alt="" src={user.imageUrl} className="h-8 w-8 rounded-full" width={32} height={32} />
                     </MenuButton>
                   </div>
                   <MenuItems
@@ -125,7 +128,7 @@ export default function Header({ children }: { children: ReactNode }) {
             <div className="border-t border-gray-200 pb-3 pt-4">
               <div className="flex items-center px-4">
                 <div className="flex-shrink-0">
-                  <img alt="" src={user.imageUrl} className="h-10 w-10 rounded-full" />
+                  <Image alt="" src={user.imageUrl} className="h-10 w-10 rounded-full" width={40} height={40} />
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium text-gray-800">{user.name}</div>

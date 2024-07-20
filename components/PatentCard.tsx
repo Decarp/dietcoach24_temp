@@ -16,8 +16,8 @@ export default function PatientCard() {
   const pathname = usePathname();
   const router = useRouter();
   const pathSegments = pathname.split("/");
-  const patientId = pathSegments[2]; // Assuming URL format is /patient/{id}/{tab}
-  const currentTab = pathSegments[3] || 'profile'; // Default to 'profile' tab if no tab is specified
+  const patientId = pathSegments[2];
+  const currentTab = pathSegments[3] || 'profile';
 
   const patient = patients.find((p) => p.id === patientId);
 
@@ -25,7 +25,7 @@ export default function PatientCard() {
     return <p>Patient not found</p>;
   }
 
-  const handleTabChange = (event) => {
+  const handleTabChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTab = event.target.value;
     router.push(`/patient/${patientId}/${selectedTab}`);
   };
