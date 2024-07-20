@@ -8,16 +8,20 @@ import {
 type DataEntry = {
     name: string;
     value: number;
-    metric: string;
+    metric: string
 };
 
 const data: DataEntry[] = [
-    { name: 'Kohlenhydrate', value: 600, metric: 'kcal' },
-    { name: 'Fette', value: 400, metric: 'kcal' },
-    { name: 'Proteine', value: 100, metric: 'kcal' },
+    { name: 'Getränke', value: 100, metric: 'kcal' },
+    { name: 'Früchte', value: 50, metric: 'kcal' },
+    { name: 'Getreide, Kartoffeln', value: 100, metric: 'kcal' },
+    { name: 'Öle, Fette, Saucen', value: 500, metric: 'kcal' },
+    { name: 'Verarbeitete Lebensmittel', value: 800, metric: 'kcal' },
+    { name: 'Proteinreiche Lebensmittel', value: 200, metric: 'kcal' },
+    { name: 'Gemüse', value: 200, metric: 'kcal' },
 ];
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28DFE', '#FEA28D', '#8DFFF4', '#FFD700'];
 
 const RADIAN = Math.PI / 180;
 
@@ -73,13 +77,13 @@ const renderCustomizedLabel = (props: any) => {
             <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
             <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">
                 {`${value} ${payload.metric} `}
-                <tspan fill="#999" fontSize="12" fontWeight="300">{`(${(percent * 100).toFixed(0)}%)`}</tspan>
+                <tspan fill="#999" fontSize="12" fontWeight="300">({(percent * 100).toFixed(0)}%)</tspan>
             </text>
         </>
     );
 };
 
-export default function EnergyChartMacro() {
+export default function EnergyChartCategories() {
     const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
     const handleClick = (index: number) => {
@@ -91,7 +95,7 @@ export default function EnergyChartMacro() {
     };
 
     return (
-        <div className='bg-white border p-4 rounded-lg' style={{ height: '310px' }}>
+        <div className='bg-white p-4 border rounded-lg' style={{ height: '350px' }}>
             <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                     <Pie
@@ -112,7 +116,7 @@ export default function EnergyChartMacro() {
                             <Cell
                                 key={`cell-${index}`}
                                 fill={COLORS[index % COLORS.length]}
-                                opacity={activeIndices.includes(index) ? 1 : 1}
+                                opacity={activeIndices.includes(index) ? 1 : 1}  // Bug: If I change opactiy to 0.5, and click on a section, the labels disappear for 1 second
                             />
                         ))}
                     </Pie>
