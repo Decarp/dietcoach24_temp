@@ -39,11 +39,28 @@ export default function Purchases() {
   };
 
   const handleBasketCheckboxChange = (basketId: any) => {
-    setCheckedBaskets((prevCheckedItems) =>
-      prevCheckedItems.includes(basketId)
-        ? prevCheckedItems.filter((item) => item !== basketId)
-        : [...prevCheckedItems, basketId]
-    );
+    if (checkedBaskets.includes(basketId)) {
+      // Deselect basket and its products
+      setCheckedBaskets((prevCheckedItems) =>
+        prevCheckedItems.filter((item) => item !== basketId)
+      );
+      setCheckedProducts((prevCheckedProducts) =>
+        prevCheckedProducts.filter(
+          (productId) =>
+            !Object.values(products)
+              .flat()
+              .some(
+                (product: any) =>
+                  product.basketId === basketId &&
+                  `${product.basketId},${product.productId}` ===
+                    productId.toString()
+              )
+        )
+      );
+    } else {
+      // Select basket
+      setCheckedBaskets((prevCheckedItems) => [...prevCheckedItems, basketId]);
+    }
   };
 
   const handleProductCheckboxChange = (uniqueId: any) => {
@@ -54,7 +71,6 @@ export default function Purchases() {
     );
   };
 
-  // TODO: Filter products based on checkedBaskets (basketId)
   const filteredProducts = Object.keys(products).reduce((acc: any, key) => {
     acc[key] = products[key].filter((product: any) =>
       checkedBaskets.includes(product.basketId)
