@@ -1,6 +1,7 @@
 import React from "react";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { classNames } from "@/utils/classNames";
+import BasketsHeader from "./BasketsHeader";
 
 const formatDate = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
@@ -44,17 +45,14 @@ const Baskets = ({
   const { numBaskets, numProducts, avgNutriScore } = calculateStats();
 
   return (
-    <div className="flex flex-col border-b border-gray-200 py-6 xl:w-64 xl:shrink-0 xl:border-b-0 xl:border-r">
-      <h2 className="text-xl font-semibold">Einkäufe</h2>
-      <h3 className="text-sm font-light mb-4 text-gray-500">
-        Wähle aus {Object.values(baskets).flat().length} Einkäufen
-      </h3>
+    <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-200 xl:w-64 xl:shrink-0 max-h-[calc(100vh-187px)]">
+      <BasketsHeader baskets={baskets} checkedBaskets={checkedBaskets} />
 
-      <div className="-ml-8">
+      <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
         <nav aria-label="Baskets List" className="overflow-y-auto">
           {Object.keys(baskets).map((letter) => (
             <div key={letter} className="relative">
-              <div className="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900">
+              <div className="pl-8 sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900">
                 <h3>{letter}</h3>
               </div>
               <ul role="list" className="divide-y divide-gray-100">
@@ -62,7 +60,7 @@ const Baskets = ({
                   <li
                     key={person.basketId}
                     className={classNames(
-                      "pl-6 flex items-center gap-x-4 px-3 py-5",
+                      "pl-8 flex items-center gap-x-4 px-3 py-5",
                       checkedBaskets.includes(person.basketId)
                         ? "bg-primary text-white"
                         : ""
@@ -100,7 +98,7 @@ const Baskets = ({
                     </div>
                     <input
                       type="checkbox"
-                      className="ml-auto mr-2 rounded-sm form-checkbox h-5 w-5 text-primary"
+                      className="h-4 w-4 mx-auto rounded border-gray-300 text-primary focus:ring-primary"
                       checked={checkedBaskets.includes(person.basketId)}
                       onChange={() =>
                         handleBasketCheckboxChange(person.basketId)
@@ -112,34 +110,6 @@ const Baskets = ({
             </div>
           ))}
         </nav>
-        <div className="px-3">
-          <h3 className="text-lg font-medium leading-6 text-gray-900">
-            Statistiken
-          </h3>
-          <p className="mt-1 text-sm text-gray-500">
-            {checkedBaskets.length > 0 ? (
-              <>
-                <span>{numBaskets} ausgewählte Körbe</span>
-                <br />
-                <span>{numProducts} ausgewählte Produkte</span>
-                <br />
-                <span>
-                  Durchschnittlicher Nutri-Score: {avgNutriScore.toFixed(2)}
-                </span>
-              </>
-            ) : (
-              <>
-                <span>{numBaskets} Körbe insgesamt</span>
-                <br />
-                <span>{numProducts} Produkte insgesamt</span>
-                <br />
-                <span>
-                  Durchschnittlicher Nutri-Score: {avgNutriScore.toFixed(2)}
-                </span>
-              </>
-            )}
-          </p>
-        </div>
       </div>
     </div>
   );
