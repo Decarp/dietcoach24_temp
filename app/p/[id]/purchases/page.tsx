@@ -35,7 +35,7 @@ export default function Purchases() {
 
   const handleTabChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTab = event.target.value;
-    router.push(`/patient/${patientId}/purchases?chart=${selectedTab}`);
+    router.push(`/p/${patientId}/purchases?chart=${selectedTab}`);
   };
 
   const handleBasketCheckboxChange = (basketId: any) => {
