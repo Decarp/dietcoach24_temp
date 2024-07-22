@@ -27,7 +27,7 @@ export default function PatientCard() {
 
   const handleTabChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTab = event.target.value;
-    router.push(`/patient/${patientId}/${selectedTab}`);
+    router.push(`/p/${patientId}/${selectedTab}`);
   };
 
   return (
@@ -70,7 +70,7 @@ export default function PatientCard() {
               {tabs.map((tab) => (
                 <a
                   key={tab.path}
-                  href={`/patient/${patientId}/${tab.path}`}
+                  href={`/p/${patientId}/${tab.path}`}
                   aria-current={tab.path === currentTab ? "page" : undefined}
                   className={classNames(
                     tab.path === currentTab
