@@ -2,14 +2,14 @@ import React from "react";
 import dynamic from "next/dynamic";
 import AnalysisHeader from "@/components/purchases/analysis/AnalysisHeader";
 
-const EnergyChartMacro = dynamic(
-  () => import("@/components/purchases/analysis/EnergyChartMacro"),
+const ChartMacro = dynamic(
+  () => import("@/components/purchases/analysis/ChartMacro"),
   {
     ssr: false,
   }
 );
-const EnergyChartCategories = dynamic(
-  () => import("@/components/purchases/analysis/EnergyChartCategories"),
+const ChartMacroCategories = dynamic(
+  () => import("@/components/purchases/analysis/ChartMacroCategories"),
   {
     ssr: false,
   }
@@ -52,12 +52,12 @@ const Analysis = ({
                   <h4 className="text-lg font-medium mb-2">
                     Energiegehalt aus Makronährstoffen
                   </h4>
-                  <EnergyChartMacro />
+                  <ChartMacro />
                   <br />
                   <h4 className="text-lg font-medium mb-2">
                     Energiegehalt aus Lebensmittelkategorien
                   </h4>
-                  <EnergyChartCategories />
+                  <ChartMacroCategories />
                 </>
               )}
               {currentTab === "macro" && (
