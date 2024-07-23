@@ -1,15 +1,18 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import AnalysisHeader from "@/components/purchases/analysis/AnalysisHeader";
+import { getChartMacroData } from "@/api/getChartMacroData";
+import { MetricOptions } from "@/utils/mapChartMacroResponse";
+import { getChartMacroCategoriesData } from "@/api/getChartMacroCategoriesData";
 
-const EnergyChartMacro = dynamic(
-  () => import("@/components/purchases/analysis/EnergyChartMacro"),
+const ChartMacro = dynamic(
+  () => import("@/components/purchases/analysis/ChartMacro"),
   {
     ssr: false,
   }
 );
-const EnergyChartCategories = dynamic(
-  () => import("@/components/purchases/analysis/EnergyChartCategories"),
+const ChartMacroCategories = dynamic(
+  () => import("@/components/purchases/analysis/ChartMacroCategories"),
   {
     ssr: false,
   }
@@ -21,12 +24,14 @@ const Analysis = ({
   handleTabChange,
   checkedBaskets,
   baskets,
+  filteredProducts,
 }: {
   currentTab: string;
   setCurrentTab: any;
   handleTabChange: any;
   checkedBaskets: number[];
   baskets: any;
+  filteredProducts: any;
 }) => {
   const tabs = [
     { name: "Energiegehalt", path: "energy" },
@@ -34,6 +39,13 @@ const Analysis = ({
     { name: "Mikronährstoffe", path: "micro" },
     { name: "Nutri-Score", path: "nutri" },
   ];
+
+  const selectedMetric: MetricOptions = "kcal";
+  const chartMacroData = getChartMacroData(checkedBaskets, selectedMetric);
+  const chartMacroCategoriesData = getChartMacroCategoriesData(
+    checkedBaskets,
+    selectedMetric
+  );
 
   return (
     <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
@@ -52,12 +64,12 @@ const Analysis = ({
                   <h4 className="text-lg font-medium mb-2">
                     Energiegehalt aus Makronährstoffen
                   </h4>
-                  <EnergyChartMacro />
+                  <ChartMacro data={chartMacroData} />
                   <br />
                   <h4 className="text-lg font-medium mb-2">
                     Energiegehalt aus Lebensmittelkategorien
                   </h4>
-                  <EnergyChartCategories />
+                  <ChartMacroCategories data={chartMacroCategoriesData} />
                 </>
               )}
               {currentTab === "macro" && (
@@ -89,11 +101,6 @@ const Analysis = ({
             </p>
           )}
         </div>
-
-        {/* DEBUG: Selected basketIds */}
-        {/* <p className="mt-4">
-        [DEBUG] Selected basketIds: {checkedBaskets.join(", ")}
-      </p> */}
       </div>
     </div>
   );

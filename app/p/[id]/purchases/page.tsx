@@ -12,6 +12,9 @@ import { mapProductsResponse } from "@/utils/mapProductsResponse";
 import { productsResponse } from "@/data/productsResponse";
 import { basketsResponse } from "@/data/basketsResponse";
 
+export type CheckedBaskets = number[];
+export type CheckedProducts = string[]; // ["basketId,productId"]
+
 export default function Purchases() {
   const baskets = mapBasketsResponse(basketsResponse);
   const products = mapProductsResponse(productsResponse, basketsResponse);
@@ -26,8 +29,8 @@ export default function Purchases() {
   const [currentTab, setCurrentTab] = useState(
     searchParams.get("chart") || "energy"
   );
-  const [checkedBaskets, setCheckedBaskets] = useState<number[]>([]);
-  const [checkedProducts, setCheckedProducts] = useState<number[]>([]);
+  const [checkedBaskets, setCheckedBaskets] = useState<CheckedBaskets>([]);
+  const [checkedProducts, setCheckedProducts] = useState<CheckedProducts>([]);
 
   useEffect(() => {
     setCurrentTab(searchParams.get("chart") || "energy");
@@ -98,6 +101,7 @@ export default function Purchases() {
             handleTabChange={handleTabChange}
             checkedBaskets={checkedBaskets}
             baskets={baskets}
+            filteredProducts={filteredProducts}
           />
         </div>
         <Products
