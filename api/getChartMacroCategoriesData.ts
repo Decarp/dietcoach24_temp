@@ -1,13 +1,26 @@
 import { SelectedBasketIds } from "@/app/p/[id]/purchases/page";
-import { chartMacroCategoriesResponse } from "@/data/chartMacroCategoriesResponse";
-import { basketProductsResponseNew } from "@/data/basketProductsResponseNew";
-import {
-  mapChartMacroCategoriesResponse,
-  MetricOptions,
-  ChartMacroCategoriesResponse,
-} from "@/utils/mapChartMacroCategoriesResponse";
+import { basketProductsResponse } from "@/data/basketProductsResponse";
 
-const MOCK = true;
+export type ChartMacroCategoriesResponse = {
+  name: {
+    de: string;
+    en: string;
+  };
+  values: {
+    kcal: number;
+    g: number;
+  };
+};
+
+export type ChartMacroCategoriesData = {
+  name: string;
+  value: number;
+  metric: string;
+};
+
+export type MetricOptions = "kcal" | "g";
+
+export type LanguageOptions = "en" | "de";
 
 const aggregateCategories = (
   filteredProducts: any[]
@@ -29,29 +42,37 @@ const aggregateCategories = (
     categories[categoryName].values.g += protein + fat + carbs + fiber;
   });
 
-  return Object.values(categories);
+  // sort categories ascending alphabetically
+  return Object.values(categories).sort((a, b) =>
+    a.name.en.localeCompare(b.name.en)
+  );
+};
+
+const mapChartMacroCategoriesResponse = (
+  chartMacroCategoriesResponse: ChartMacroCategoriesResponse[],
+  selectedMetric: MetricOptions,
+  language: LanguageOptions = "de"
+): ChartMacroCategoriesData[] => {
+  return chartMacroCategoriesResponse.map((item) => ({
+    name: item.name[language],
+    value: item.values[selectedMetric],
+    metric: selectedMetric,
+  }));
 };
 
 export const getChartMacroCategoriesData = (
   checkedBaskets: SelectedBasketIds,
   selectedMetric: MetricOptions
-) => {
-  if (MOCK) {
-    const filteredProducts = basketProductsResponseNew
-      .filter((basket) => checkedBaskets.includes(basket.basketId))
-      .flatMap((basket) => basket.products);
+): ChartMacroCategoriesData[] => {
+  const filteredProducts = basketProductsResponse
+    .filter((basket) => checkedBaskets.includes(basket.basketId))
+    .flatMap((basket) => basket.products);
 
-    const dynamicChartMacroCategoriesResponse =
-      aggregateCategories(filteredProducts);
-
-    return mapChartMacroCategoriesResponse(
-      dynamicChartMacroCategoriesResponse,
-      selectedMetric
-    );
-  }
+  const dynamicChartMacroCategoriesResponse =
+    aggregateCategories(filteredProducts);
 
   return mapChartMacroCategoriesResponse(
-    chartMacroCategoriesResponse,
+    dynamicChartMacroCategoriesResponse,
     selectedMetric
   );
 };
