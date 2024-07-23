@@ -2,6 +2,7 @@ import React from "react";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { classNames } from "@/utils/classNames";
 import BasketsHeader from "./BasketsHeader";
+import { SelectedBasketIds } from "@/app/p/[id]/purchases/page";
 
 const formatDate = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
@@ -13,40 +14,16 @@ const formatDate = (timestamp: number) => {
 
 const Baskets = ({
   baskets,
-  checkedBaskets,
+  selectedBasketIds,
   handleBasketCheckboxChange,
 }: {
   baskets: any;
-  checkedBaskets: any;
+  selectedBasketIds: SelectedBasketIds;
   handleBasketCheckboxChange: any;
 }) => {
-  const calculateStats = () => {
-    const selectedBaskets =
-      checkedBaskets.length > 0
-        ? Object.values(baskets)
-            .flat()
-            .filter((basket: any) => checkedBaskets.includes(basket.basketId))
-        : Object.values(baskets).flat();
-
-    const numBaskets: number = selectedBaskets.length;
-    const numProducts: number = selectedBaskets.reduce(
-      (acc: number, basket: any) => acc + basket.num_products,
-      0
-    );
-    const avgNutriScore: number =
-      selectedBaskets.reduce(
-        (acc: number, basket: any) => acc + basket.avg_nutriscore,
-        0
-      ) / numBaskets;
-
-    return { numBaskets, numProducts, avgNutriScore };
-  };
-
-  const { numBaskets, numProducts, avgNutriScore } = calculateStats();
-
   return (
     <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-200 xl:w-64 xl:shrink-0 max-h-[calc(100vh-187px)]">
-      <BasketsHeader baskets={baskets} checkedBaskets={checkedBaskets} />
+      <BasketsHeader baskets={baskets} selectedBasketIds={selectedBasketIds} />
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
         <nav aria-label="Baskets List" className="overflow-y-auto">
@@ -61,7 +38,7 @@ const Baskets = ({
                     key={person.basketId}
                     className={classNames(
                       "pl-8 flex items-center gap-x-4 px-3 py-5",
-                      checkedBaskets.includes(person.basketId)
+                      selectedBasketIds.includes(person.basketId)
                         ? "bg-primary text-white"
                         : ""
                     )}
@@ -69,7 +46,7 @@ const Baskets = ({
                     <ShoppingCartIcon
                       className={classNames(
                         "border border-gray-200 h-12 w-12 p-2 flex-none rounded-md",
-                        checkedBaskets.includes(person.basketId)
+                        selectedBasketIds.includes(person.basketId)
                           ? "bg-white text-primary"
                           : "bg-gray-50 text-primary"
                       )}
@@ -78,7 +55,7 @@ const Baskets = ({
                       <p
                         className={classNames(
                           "text-base font-semibold leading-6",
-                          checkedBaskets.includes(person.basketId)
+                          selectedBasketIds.includes(person.basketId)
                             ? "text-white"
                             : "text-gray-900"
                         )}
@@ -88,7 +65,7 @@ const Baskets = ({
                       <p
                         className={classNames(
                           "truncate text-sm leading-5",
-                          checkedBaskets.includes(person.basketId)
+                          selectedBasketIds.includes(person.basketId)
                             ? "text-white"
                             : "text-gray-500"
                         )}
@@ -99,7 +76,7 @@ const Baskets = ({
                     <input
                       type="checkbox"
                       className="h-4 w-4 mx-auto rounded border-gray-300 text-primary focus:ring-primary"
-                      checked={checkedBaskets.includes(person.basketId)}
+                      checked={selectedBasketIds.includes(person.basketId)}
                       onChange={() =>
                         handleBasketCheckboxChange(person.basketId)
                       }

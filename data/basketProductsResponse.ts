@@ -1,4 +1,4 @@
-export const productsResponse = [
+export const basketProductsResponse = [
   {
     1234: [
       {
