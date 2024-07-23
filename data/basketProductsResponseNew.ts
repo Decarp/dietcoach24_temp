@@ -1,9 +1,8 @@
-export const productsResponseNew = [
+export const basketProductsResponseNew = [
   {
     basketId: 1234,
     index: 1,
     timestamp: 1716336000,
-    num_products: 1,
     avg_nutriscore: 2,
     products: [
       {
@@ -26,7 +25,6 @@ export const productsResponseNew = [
     basketId: 2345,
     index: 2,
     timestamp: 1719532800,
-    num_products: 1,
     avg_nutriscore: 4,
     products: [
       {
@@ -49,7 +47,6 @@ export const productsResponseNew = [
     basketId: 3456,
     index: 3,
     timestamp: 1720656000,
-    num_products: 1,
     avg_nutriscore: 2,
     products: [
       {
@@ -72,7 +69,6 @@ export const productsResponseNew = [
     basketId: 4567,
     index: 4,
     timestamp: 1721174400,
-    num_products: 2,
     avg_nutriscore: 3,
     products: [
       {
@@ -109,7 +105,6 @@ export const productsResponseNew = [
     basketId: 5678,
     index: 5,
     timestamp: 1721782400,
-    num_products: 1,
     avg_nutriscore: 4,
     products: [
       {
@@ -132,7 +127,6 @@ export const productsResponseNew = [
     basketId: 6789,
     index: 6,
     timestamp: 1722390400,
-    num_products: 1,
     avg_nutriscore: 2,
     products: [
       {
@@ -155,7 +149,6 @@ export const productsResponseNew = [
     basketId: 7890,
     index: 7,
     timestamp: 1722998400,
-    num_products: 1,
     avg_nutriscore: 3,
     products: [
       {
@@ -178,7 +171,6 @@ export const productsResponseNew = [
     basketId: 8901,
     index: 8,
     timestamp: 1723606400,
-    num_products: 1,
     avg_nutriscore: 4,
     products: [
       {
@@ -201,7 +193,6 @@ export const productsResponseNew = [
     basketId: 9012,
     index: 9,
     timestamp: 1724214400,
-    num_products: 1,
     avg_nutriscore: 2,
     products: [
       {
@@ -224,7 +215,6 @@ export const productsResponseNew = [
     basketId: 10123,
     index: 10,
     timestamp: 1724822400,
-    num_products: 1,
     avg_nutriscore: 3,
     products: [
       {
@@ -247,7 +237,6 @@ export const productsResponseNew = [
     basketId: 11134,
     index: 11,
     timestamp: 1725430400,
-    num_products: 1,
     avg_nutriscore: 4,
     products: [
       {
@@ -270,7 +259,6 @@ export const productsResponseNew = [
     basketId: 12145,
     index: 12,
     timestamp: 1726038400,
-    num_products: 1,
     avg_nutriscore: 2,
     products: [
       {
@@ -293,7 +281,6 @@ export const productsResponseNew = [
     basketId: 13156,
     index: 13,
     timestamp: 1726646400,
-    num_products: 1,
     avg_nutriscore: 3,
     products: [
       {
@@ -316,7 +303,6 @@ export const productsResponseNew = [
     basketId: 14167,
     index: 14,
     timestamp: 1727254400,
-    num_products: 1,
     avg_nutriscore: 4,
     products: [
       {
@@ -339,7 +325,6 @@ export const productsResponseNew = [
     basketId: 15178,
     index: 15,
     timestamp: 1727862400,
-    num_products: 1,
     avg_nutriscore: 2,
     products: [
       {
@@ -362,7 +347,6 @@ export const productsResponseNew = [
     basketId: 16189,
     index: 16,
     timestamp: 1728470400,
-    num_products: 1,
     avg_nutriscore: 3,
     products: [
       {
@@ -385,7 +369,6 @@ export const productsResponseNew = [
     basketId: 17200,
     index: 17,
     timestamp: 1729078400,
-    num_products: 3,
     avg_nutriscore: 4,
     products: [
       {
@@ -436,7 +419,6 @@ export const productsResponseNew = [
     basketId: 18211,
     index: 18,
     timestamp: 1729686400,
-    num_products: 2,
     avg_nutriscore: 2,
     products: [
       {
@@ -454,18 +436,18 @@ export const productsResponseNew = [
         fiber: 2,
       },
       {
-        productId: 22,
-        name: "Reis",
-        nutriscore: 2,
+        productId: 25,
+        name: "Linsensuppe",
+        nutriscore: 3,
         category: {
-          de: "Getreide",
-          en: "Grains",
+          de: "Proteinreiche Lebensmittel",
+          en: "Protein-rich foods",
         },
-        kcal: 130,
-        protein: 2,
-        fat: 0,
-        carbs: 28,
-        fiber: 1,
+        kcal: 200,
+        protein: 10,
+        fat: 3,
+        carbs: 25,
+        fiber: 5,
       },
     ],
   },
@@ -473,7 +455,6 @@ export const productsResponseNew = [
     basketId: 19222,
     index: 19,
     timestamp: 1730294400,
-    num_products: 3,
     avg_nutriscore: 3,
     products: [
       {

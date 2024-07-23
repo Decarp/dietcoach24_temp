@@ -1,18 +1,21 @@
+import { SelectedBasketIds } from "@/app/p/[id]/purchases/page";
 import React from "react";
 
 const BasketsHeader = ({
   baskets,
-  checkedBaskets,
+  selectedBasketIds,
 }: {
   baskets: any;
-  checkedBaskets: any;
+  selectedBasketIds: SelectedBasketIds;
 }) => {
   const calculateStats = () => {
     const selectedBaskets =
-      checkedBaskets.length > 0
+      selectedBasketIds.length > 0
         ? Object.values(baskets)
             .flat()
-            .filter((basket: any) => checkedBaskets.includes(basket.basketId))
+            .filter((basket: any) =>
+              selectedBasketIds.includes(basket.basketId)
+            )
         : Object.values(baskets).flat();
 
     const numBaskets: number = selectedBaskets.length;

@@ -9,15 +9,69 @@ import Baskets from "@/components/purchases/baskets/Baskets";
 import Analysis from "@/components/purchases/analysis/Analysis";
 import { mapBasketsResponse } from "@/utils/mapBasketsResponse";
 import { mapProductsResponse } from "@/utils/mapProductsResponse";
-import { productsResponse } from "@/data/productsResponse";
 import { basketsResponse } from "@/data/basketsResponse";
+import { basketProductsResponse } from "@/data/basketProductsResponse";
+import { getBaskets } from "@/api/getBaskets";
+import { getBasketProducts } from "@/api/getBasketProducts";
 
-export type CheckedBaskets = number[];
-export type CheckedProducts = string[]; // ["basketId,productId"]
+export type Basket = {
+  basketId: number;
+  index: number;
+  timestamp: number;
+  avg_nutriscore: number;
+};
+
+export type Product = {
+  productId: number;
+  name: string;
+  nutriscore: number;
+  category: {
+    de: string;
+    en: string;
+  };
+  kcal: number;
+  protein: number;
+  fat: number;
+  carbs: number;
+  fiber: number;
+};
+
+export type BasketProduct = {
+  basketId: number;
+  index: number;
+  timestamp: number;
+  avg_nutriscore: number;
+  products: Product[];
+};
+
+export type BasketProductFlat = {
+  basketId: number;
+  basketIndex: number;
+  basketTimestamp: number;
+  productId: number;
+  name: string;
+  nutriscore: number;
+  category: {
+    de: string;
+    en: string;
+  };
+  kcal: number;
+  protein: number;
+  fat: number;
+  carbs: number;
+  fiber: number;
+};
+
+export type SelectedBasketIds = number[];
+
+export type SelectedBasketProductId = {
+  basketId: number;
+  productId: number;
+};
 
 export default function Purchases() {
-  const baskets = mapBasketsResponse(basketsResponse);
-  const products = mapProductsResponse(productsResponse, basketsResponse);
+  const baskets = getBaskets();
+  const basketsMapped = mapBasketsResponse(basketsResponse);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -29,8 +83,12 @@ export default function Purchases() {
   const [currentTab, setCurrentTab] = useState(
     searchParams.get("chart") || "energy"
   );
-  const [checkedBaskets, setCheckedBaskets] = useState<CheckedBaskets>([]);
-  const [checkedProducts, setCheckedProducts] = useState<CheckedProducts>([]);
+  const [selectedBasketIds, setSelectedBasketIds] = useState<SelectedBasketIds>(
+    []
+  );
+  const [selectedBasketProductIds, setSelectedBasketProductIds] = useState<
+    SelectedBasketProductId[]
+  >([]);
 
   useEffect(() => {
     setCurrentTab(searchParams.get("chart") || "energy");
@@ -42,44 +100,57 @@ export default function Purchases() {
   };
 
   const handleBasketCheckboxChange = (basketId: any) => {
-    if (checkedBaskets.includes(basketId)) {
+    if (selectedBasketIds.includes(basketId)) {
       // Deselect basket and its products
-      setCheckedBaskets((prevCheckedItems) =>
+      setSelectedBasketIds((prevCheckedItems) =>
         prevCheckedItems.filter((item) => item !== basketId)
       );
-      setCheckedProducts((prevCheckedProducts) =>
-        prevCheckedProducts.filter(
-          (productId) =>
-            !Object.values(products)
-              .flat()
-              .some(
-                (product: any) =>
-                  product.basketId === basketId &&
-                  `${product.basketId},${product.productId}` ===
-                    productId.toString()
-              )
-        )
+      setSelectedBasketProductIds((prevCheckedProducts) =>
+        prevCheckedProducts.filter((product) => product.basketId !== basketId)
       );
     } else {
       // Select basket
-      setCheckedBaskets((prevCheckedItems) => [...prevCheckedItems, basketId]);
+      setSelectedBasketIds((prevCheckedItems) => [
+        ...prevCheckedItems,
+        basketId,
+      ]);
     }
   };
 
-  const handleProductCheckboxChange = (uniqueId: any) => {
-    setCheckedProducts((prevCheckedItems) =>
-      prevCheckedItems.includes(uniqueId)
-        ? prevCheckedItems.filter((item) => item !== uniqueId)
-        : [...prevCheckedItems, uniqueId]
+  const handleProductCheckboxChange = (
+    selectedBasketProductId: SelectedBasketProductId
+  ) => {
+    setSelectedBasketProductIds((prevCheckedItems) =>
+      prevCheckedItems.some(
+        (item) =>
+          item.basketId === selectedBasketProductId.basketId &&
+          item.productId === selectedBasketProductId.productId
+      )
+        ? prevCheckedItems.filter(
+            (item) =>
+              item.basketId !== selectedBasketProductId.basketId ||
+              item.productId !== selectedBasketProductId.productId
+          )
+        : [...prevCheckedItems, selectedBasketProductId]
     );
   };
 
-  const filteredProducts = Object.keys(products).reduce((acc: any, key) => {
-    acc[key] = products[key].filter((product: any) =>
-      checkedBaskets.includes(product.basketId)
-    );
-    return acc;
-  }, {});
+  const basketProducts = getBasketProducts(selectedBasketIds);
+  const filteredBasketProducts = basketProducts.filter((basket) =>
+    selectedBasketIds.includes(basket.basketId)
+  );
+  const filteredBasketProductsFlat = filteredBasketProducts.flatMap(
+    (basket) => {
+      return basket.products.map((product) => {
+        return {
+          basketId: basket.basketId,
+          basketIndex: basket.index,
+          basketTimestamp: basket.timestamp,
+          ...product,
+        };
+      });
+    }
+  );
 
   if (!patient) {
     return <p>Patient not found</p>;
@@ -91,24 +162,22 @@ export default function Purchases() {
       <div className="mx-auto w-full max-w-7xl lg:flex">
         <div className="flex-1 xl:flex">
           <Baskets
-            baskets={baskets}
-            checkedBaskets={checkedBaskets}
+            baskets={basketsMapped}
+            selectedBasketIds={selectedBasketIds}
             handleBasketCheckboxChange={handleBasketCheckboxChange}
           />
           <Analysis
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             handleTabChange={handleTabChange}
-            checkedBaskets={checkedBaskets}
-            baskets={baskets}
-            filteredProducts={filteredProducts}
+            selectedBasketIds={selectedBasketIds}
           />
         </div>
         <Products
-          filteredProducts={filteredProducts}
-          checkedProducts={checkedProducts}
+          filteredBasketProductsFlat={filteredBasketProductsFlat}
+          selectedBasketProductIds={selectedBasketProductIds}
           handleProductCheckboxChange={handleProductCheckboxChange}
-          checkedBaskets={checkedBaskets}
+          selectedBasketIds={selectedBasketIds}
         />
       </div>
     </main>

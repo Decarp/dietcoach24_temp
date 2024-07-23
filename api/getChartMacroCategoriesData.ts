@@ -1,6 +1,6 @@
-import { CheckedBaskets } from "@/app/p/[id]/purchases/page";
+import { SelectedBasketIds } from "@/app/p/[id]/purchases/page";
 import { chartMacroCategoriesResponse } from "@/data/chartMacroCategoriesResponse";
-import { productsResponseNew } from "@/data/productsResponseNew";
+import { basketProductsResponseNew } from "@/data/basketProductsResponseNew";
 import {
   mapChartMacroCategoriesResponse,
   MetricOptions,
@@ -33,11 +33,11 @@ const aggregateCategories = (
 };
 
 export const getChartMacroCategoriesData = (
-  checkedBaskets: CheckedBaskets,
+  checkedBaskets: SelectedBasketIds,
   selectedMetric: MetricOptions
 ) => {
   if (MOCK) {
-    const filteredProducts = productsResponseNew
+    const filteredProducts = basketProductsResponseNew
       .filter((basket) => checkedBaskets.includes(basket.basketId))
       .flatMap((basket) => basket.products);
 

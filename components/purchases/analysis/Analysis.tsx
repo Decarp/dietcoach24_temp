@@ -18,32 +18,29 @@ const ChartMacroCategories = dynamic(
   }
 );
 
+const tabs = [
+  { name: "Energiegehalt", path: "energy" },
+  { name: "Makronährstoffe", path: "macro" },
+  { name: "Mikronährstoffe", path: "micro" },
+  { name: "Nutri-Score", path: "nutri" },
+];
+
 const Analysis = ({
   currentTab,
   setCurrentTab,
   handleTabChange,
-  checkedBaskets,
-  baskets,
-  filteredProducts,
+  selectedBasketIds,
 }: {
   currentTab: string;
   setCurrentTab: any;
   handleTabChange: any;
-  checkedBaskets: number[];
-  baskets: any;
-  filteredProducts: any;
+  selectedBasketIds: number[];
 }) => {
-  const tabs = [
-    { name: "Energiegehalt", path: "energy" },
-    { name: "Makronährstoffe", path: "macro" },
-    { name: "Mikronährstoffe", path: "micro" },
-    { name: "Nutri-Score", path: "nutri" },
-  ];
-
   const selectedMetric: MetricOptions = "kcal";
-  const chartMacroData = getChartMacroData(checkedBaskets, selectedMetric);
+
+  const chartMacroData = getChartMacroData(selectedBasketIds, selectedMetric);
   const chartMacroCategoriesData = getChartMacroCategoriesData(
-    checkedBaskets,
+    selectedBasketIds,
     selectedMetric
   );
 
@@ -56,7 +53,7 @@ const Analysis = ({
       />
       <div className="shadow-inner -mx-6">
         <div className="flex-1 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
-          {checkedBaskets.length > 0 ? (
+          {selectedBasketIds.length > 0 ? (
             <>
               {currentTab === "energy" && (
                 <>
