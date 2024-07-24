@@ -1,7 +1,19 @@
 import React, { useState } from "react";
-import { CakeIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  CakeIcon,
+} from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+} from "@headlessui/react";
 import { classNames } from "@/utils/classNames";
 import ProductsHeader from "@/components/purchases/products/ProductsHeader";
 import {
@@ -19,6 +31,21 @@ const formatDate = (timestamp: number) => {
   });
 };
 
+const foodCategories = [
+  { value: "Getränke", label: "Getränke" },
+  { value: "Früchte", label: "Früchte" },
+  { value: "Getreide", label: "Getreide" },
+  {
+    value: "Verarbeitete Lebensmittel",
+    label: "Verarbeitete Lebensmittel",
+  },
+  {
+    value: "Proteinreiche Lebensmittel",
+    label: "Proteinreiche Lebensmittel",
+  },
+  { value: "Gemüse", label: "Gemüse" },
+];
+
 const Products = ({
   filteredBasketProductsFlat,
   selectedBasketProductIds,
@@ -31,7 +58,8 @@ const Products = ({
   selectedBasketIds: SelectedBasketIds;
 }) => {
   const [sortCriteria, setSortCriteria] = useState("Einkaufsdatum");
-  const [sortOrder, setSortOrder] = useState("Aufsteigend");
+  const [ascending, setAscending] = useState(true);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const isProductSelected = (productId: number, basketId: number) =>
     selectedBasketProductIds.some(
@@ -68,7 +96,7 @@ const Products = ({
           bValue = b.basketIndex;
       }
 
-      if (sortOrder === "Aufsteigend") {
+      if (ascending) {
         return aValue - bValue;
       } else {
         return bValue - aValue;
@@ -78,8 +106,24 @@ const Products = ({
     return sortedProducts;
   };
 
-  const sortedProducts = sortProducts(filteredBasketProductsFlat);
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategories((prevCategories) =>
+      prevCategories.includes(category)
+        ? prevCategories.filter((c) => c !== category)
+        : [...prevCategories, category]
+    );
+  };
 
+  const filteredProducts =
+    selectedCategories.length > 0
+      ? filteredBasketProductsFlat.filter((product) =>
+          selectedCategories.includes(product.category.de)
+        )
+      : [];
+
+  console.log("selectedCategories 'Products':", selectedCategories);
+
+  const sortedProducts = sortProducts(filteredProducts);
   return (
     <div className="pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-200 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 max-h-[calc(100vh-187px)]">
       <ProductsHeader
@@ -87,7 +131,43 @@ const Products = ({
         selectedBasketIds={selectedBasketIds}
       />
 
-      <div className="px-6 pt-1 pb-2 flex gap-x-8 items-center">
+      <div className="px-6 -mt-2 pb-2 flex gap-x-8 items-center">
+        <div>
+          <Popover className="relative inline-block text-left">
+            <div>
+              <PopoverButton className="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                <span>Filter</span>
+                <ChevronDownIcon
+                  aria-hidden="true"
+                  className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                />
+              </PopoverButton>
+            </div>
+
+            <PopoverPanel
+              transition
+              className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+            >
+              <form className="space-y-4">
+                {foodCategories.map((option) => (
+                  <div key={option.value} className="flex items-center">
+                    <input
+                      value={option.value}
+                      type="checkbox"
+                      checked={selectedCategories.includes(option.value)}
+                      onChange={() => handleCategoryChange(option.value)}
+                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    />
+                    <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
+                      {option.label}
+                    </label>
+                  </div>
+                ))}
+              </form>
+            </PopoverPanel>
+          </Popover>
+        </div>
+
         <div>
           <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -137,33 +217,16 @@ const Products = ({
         </div>
 
         <div>
-          <Menu as="div" className="relative inline-block text-left">
-            <div>
-              <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                {sortOrder === "Aufsteigend" ? "Aufsteigend" : "Absteigend"}
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                />
-              </MenuButton>
-            </div>
-            <MenuItems className="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
-              <div className="py-1">
-                {["Aufsteigend", "Absteigend"].map((option) => (
-                  <MenuItem key={option}>
-                    {({ active }) => (
-                      <button
-                        className="w-full text-left block px-4 py-2 text-sm font-medium text-gray-900 data-[focus]:bg-gray-100"
-                        onClick={() => setSortOrder(option)}
-                      >
-                        {option}
-                      </button>
-                    )}
-                  </MenuItem>
-                ))}
-              </div>
-            </MenuItems>
-          </Menu>
+          <button
+            className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+            onClick={() => setAscending(!ascending)}
+          >
+            {ascending ? (
+              <ArrowUpIcon className="h-5 w-5 text-gray-400" />
+            ) : (
+              <ArrowDownIcon className="h-5 w-5 text-gray-400" />
+            )}
+          </button>
         </div>
       </div>
 
