@@ -1,4 +1,4 @@
-import { ChartMacroCategoriesResponse } from "@/utils/mapChartMacroCategoriesResponse";
+import { ChartMacroCategoriesResponse } from "@/api/getChartMacroCategoriesData";
 
 export const chartMacroCategoriesResponse: ChartMacroCategoriesResponse[] = [
   {

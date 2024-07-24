@@ -1,8 +1,8 @@
 import { SelectedBasketIds } from "@/app/p/[id]/purchases/page";
-import { basketProductsResponseNew } from "@/data/basketProductsResponseNew";
+import { basketProductsResponse } from "@/data/basketProductsResponse";
 
 export const getBasketProducts = (selectedBasketIds: SelectedBasketIds) => {
-  return basketProductsResponseNew.filter((basket) =>
+  return basketProductsResponse.filter((basket) =>
     selectedBasketIds.includes(basket.basketId)
   );
 };

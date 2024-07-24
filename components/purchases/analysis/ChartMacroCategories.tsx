@@ -1,9 +1,9 @@
 "use client";
 
-import { ChartMacroCategoriesData } from "@/utils/mapChartMacroCategoriesResponse";
+import { ChartMacroCategoriesData } from "@/api/getChartMacroCategoriesData";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
 import { renderCustomizedChartLabel } from "@/utils/renderCustomizedChartLabel";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   PieChart,
   Pie,
@@ -30,6 +30,14 @@ export default function ChartMacroCategories({
   data: ChartMacroCategoriesData[];
 }) {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
+
+  useEffect(() => {
+    const selectedCategories = activeIndices.map((index) => data[index]?.name);
+    console.log(
+      "selectedCategories 'ChartMacroCategories':",
+      selectedCategories
+    );
+  }, [activeIndices, data]);
 
   const handleClick = (index: number) => {
     if (activeIndices.includes(index)) {

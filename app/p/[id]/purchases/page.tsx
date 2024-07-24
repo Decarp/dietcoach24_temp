@@ -8,9 +8,7 @@ import Products from "@/components/purchases/products/Products";
 import Baskets from "@/components/purchases/baskets/Baskets";
 import Analysis from "@/components/purchases/analysis/Analysis";
 import { mapBasketsResponse } from "@/utils/mapBasketsResponse";
-import { mapProductsResponse } from "@/utils/mapProductsResponse";
 import { basketsResponse } from "@/data/basketsResponse";
-import { basketProductsResponse } from "@/data/basketProductsResponse";
 import { getBaskets } from "@/api/getBaskets";
 import { getBasketProducts } from "@/api/getBasketProducts";
 
