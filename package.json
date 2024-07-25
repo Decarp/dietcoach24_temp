@@ -13,10 +13,12 @@
     "@heroicons/react": "^2.1.5",
     "@tailwindcss/forms": "^0.5.7",
     "date-fns": "^3.6.0",
+    "immer": "^10.1.1",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
-    "recharts": "^2.12.7"
+    "recharts": "^2.12.7",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/node": "^20",
