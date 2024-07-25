@@ -1,6 +1,7 @@
 "use client";
 
 import { ChartMacroCategoriesData } from "@/api/getChartMacroCategoriesData";
+import { useCounterStore } from "@/providers/useStoreProvider";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
 import { renderCustomizedChartLabel } from "@/utils/renderCustomizedChartLabel";
 import React, { useEffect, useState } from "react";
@@ -30,21 +31,28 @@ export default function ChartMacroCategories({
   data: ChartMacroCategoriesData[];
 }) {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
+  const { selectedCats, setSelectedCats } = useCounterStore((state) => state);
+
+  // TODO: There can be orphans left in selectedCats if a basket was deselected
 
   useEffect(() => {
-    const selectedCategories = activeIndices.map((index) => data[index]?.name);
-    console.log(
-      "selectedCategories 'ChartMacroCategories':",
-      selectedCategories
-    );
-  }, [activeIndices, data]);
+    const updatedIndices = data
+      .map((item, index) => (selectedCats.includes(item.name) ? index : -1))
+      .filter((index) => index !== -1);
+    setActiveIndices(updatedIndices);
+  }, [selectedCats, data]);
 
   const handleClick = (index: number) => {
+    let updatedIndices;
     if (activeIndices.includes(index)) {
-      setActiveIndices(activeIndices.filter((i) => i !== index));
+      updatedIndices = activeIndices.filter((i) => i !== index);
     } else {
-      setActiveIndices([...activeIndices, index]);
+      updatedIndices = [...activeIndices, index];
     }
+    setActiveIndices(updatedIndices);
+
+    const selectedCategories = updatedIndices.map((i) => data[i]?.name);
+    setSelectedCats(selectedCategories);
   };
 
   return (

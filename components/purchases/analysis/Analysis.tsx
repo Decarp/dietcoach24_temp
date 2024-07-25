@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import AnalysisHeader from "@/components/purchases/analysis/AnalysisHeader";
 import { getChartMacroData, MetricOptions } from "@/api/getChartMacroData";
 import { getChartMacroCategoriesData } from "@/api/getChartMacroCategoriesData";
+import { useCounterStore } from "@/providers/useStoreProvider";
 
 const ChartMacro = dynamic(
   () => import("@/components/purchases/analysis/ChartMacro"),
@@ -42,6 +43,8 @@ const Analysis = ({
     selectedBasketIds,
     selectedMetric
   );
+
+  const { selectedCats, setSelectedCats } = useCounterStore((state) => state);
 
   return (
     <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
