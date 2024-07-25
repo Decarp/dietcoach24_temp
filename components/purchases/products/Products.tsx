@@ -24,6 +24,7 @@ import {
   SelectedBasketProductId,
 } from "@/app/p/[id]/purchases/page";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import RecommendationDrawer from "./RecommendationDrawer";
 
 const formatDate = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
@@ -63,6 +64,7 @@ const Products = ({
   const [sortCriteria, setSortCriteria] = useState("Einkaufsdatum");
   const [ascending, setAscending] = useState(true);
   const { selectedCats, setSelectedCats } = useCounterStore((state) => state);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const isProductSelected = (productId: number, basketId: number) =>
     selectedBasketProductIds.some(
@@ -298,12 +300,14 @@ const Products = ({
         <div className="flex justify-end p-6">
           <button
             type="button"
+            onClick={() => setDrawerOpen(true)}
             className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             Alternative Produkte empfehlen
           </button>
         </div>
       </div>
+      <RecommendationDrawer open={drawerOpen} setOpen={setDrawerOpen} />
     </div>
   );
 };
