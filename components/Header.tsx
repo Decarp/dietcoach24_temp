@@ -1,42 +1,50 @@
-'use client'
+"use client";
 
 import React, { ReactNode, useMemo } from "react";
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { ShoppingCartIcon } from '@heroicons/react/24/solid'
-import { usePathname } from 'next/navigation';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon } from "@heroicons/react/24/solid";
+import { usePathname } from "next/navigation";
 import { classNames } from "@/utils/classNames";
 import Link from "next/link";
 import Image from "next/image";
 
 const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
+  name: "Tom Cook",
+  email: "tom@example.com",
   imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+};
 
-const navigation = [
-  { name: 'Patienten', href: '/patients' },
-]
+const navigation = [{ name: "Patienten", href: "/patients" }];
 
-const userNavigation = [
-  { name: 'Abmelden', href: '#' },
-]
+const userNavigation = [{ name: "Abmelden", href: "#" }];
 
 export default function Header({ children }: { children: ReactNode }) {
   const currentPath = usePathname();
 
-  const updatedNavigation = useMemo(() => navigation.map((item) => ({
-    ...item,
-    current: currentPath.includes(item.href),
-  })), [currentPath]);
+  const updatedNavigation = useMemo(
+    () =>
+      navigation.map((item) => ({
+        ...item,
+        current: currentPath.includes(item.href),
+      })),
+    [currentPath]
+  );
 
   return (
     <>
       <div className="min-h-full">
-        <Disclosure as="nav" className="border-b border-gray-200 bg-white">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Disclosure as="nav">
+          <div className="bg-white border-x border-b border-gray-200 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <Link className="flex flex-shrink-0 items-center" href="/">
@@ -48,12 +56,12 @@ export default function Header({ children }: { children: ReactNode }) {
                     <Link
                       key={item.name}
                       href={item.href}
-                      aria-current={item.current ? 'page' : undefined}
+                      aria-current={item.current ? "page" : undefined}
                       className={classNames(
                         item.current
-                          ? 'border-primary text-primary'
-                          : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                        'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium',
+                          ? "border-primary text-primary"
+                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                        "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium"
                       )}
                     >
                       {item.name}
@@ -77,7 +85,13 @@ export default function Header({ children }: { children: ReactNode }) {
                     <MenuButton className="relative flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
-                      <Image alt="" src={user.imageUrl} className="h-8 w-8 rounded-full" width={32} height={32} />
+                      <Image
+                        alt=""
+                        src={user.imageUrl}
+                        className="h-8 w-8 rounded-full"
+                        width={32}
+                        height={32}
+                      />
                     </MenuButton>
                   </div>
                   <MenuItems
@@ -86,7 +100,10 @@ export default function Header({ children }: { children: ReactNode }) {
                   >
                     {userNavigation.map((item) => (
                       <MenuItem key={item.name}>
-                        <a href={item.href} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                        <a
+                          href={item.href}
+                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                        >
                           {item.name}
                         </a>
                       </MenuItem>
@@ -99,8 +116,14 @@ export default function Header({ children }: { children: ReactNode }) {
                 <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Open main menu</span>
-                  <Bars3Icon aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden" />
-                  <XMarkIcon aria-hidden="true" className="hidden h-6 w-6 group-data-[open]:block" />
+                  <Bars3Icon
+                    aria-hidden="true"
+                    className="block h-6 w-6 group-data-[open]:hidden"
+                  />
+                  <XMarkIcon
+                    aria-hidden="true"
+                    className="hidden h-6 w-6 group-data-[open]:block"
+                  />
                 </DisclosureButton>
               </div>
             </div>
@@ -113,12 +136,12 @@ export default function Header({ children }: { children: ReactNode }) {
                   key={item.name}
                   as="a"
                   href={item.href}
-                  aria-current={item.current ? 'page' : undefined}
+                  aria-current={item.current ? "page" : undefined}
                   className={classNames(
                     item.current
-                      ? 'border-primary bg-green-50 text-green-700'
-                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800',
-                    'block border-l-4 py-2 pl-3 pr-4 text-base font-medium',
+                      ? "border-primary bg-green-50 text-green-700"
+                      : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800",
+                    "block border-l-4 py-2 pl-3 pr-4 text-base font-medium"
                   )}
                 >
                   {item.name}
@@ -128,11 +151,21 @@ export default function Header({ children }: { children: ReactNode }) {
             <div className="border-t border-gray-200 pb-3 pt-4">
               <div className="flex items-center px-4">
                 <div className="flex-shrink-0">
-                  <Image alt="" src={user.imageUrl} className="h-10 w-10 rounded-full" width={40} height={40} />
+                  <Image
+                    alt=""
+                    src={user.imageUrl}
+                    className="h-10 w-10 rounded-full"
+                    width={40}
+                    height={40}
+                  />
                 </div>
                 <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">{user.name}</div>
-                  <div className="text-sm font-medium text-gray-500">{user.email}</div>
+                  <div className="text-base font-medium text-gray-800">
+                    {user.name}
+                  </div>
+                  <div className="text-sm font-medium text-gray-500">
+                    {user.email}
+                  </div>
                 </div>
                 <button
                   type="button"
@@ -159,10 +192,8 @@ export default function Header({ children }: { children: ReactNode }) {
           </DisclosurePanel>
         </Disclosure>
 
-        <div className="mx-auto max-w-7xl">
-          {children}
-        </div>
+        <div className="mx-auto max-w-7xl">{children}</div>
       </div>
     </>
-  )
+  );
 }

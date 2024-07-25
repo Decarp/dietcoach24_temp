@@ -2,20 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Potentially delete all below if it interferes */
-
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 214, 219, 220;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --background-end-rgb: 249, 250, 251;
 }
 
 body {
@@ -25,7 +13,7 @@ body {
       transparent,
       rgb(var(--background-end-rgb))
     )
-    rgb(var(--background-start-rgb));
+    rgb(var(--background-end-rgb));
 }
 
 @layer utilities {
