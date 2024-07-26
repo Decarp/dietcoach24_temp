@@ -2,24 +2,31 @@ import { createStore } from "zustand/vanilla";
 
 export type CounterState = {
   count: number;
-  selectedCats: string[];
+  selectedCategories: string[];
+  selectedSortCriteria: string;
 };
 
 export type CounterActions = {
   decrementCount: () => void;
   incrementCount: () => void;
-  setSelectedCats: (cats: string[]) => void;
+  setSelectedCategories: (cats: string[]) => void;
+  setSelectedSortCriteria: (criteria: string) => void;
 };
 
 export type CounterStore = CounterState & CounterActions;
 
 export const initCounterStore = (): CounterState => {
-  return { count: new Date().getFullYear(), selectedCats: [] };
+  return {
+    count: new Date().getFullYear(),
+    selectedCategories: [],
+    selectedSortCriteria: "Einkaufsdatum",
+  };
 };
 
 export const defaultInitState: CounterState = {
   count: 0,
-  selectedCats: [],
+  selectedCategories: [],
+  selectedSortCriteria: "Einkaufsdatum",
 };
 
 export const createCounterStore = (
@@ -29,6 +36,9 @@ export const createCounterStore = (
     ...initState,
     decrementCount: () => set((state) => ({ count: state.count - 1 })),
     incrementCount: () => set((state) => ({ count: state.count + 1 })),
-    setSelectedCats: (cats: string[]) => set(() => ({ selectedCats: cats })),
+    setSelectedCategories: (cats: string[]) =>
+      set(() => ({ selectedCategories: cats })),
+    setSelectedSortCriteria: (criteria: string) =>
+      set(() => ({ selectedSortCriteria: criteria })),
   }));
 };
