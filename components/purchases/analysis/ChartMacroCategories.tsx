@@ -31,16 +31,20 @@ export default function ChartMacroCategories({
   data: ChartMacroCategoriesData[];
 }) {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
-  const { selectedCats, setSelectedCats } = useCounterStore((state) => state);
+  const { selectedCategories, setSelectedCategories } = useCounterStore(
+    (state) => state
+  );
 
   // TODO: There can be orphans left in selectedCats if a basket was deselected
 
   useEffect(() => {
     const updatedIndices = data
-      .map((item, index) => (selectedCats.includes(item.name) ? index : -1))
+      .map((item, index) =>
+        selectedCategories.includes(item.name) ? index : -1
+      )
       .filter((index) => index !== -1);
     setActiveIndices(updatedIndices);
-  }, [selectedCats, data]);
+  }, [selectedCategories, data]);
 
   const handleClick = (index: number) => {
     let updatedIndices;
@@ -51,8 +55,8 @@ export default function ChartMacroCategories({
     }
     setActiveIndices(updatedIndices);
 
-    const selectedCategories = updatedIndices.map((i) => data[i]?.name);
-    setSelectedCats(selectedCategories);
+    const selectedChartCategories = updatedIndices.map((i) => data[i]?.name);
+    setSelectedCategories(selectedChartCategories);
   };
 
   return (

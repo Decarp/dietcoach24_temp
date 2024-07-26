@@ -1,29 +1,41 @@
 "use client";
 
 import { ChartMacroData } from "@/api/getChartMacroData";
+import { useCounterStore } from "@/providers/useStoreProvider";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
 import { renderCustomizedChartLabel } from "@/utils/renderCustomizedChartLabel";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   PieChart,
   Pie,
   Cell,
   Tooltip,
   Legend,
-  Sector,
   ResponsiveContainer,
 } from "recharts";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 export default function ChartMacro({ data }: { data: ChartMacroData[] }) {
-  const [activeIndices, setActiveIndices] = useState<number[]>([]);
+  const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
+  const { selectedSortCriteria, setSelectedSortCriteria } = useCounterStore(
+    (state) => state
+  );
+
+  useEffect(() => {
+    const updatedIndex = data.findIndex(
+      (item) => item.name === selectedSortCriteria
+    );
+    setActiveIndex(updatedIndex !== -1 ? updatedIndex : undefined);
+  }, [selectedSortCriteria, data]);
 
   const handleClick = (index: number) => {
-    if (activeIndices.includes(index)) {
-      setActiveIndices(activeIndices.filter((i) => i !== index));
+    if (activeIndex === index) {
+      setActiveIndex(undefined);
+      setSelectedSortCriteria("Einkaufsdatum");
     } else {
-      setActiveIndices([...activeIndices, index]);
+      setActiveIndex(index);
+      setSelectedSortCriteria(data[index]?.name);
     }
   };
 
@@ -32,7 +44,7 @@ export default function ChartMacro({ data }: { data: ChartMacroData[] }) {
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
-            activeIndex={activeIndices}
+            activeIndex={activeIndex}
             activeShape={renderActiveChartShape}
             data={data}
             cx="50%"
@@ -50,7 +62,7 @@ export default function ChartMacro({ data }: { data: ChartMacroData[] }) {
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
-                opacity={activeIndices.includes(index) ? 1 : 1}
+                opacity={activeIndex === index ? 1 : 1}
               />
             ))}
           </Pie>
