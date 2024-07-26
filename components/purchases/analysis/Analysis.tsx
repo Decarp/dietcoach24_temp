@@ -44,7 +44,9 @@ const Analysis = ({
     selectedMetric
   );
 
-  const { selectedCats, setSelectedCats } = useCounterStore((state) => state);
+  const { selectedCategories, setSelectedCategories } = useCounterStore(
+    (state) => state
+  );
 
   return (
     <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">

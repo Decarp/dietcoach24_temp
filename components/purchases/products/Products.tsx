@@ -70,8 +70,8 @@ const Products = ({
 }) => {
   const [ascending, setAscending] = useState(true);
   const {
-    selectedCats,
-    setSelectedCats,
+    selectedCategories,
+    setSelectedCategories,
     selectedSortCriteria,
     setSelectedSortCriteria,
   } = useCounterStore((state) => state);
@@ -136,15 +136,15 @@ const Products = ({
   };
 
   const handleCategoryChange = (category: string) => {
-    selectedCats.includes(category)
-      ? setSelectedCats(selectedCats.filter((i) => i !== category))
-      : setSelectedCats([...selectedCats, category]);
+    selectedCategories.includes(category)
+      ? setSelectedCategories(selectedCategories.filter((i) => i !== category))
+      : setSelectedCategories([...selectedCategories, category]);
   };
 
   const filteredProducts =
-    selectedCats.length > 0
+    selectedCategories.length > 0
       ? filteredBasketProductsFlat.filter((product) =>
-          selectedCats.includes(product.category.de)
+          selectedCategories.includes(product.category.de)
         )
       : [];
 
@@ -180,7 +180,7 @@ const Products = ({
                     <input
                       value={option.value}
                       type="checkbox"
-                      checked={selectedCats.includes(option.value)}
+                      checked={selectedCategories.includes(option.value)}
                       onChange={() => handleCategoryChange(option.value)}
                       className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                     />
@@ -250,7 +250,7 @@ const Products = ({
       </div>
 
       <div className="-mr-6 flex-1 overflow-y-auto min-h-0 min-h-80 shadow-inner">
-        {selectedCats.length === 0 && (
+        {selectedCategories.length === 0 && (
           <p className="px-6 mt-6 text-gray-500">
             Bitte wählen Sie mindestens eine Lebensmittelkategorie aus, um die
             Artikel anzuzeigen.
