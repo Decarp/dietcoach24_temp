@@ -30,11 +30,11 @@ _Last updated: Jul 21, 2024_
 }
 ```
 
-## /dietcoach/backend/dietitian/participants
+## /dietcoach/backend/dietician/participants
 
 > Status: TODO ⚙️
 
-> Priority: 4
+> Priority: 3
 
 > Reuse: "/users"
 
@@ -54,6 +54,7 @@ Authentication: string
         "lastName": "Wallace",
         ...
     },
+    ...
 ]
 ```
 
@@ -61,7 +62,7 @@ Authentication: string
 
 > Status: TODO ⚙️
 
-> Priority: 5
+> Priority: 4
 
 > Reuse: "/user-survey"
 
@@ -87,7 +88,7 @@ Participant-Id: string
 
 > Status: TODO ⚙️
 
-> Priority: 6
+> Priority: 5
 
 > Reuse: "/profile"
 
@@ -156,6 +157,7 @@ End-Timestamp: number (EoD)
         "numProducts": 2,
         "avgNutriscore": 3,
     },
+    ...
 ]
 ```
 
@@ -163,7 +165,7 @@ End-Timestamp: number (EoD)
 
 > Status: TODO ⚙️
 
-> Priority: 3
+> Priority: 2
 
 > Reuse: "/shopping-history"
 
@@ -187,21 +189,28 @@ Participant-Id: string
     "basketId1": [
         {
             "productId": 1,
-            "name": "Brot",
-            "nutriscore": 3,
-            "category": {
-                "de": "Getreide",
-                "en": "Grains"
+            "name": "Bio Vollkornbrot 350g",
+            "nutriscore": 2,
+            "majorCategory": {
+                "de": "Getreideprodukte & Kartoffeln",
+                "en": "Grain products & potatoes"
             },
+            "minorCategory": {
+                "de": "Brot",
+                "en": "Brot",
+            }
             "quantity": 10,
             "kcal": 250,
-            "protein": 10,
-            "fat": 5,
-            "carbs": 40,
+            "protein": 8,
+            "fat": 2,
+            "carbohydrates": 60,
             "fiber": 5,
+            "salt": 1,
             "imageUrl": "https://www.image.com/image.jpg"
         },
-    ]
+        ...
+    ],
+    ...
 ]
 ```
 
