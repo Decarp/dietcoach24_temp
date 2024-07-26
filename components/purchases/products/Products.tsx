@@ -1,6 +1,4 @@
-// src/components/purchases/products/Products.tsx
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -50,6 +48,15 @@ const foodCategories = [
   { value: "Gemüse", label: "Gemüse" },
 ];
 
+const sortCriteria = [
+  "Einkaufsdatum",
+  "Kalorien",
+  "Proteine",
+  "Fette",
+  "Kohlenhydrate",
+  "Nahrungsfasern",
+];
+
 const Products = ({
   filteredBasketProductsFlat,
   selectedBasketProductIds,
@@ -61,10 +68,27 @@ const Products = ({
   handleProductCheckboxChange: any;
   selectedBasketIds: SelectedBasketIds;
 }) => {
-  const [sortCriteria, setSortCriteria] = useState("Einkaufsdatum");
   const [ascending, setAscending] = useState(true);
-  const { selectedCats, setSelectedCats } = useCounterStore((state) => state);
+  const {
+    selectedCats,
+    setSelectedCats,
+    selectedSortCriteria,
+    setSelectedSortCriteria,
+  } = useCounterStore((state) => state);
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    if (
+      selectedSortCriteria !== "Einkaufsdatum" &&
+      selectedSortCriteria !== "Kalorien" &&
+      selectedSortCriteria !== "Protein" &&
+      selectedSortCriteria !== "Fett" &&
+      selectedSortCriteria !== "Kohlenhydrate" &&
+      selectedSortCriteria !== "Nahrungsfasern"
+    ) {
+      setSelectedSortCriteria(selectedSortCriteria);
+    }
+  }, [selectedSortCriteria, setSelectedSortCriteria]);
 
   const isProductSelected = (productId: number, basketId: number) =>
     selectedBasketProductIds.some(
@@ -75,7 +99,7 @@ const Products = ({
     const sortedProducts = [...products].sort((a, b) => {
       let aValue, bValue;
 
-      switch (sortCriteria) {
+      switch (selectedSortCriteria) {
         case "Kalorien":
           aValue = a.kcal;
           bValue = b.kcal;
@@ -125,8 +149,6 @@ const Products = ({
       : [];
 
   const sortedProducts = sortProducts(filteredProducts);
-
-  console.log(selectedCats);
 
   return (
     <div className="pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-200 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 max-h-[calc(100vh-187px)]">
@@ -186,14 +208,7 @@ const Products = ({
 
             <MenuItems className="absolute left-0 z-10 mt-2 w-50 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
               <div className="py-1">
-                {[
-                  "Einkaufsdatum",
-                  "Kalorien",
-                  "Protein",
-                  "Fett",
-                  "Kohlenhydrate",
-                  "Nahrungsfasern",
-                ].map((option) => (
+                {sortCriteria.map((option) => (
                   <MenuItem key={option}>
                     {({ active }) => (
                       <div className=" ml-4 flex items-center">
@@ -201,13 +216,13 @@ const Products = ({
                           type="radio"
                           name="sortCriteria"
                           value={option}
-                          checked={sortCriteria === option}
-                          onChange={() => setSortCriteria(option)}
+                          checked={selectedSortCriteria === option}
+                          onChange={() => setSelectedSortCriteria(option)}
                           className="h-4 w-4 text-primary focus:ring-primary border-gray-300"
                         />
                         <label
                           className="block px-4 py-2 text-sm font-medium text-gray-900 data-[focus]:bg-gray-100"
-                          onClick={() => setSortCriteria(option)}
+                          onClick={() => setSelectedSortCriteria(option)}
                         >
                           {option}
                         </label>
