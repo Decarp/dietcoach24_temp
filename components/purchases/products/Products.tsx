@@ -123,7 +123,7 @@ const Products = () => {
       {overlayVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
       )}
-      <ProductsHeader filteredProducts={filteredBasketProductsFlat} />
+      <ProductsHeader sortedProducts={sortedProducts} />
 
       <div className="px-6 -mt-2 pb-2 flex gap-x-8 items-center">
         <div>
