@@ -23,6 +23,7 @@ import {
 } from "@/app/p/[id]/purchases/page";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import RecommendationDrawer from "./RecommendationDrawer";
+import { categories } from "@/data/categories"; // Assuming categories are imported from "@/data/categories"
 
 const formatDate = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
@@ -33,20 +34,10 @@ const formatDate = (timestamp: number) => {
   });
 };
 
-const foodCategories = [
-  { value: "Getränke", label: "Getränke" },
-  { value: "Früchte", label: "Früchte" },
-  { value: "Getreide", label: "Getreide" },
-  {
-    value: "Verarbeitete Lebensmittel",
-    label: "Verarbeitete Lebensmittel",
-  },
-  {
-    value: "Proteinreiche Lebensmittel",
-    label: "Proteinreiche Lebensmittel",
-  },
-  { value: "Gemüse", label: "Gemüse" },
-];
+const foodCategories = Object.keys(categories.de).map((key) => ({
+  value: key,
+  label: key,
+}));
 
 const sortCriteria = [
   "Einkaufsdatum",
@@ -82,8 +73,8 @@ const Products = ({
     if (
       selectedSortCriteria !== "Einkaufsdatum" &&
       selectedSortCriteria !== "Kalorien" &&
-      selectedSortCriteria !== "Protein" &&
-      selectedSortCriteria !== "Fett" &&
+      selectedSortCriteria !== "Proteine" &&
+      selectedSortCriteria !== "Fette" &&
       selectedSortCriteria !== "Kohlenhydrate" &&
       selectedSortCriteria !== "Nahrungsfasern"
     ) {
@@ -102,24 +93,24 @@ const Products = ({
 
       switch (selectedSortCriteria) {
         case "Kalorien":
-          aValue = a.kcal;
-          bValue = b.kcal;
+          aValue = a.nutrients.kcal;
+          bValue = b.nutrients.kcal;
           break;
-        case "Protein":
-          aValue = a.protein;
-          bValue = b.protein;
+        case "Proteine":
+          aValue = a.nutrients.proteins;
+          bValue = b.nutrients.proteins;
           break;
-        case "Fett":
-          aValue = a.fat;
-          bValue = b.fat;
+        case "Fette":
+          aValue = a.nutrients.fats;
+          bValue = b.nutrients.fats;
           break;
         case "Kohlenhydrate":
-          aValue = a.carbs;
-          bValue = b.carbs;
+          aValue = a.nutrients.carbohydrates;
+          bValue = b.nutrients.carbohydrates;
           break;
         case "Nahrungsfasern":
-          aValue = a.fiber;
-          bValue = b.fiber;
+          aValue = a.nutrients.fibers;
+          bValue = b.nutrients.fibers;
           break;
         default:
           aValue = a.basketIndex;
@@ -145,9 +136,9 @@ const Products = ({
   const filteredProducts =
     selectedCategories.length > 0
       ? filteredBasketProductsFlat.filter((product) =>
-          selectedCategories.includes(product.category.de)
+          selectedCategories.includes(product.dietCoachCategoryL1.de)
         )
-      : [];
+      : []; // or `filteredBasketProductsFlat` if all categories should be shown per default
 
   const sortedProducts = sortProducts(filteredProducts);
 
@@ -303,7 +294,7 @@ const Products = ({
                       selected ? "text-white" : "text-gray-500"
                     )}
                   >
-                    {product.nutriscore}
+                    {product.nutrients.nutriScore}
                   </p>
                 </div>
                 <input

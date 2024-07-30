@@ -16,29 +16,43 @@ export type Basket = {
   basketId: number;
   index: number;
   timestamp: number;
-  avg_nutriscore: number;
+  avgNutriScore: string;
+  avgFsaScore: number;
+};
+
+export type Nutrients = {
+  nutriScore: string;
+  fsaScore: number;
+  kcal: number;
+  proteins: number;
+  fats: number;
+  carbohydrates: number;
+  fibers: number;
+  salt: number;
 };
 
 export type Product = {
   productId: number;
   name: string;
-  nutriscore: number;
-  category: {
+  quantity: number;
+  nutrients: Nutrients;
+  dietCoachCategoryL1: {
     de: string;
     en: string;
   };
-  kcal: number;
-  protein: number;
-  fat: number;
-  carbs: number;
-  fiber: number;
+  dietCoachCategoryL2: {
+    de: string;
+    en: string;
+  };
+  imageUrl: string;
 };
 
 export type BasketProduct = {
   basketId: number;
   index: number;
   timestamp: number;
-  avg_nutriscore: number;
+  avgNutriScore: string;
+  avgFsaScore: number;
   products: Product[];
 };
 
@@ -48,16 +62,17 @@ export type BasketProductFlat = {
   basketTimestamp: number;
   productId: number;
   name: string;
-  nutriscore: number;
-  category: {
+  quantity: number;
+  nutrients: Nutrients;
+  dietCoachCategoryL1: {
     de: string;
     en: string;
   };
-  kcal: number;
-  protein: number;
-  fat: number;
-  carbs: number;
-  fiber: number;
+  dietCoachCategoryL2: {
+    de: string;
+    en: string;
+  };
+  imageUrl: string;
 };
 
 export type SelectedBasketIds = number[];

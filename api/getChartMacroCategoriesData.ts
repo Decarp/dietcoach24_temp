@@ -28,18 +28,20 @@ const aggregateCategories = (
   const categories: { [key: string]: ChartMacroCategoriesResponse } = {};
 
   filteredProducts.forEach((product) => {
-    const { category, kcal, protein, fat, carbs, fiber } = product;
-    const categoryName = category.en;
+    const { dietCoachCategoryL1, nutrients } = product;
+    const { kcal, proteins, fats, carbohydrates, fibers } = nutrients;
+    const categoryName = dietCoachCategoryL1.en;
 
     if (!categories[categoryName]) {
       categories[categoryName] = {
-        name: category,
+        name: dietCoachCategoryL1,
         values: { kcal: 0, g: 0 },
       };
     }
 
     categories[categoryName].values.kcal += kcal;
-    categories[categoryName].values.g += protein + fat + carbs + fiber;
+    categories[categoryName].values.g +=
+      proteins + fats + carbohydrates + fibers;
   });
 
   // sort categories ascending alphabetically
@@ -76,7 +78,7 @@ export const getChartMacroCategoriesData = (
   selectedMetric: MetricOptions // Client side selection
 ): ChartMacroCategoriesData[] => {
   const data = fetchData(selectedBasketIds);
-  const filteredProducts = basketProductsResponse
+  const filteredProducts = data
     .filter((basket) => selectedBasketIds.includes(basket.basketId))
     .flatMap((basket) => basket.products);
 
