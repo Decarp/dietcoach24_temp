@@ -200,7 +200,8 @@ Participant-Id: string
                 name: "Bio Vollkornbrot 350g",
                 quantity: 10,
                 nutrients: {
-                    nutriScore: 2,
+                    nutriScore: "A",
+                    fsaScore: 3,
                     kcal: 250,
                     proteins: 8,
                     fats: 2,
@@ -460,7 +461,8 @@ Product-Id: number
     name: "Bio Vollkornbrot 350g",
     quantity: 10,
     nutrients: {
-        nutriScore: 2,
+        nutriScore: "A",
+        fsaScore: 3,
         kcal: 250,
         proteins: 8,
         fats: 2,
@@ -511,7 +513,8 @@ NutriScore-Cutoff: string (optional, default: "C", includes C)
             name: "Bio Vollkornbrot 350g",
             quantity: 10,
             nutrients: {
-                nutriScore: 2,
+                nutriScore: "A",
+                fsaScore: 3,
                 kcal: 250,
                 proteins: 8,
                 fats: 2,
