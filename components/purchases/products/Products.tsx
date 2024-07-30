@@ -76,6 +76,7 @@ const Products = ({
     setSelectedSortCriteria,
   } = useCounterStore((state) => state);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
 
   useEffect(() => {
     if (
@@ -150,8 +151,16 @@ const Products = ({
 
   const sortedProducts = sortProducts(filteredProducts);
 
+  const handleDrawerOpen = (open: boolean) => {
+    setDrawerOpen(open);
+    setOverlayVisible(open);
+  };
+
   return (
-    <div className="pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-200 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 max-h-[calc(100vh-187px)]">
+    <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-200 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 max-h-[calc(100vh-187px)]">
+      {overlayVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
+      )}
       <ProductsHeader
         filteredProducts={filteredBasketProductsFlat}
         selectedBasketIds={selectedBasketIds}
@@ -315,14 +324,14 @@ const Products = ({
         <div className="flex justify-end p-6">
           <button
             type="button"
-            onClick={() => setDrawerOpen(true)}
+            onClick={() => handleDrawerOpen(true)}
             className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             Alternative Produkte empfehlen
           </button>
         </div>
       </div>
-      <RecommendationDrawer open={drawerOpen} setOpen={setDrawerOpen} />
+      <RecommendationDrawer open={drawerOpen} setOpen={handleDrawerOpen} />
     </div>
   );
 };

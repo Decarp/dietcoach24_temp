@@ -1,5 +1,5 @@
-import { SelectedBasketIds } from "@/app/p/[id]/purchases/page";
 import { basketProductsResponse } from "@/data/basketProductsResponse";
+import type { SelectedBasketIds } from "@/app/p/[id]/purchases/page";
 
 export type ChartMacroCategoriesResponse = {
   name: {
@@ -60,12 +60,24 @@ const mapChartMacroCategoriesResponse = (
   }));
 };
 
+const fetchData = (
+  selectedBasketIds: SelectedBasketIds // API body parameter
+) => {
+  const authentication = ""; // via local storage
+  const participantId = ""; // via url param
+  const body = {
+    basketIds: selectedBasketIds, // list of basketIds
+  };
+  return basketProductsResponse;
+};
+
 export const getChartMacroCategoriesData = (
-  checkedBaskets: SelectedBasketIds,
-  selectedMetric: MetricOptions
+  selectedBasketIds: SelectedBasketIds, // API body parameter
+  selectedMetric: MetricOptions // Client side selection
 ): ChartMacroCategoriesData[] => {
+  const data = fetchData(selectedBasketIds);
   const filteredProducts = basketProductsResponse
-    .filter((basket) => checkedBaskets.includes(basket.basketId))
+    .filter((basket) => selectedBasketIds.includes(basket.basketId))
     .flatMap((basket) => basket.products);
 
   const dynamicChartMacroCategoriesResponse =
