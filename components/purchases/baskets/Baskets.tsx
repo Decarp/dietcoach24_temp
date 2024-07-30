@@ -7,8 +7,8 @@ import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import BasketsHeader from "./BasketsHeader";
 
 const Baskets = () => {
-  const basketsData = getBaskets();
-  const baskets = mapBasketsResponse(basketsData);
+  const basketsResponse = getBaskets();
+  const baskets = mapBasketsResponse(basketsResponse);
 
   const {
     selectedBasketIds,
@@ -36,7 +36,7 @@ const Baskets = () => {
 
   return (
     <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-200 xl:w-64 xl:shrink-0 max-h-[calc(100vh-187px)]">
-      <BasketsHeader baskets={baskets} selectedBasketIds={selectedBasketIds} />
+      <BasketsHeader baskets={baskets} />
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
         <nav aria-label="Baskets List" className="overflow-y-auto">
