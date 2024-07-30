@@ -18,25 +18,9 @@ const ChartMacroCategories = dynamic(
   }
 );
 
-const tabs = [
-  { name: "Energiegehalt", path: "energy" },
-  { name: "Makronährstoffe", path: "macro" },
-  { name: "Mikronährstoffe", path: "micro" },
-  { name: "Nutri-Score", path: "nutri" },
-];
-
-const Analysis = ({
-  currentTab,
-  setCurrentTab,
-  handleTabChange,
-  selectedBasketIds,
-}: {
-  currentTab: string;
-  setCurrentTab: any;
-  handleTabChange: any;
-  selectedBasketIds: number[];
-}) => {
+const Analysis = () => {
   const selectedMetric: MetricOptions = "kcal";
+  const { selectedBasketIds, currentTab } = useCounterStore((state) => state);
 
   const chartMacroData = getChartMacroData(selectedBasketIds, selectedMetric);
   const chartMacroCategoriesData = getChartMacroCategoriesData(
@@ -44,17 +28,9 @@ const Analysis = ({
     selectedMetric
   );
 
-  const { selectedCategories, setSelectedCategories } = useCounterStore(
-    (state) => state
-  );
-
   return (
     <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
-      <AnalysisHeader
-        currentTab={currentTab}
-        handleTabChange={handleTabChange}
-        tabs={tabs}
-      />
+      <AnalysisHeader />
       <div className="shadow-inner -mx-6">
         <div className="flex-1 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
           {selectedBasketIds.length > 0 ? (

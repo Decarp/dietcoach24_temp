@@ -1,13 +1,8 @@
-import { SelectedBasketIds } from "@/app/p/[id]/purchases/page";
 import React from "react";
+import { useCounterStore } from "@/providers/useStoreProvider";
 
-const ProductsHeader = ({
-  filteredProducts,
-  selectedBasketIds,
-}: {
-  filteredProducts: any;
-  selectedBasketIds: SelectedBasketIds;
-}) => {
+const ProductsHeader = ({ filteredProducts }: { filteredProducts: any }) => {
+  const { selectedBasketIds } = useCounterStore((state) => state);
   return (
     <>
       <h2 className="pl-6 text-xl font-semibold">Artikel</h2>
