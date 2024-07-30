@@ -31,19 +31,20 @@ const aggregateMacros = (filteredProducts: any[]): ChartMacroResponse[] => {
   };
 
   filteredProducts.forEach((product) => {
-    const { carbs, fat, protein, fiber, kcal } = product;
+    const { nutrients } = product;
+    const { carbohydrates, fats, proteins, fibers, kcal } = nutrients;
 
-    macros.Carbohydrates.kcal += carbs * 4; // Carbohydrates: 4 kcal per gram
-    macros.Carbohydrates.g += carbs;
+    macros.Carbohydrates.kcal += carbohydrates * 4; // Carbohydrates: 4 kcal per gram
+    macros.Carbohydrates.g += carbohydrates;
 
-    macros.Fats.kcal += fat * 9; // Fats: 9 kcal per gram
-    macros.Fats.g += fat;
+    macros.Fats.kcal += fats * 9; // Fats: 9 kcal per gram
+    macros.Fats.g += fats;
 
-    macros.Proteins.kcal += protein * 4; // Proteins: 4 kcal per gram
-    macros.Proteins.g += protein;
+    macros.Proteins.kcal += proteins * 4; // Proteins: 4 kcal per gram
+    macros.Proteins.g += proteins;
 
-    macros.Fibre.kcal += fiber * 2; // Fibres: 2 kcal per gram (approx.)
-    macros.Fibre.g += fiber;
+    macros.Fibre.kcal += fibers * 2; // Fibres: 2 kcal per gram (approx.)
+    macros.Fibre.g += fibers;
   });
 
   return Object.values(macros).map(({ de, en, kcal, g }) => ({
