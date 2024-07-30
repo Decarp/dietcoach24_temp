@@ -14,5 +14,5 @@ export const getBaskets = (
   endTimestamp: number = 10000000 // default: right now
 ) => {
   const data = fetchData(startTimestamp, endTimestamp);
-  return basketsResponse;
+  return data;
 };

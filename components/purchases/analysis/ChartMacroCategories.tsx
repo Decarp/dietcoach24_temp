@@ -60,7 +60,7 @@ export default function ChartMacroCategories({
   };
 
   return (
-    <div className="bg-white p-4 border rounded-lg" style={{ height: "350px" }}>
+    <div className="bg-white p-4 border rounded-lg" style={{ height: "380px" }}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie

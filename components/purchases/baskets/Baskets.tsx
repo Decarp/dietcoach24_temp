@@ -1,26 +1,39 @@
-import React from "react";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { getBaskets } from "@/api/getBaskets";
+import { useCounterStore } from "@/providers/useStoreProvider";
 import { classNames } from "@/utils/classNames";
+import { formatDate } from "@/utils/formatDate";
+import { mapBasketsResponse } from "@/utils/mapBasketsResponse";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import BasketsHeader from "./BasketsHeader";
-import { SelectedBasketIds } from "@/app/p/[id]/purchases/page";
 
-const formatDate = (timestamp: number) => {
-  const date = new Date(timestamp * 1000);
-  return date.toLocaleDateString("de-DE", {
-    day: "2-digit",
-    month: "long",
-  });
-};
+const Baskets = () => {
+  const basketsData = getBaskets();
+  const baskets = mapBasketsResponse(basketsData);
 
-const Baskets = ({
-  baskets,
-  selectedBasketIds,
-  handleBasketCheckboxChange,
-}: {
-  baskets: any;
-  selectedBasketIds: SelectedBasketIds;
-  handleBasketCheckboxChange: any;
-}) => {
+  const {
+    selectedBasketIds,
+    setSelectedBasketIds,
+    selectedBasketProductIds,
+    setSelectedBasketProductIds,
+  } = useCounterStore((state) => state);
+
+  const handleBasketCheckboxChange = (basketId: number) => {
+    if (selectedBasketIds.includes(basketId)) {
+      // Deselect basket and its products
+      setSelectedBasketIds(
+        selectedBasketIds.filter((item) => item !== basketId)
+      );
+      setSelectedBasketProductIds(
+        selectedBasketProductIds.filter(
+          (product) => product.basketId !== basketId
+        )
+      );
+    } else {
+      // Select basket
+      setSelectedBasketIds([...selectedBasketIds, basketId]);
+    }
+  };
+
   return (
     <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-200 xl:w-64 xl:shrink-0 max-h-[calc(100vh-187px)]">
       <BasketsHeader baskets={baskets} selectedBasketIds={selectedBasketIds} />

@@ -1,15 +1,24 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 import { classNames } from "@/utils/classNames";
+import { useCounterStore } from "@/providers/useStoreProvider";
 
-const AnalysisHeader = ({
-  currentTab,
-  handleTabChange,
-  tabs,
-}: {
-  currentTab: string;
-  handleTabChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  tabs: { name: string; path: string }[];
-}) => {
+const tabs = [
+  { name: "Energiegehalt", path: "energy" },
+  { name: "Makronährstoffe", path: "macro" },
+  { name: "Mikronährstoffe", path: "micro" },
+  { name: "Nutri-Score", path: "nutri" },
+];
+
+const AnalysisHeader = () => {
+  const router = useRouter();
+  const { currentTab, patientId } = useCounterStore((state) => state);
+
+  const handleTabChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedTab = event.target.value;
+    router.push(`/p/${patientId}/purchases?chart=${selectedTab}`);
+  };
+
   return (
     <div>
       <h2 className="text-xl font-semibold">Analyse</h2>

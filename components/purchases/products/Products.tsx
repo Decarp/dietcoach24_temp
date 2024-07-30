@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  CakeIcon,
-} from "@heroicons/react/24/outline";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { getBasketProducts } from "@/api/getBasketProducts";
+import { BasketProductFlat } from "@/app/p/[id]/purchases/page";
+import ProductsHeader from "@/components/purchases/products/ProductsHeader";
+import { categories } from "@/data/categories";
+import { useCounterStore } from "@/providers/useStoreProvider";
 import {
   Menu,
   MenuButton,
@@ -14,30 +12,11 @@ import {
   PopoverButton,
   PopoverPanel,
 } from "@headlessui/react";
-import { classNames } from "@/utils/classNames";
-import ProductsHeader from "@/components/purchases/products/ProductsHeader";
-import {
-  BasketProductFlat,
-  SelectedBasketIds,
-  SelectedBasketProductId,
-} from "@/app/p/[id]/purchases/page";
-import { useCounterStore } from "@/providers/useStoreProvider";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import ProductCard from "./ProductCard";
 import RecommendationDrawer from "./RecommendationDrawer";
-import { categories } from "@/data/categories"; // Assuming categories are imported from "@/data/categories"
-
-const formatDate = (timestamp: number) => {
-  const date = new Date(timestamp * 1000);
-  return date.toLocaleDateString("de-DE", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-};
-
-const foodCategories = Object.keys(categories.de).map((key) => ({
-  value: key,
-  label: key,
-}));
 
 const sortCriteria = [
   "Einkaufsdatum",
@@ -48,19 +27,10 @@ const sortCriteria = [
   "Nahrungsfasern",
 ];
 
-const Products = ({
-  filteredBasketProductsFlat,
-  selectedBasketProductIds,
-  handleProductCheckboxChange,
-  selectedBasketIds,
-}: {
-  filteredBasketProductsFlat: BasketProductFlat[];
-  selectedBasketProductIds: SelectedBasketProductId[];
-  handleProductCheckboxChange: any;
-  selectedBasketIds: SelectedBasketIds;
-}) => {
+const Products = () => {
   const [ascending, setAscending] = useState(true);
   const {
+    selectedBasketIds,
     selectedCategories,
     setSelectedCategories,
     selectedSortCriteria,
@@ -69,23 +39,28 @@ const Products = ({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [overlayVisible, setOverlayVisible] = useState(false);
 
+  const basketProducts = getBasketProducts(selectedBasketIds);
+  const filteredBasketProducts = basketProducts.filter((basket) =>
+    selectedBasketIds.includes(basket.basketId)
+  );
+  const filteredBasketProductsFlat = filteredBasketProducts.flatMap(
+    (basket) => {
+      return basket.products.map((product) => {
+        return {
+          basketId: basket.basketId,
+          basketIndex: basket.index,
+          basketTimestamp: basket.timestamp,
+          ...product,
+        };
+      });
+    }
+  );
+
   useEffect(() => {
-    if (
-      selectedSortCriteria !== "Einkaufsdatum" &&
-      selectedSortCriteria !== "Kalorien" &&
-      selectedSortCriteria !== "Proteine" &&
-      selectedSortCriteria !== "Fette" &&
-      selectedSortCriteria !== "Kohlenhydrate" &&
-      selectedSortCriteria !== "Nahrungsfasern"
-    ) {
+    if (!sortCriteria.includes(selectedSortCriteria)) {
       setSelectedSortCriteria(selectedSortCriteria);
     }
   }, [selectedSortCriteria, setSelectedSortCriteria]);
-
-  const isProductSelected = (productId: number, basketId: number) =>
-    selectedBasketProductIds.some(
-      (item) => item.productId === productId && item.basketId === basketId
-    );
 
   const sortProducts = (products: BasketProductFlat[]) => {
     const sortedProducts = [...products].sort((a, b) => {
@@ -117,11 +92,7 @@ const Products = ({
           bValue = b.basketIndex;
       }
 
-      if (ascending) {
-        return aValue - bValue;
-      } else {
-        return bValue - aValue;
-      }
+      return ascending ? aValue - bValue : bValue - aValue;
     });
 
     return sortedProducts;
@@ -138,7 +109,7 @@ const Products = ({
       ? filteredBasketProductsFlat.filter((product) =>
           selectedCategories.includes(product.dietCoachCategoryL1.de)
         )
-      : []; // or `filteredBasketProductsFlat` if all categories should be shown per default
+      : [];
 
   const sortedProducts = sortProducts(filteredProducts);
 
@@ -152,10 +123,7 @@ const Products = ({
       {overlayVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
       )}
-      <ProductsHeader
-        filteredProducts={filteredBasketProductsFlat}
-        selectedBasketIds={selectedBasketIds}
-      />
+      <ProductsHeader filteredProducts={filteredBasketProductsFlat} />
 
       <div className="px-6 -mt-2 pb-2 flex gap-x-8 items-center">
         <div>
@@ -175,17 +143,17 @@ const Products = ({
               className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
             >
               <form className="space-y-4">
-                {foodCategories.map((option) => (
-                  <div key={option.value} className="flex items-center">
+                {Object.keys(categories.de).map((key) => (
+                  <div key={key} className="flex items-center">
                     <input
-                      value={option.value}
+                      value={key}
                       type="checkbox"
-                      checked={selectedCategories.includes(option.value)}
-                      onChange={() => handleCategoryChange(option.value)}
+                      checked={selectedCategories.includes(key)}
+                      onChange={() => handleCategoryChange(key)}
                       className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                     />
                     <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
-                      {option.label}
+                      {key}
                     </label>
                   </div>
                 ))}
@@ -258,57 +226,11 @@ const Products = ({
         )}
         <ul role="list" className="divide-y divide-gray-100">
           {sortedProducts.map((product) => {
-            const uniqueId = `${product.basketId},${product.productId}`;
-            const selected = isProductSelected(
-              product.productId,
-              product.basketId
-            );
             return (
-              <li
-                key={uniqueId}
-                className={classNames(
-                  "pl-6 flex items-center gap-x-4 px-3 py-5",
-                  selected ? "bg-primary text-white" : ""
-                )}
-              >
-                <CakeIcon
-                  className={classNames(
-                    "border border-gray-200 h-20 w-20 p-2 flex-none rounded-md",
-                    selected
-                      ? "bg-white text-primary"
-                      : "bg-gray-50 text-primary"
-                  )}
-                />
-                <div className="min-w-0 flex-1">
-                  <p
-                    className={classNames(
-                      "text-base font-semibold leading-6",
-                      selected ? "text-white" : "text-gray-900"
-                    )}
-                  >
-                    {product.name}
-                  </p>
-                  <p
-                    className={classNames(
-                      "truncate text-sm leading-5",
-                      selected ? "text-white" : "text-gray-500"
-                    )}
-                  >
-                    {product.nutrients.nutriScore}
-                  </p>
-                </div>
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 mx-auto mr-4 rounded border-gray-300 text-primary focus:ring-primary"
-                  checked={selected}
-                  onChange={() =>
-                    handleProductCheckboxChange({
-                      basketId: product.basketId,
-                      productId: product.productId,
-                    })
-                  }
-                />
-              </li>
+              <ProductCard
+                key={`${product.basketId},${product.productId}`}
+                product={product}
+              />
             );
           })}
         </ul>
