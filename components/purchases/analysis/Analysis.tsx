@@ -1,9 +1,10 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import AnalysisHeader from "@/components/purchases/analysis/AnalysisHeader";
-import { getChartMacroData, MetricOptions } from "@/api/getChartMacroData";
+import { getChartMacroData } from "@/api/getChartMacroData";
 import { getChartMacroCategoriesData } from "@/api/getChartMacroCategoriesData";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { MetricOptions } from "@/types/types";
 
 const ChartMacro = dynamic(
   () => import("@/components/purchases/analysis/ChartMacro"),

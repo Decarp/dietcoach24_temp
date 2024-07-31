@@ -7,6 +7,7 @@ import {
   TrashIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { BasketProductFlat } from "@/types/types";
 
 const tabs = [
   { name: "Variante 1" },

@@ -1,7 +1,7 @@
 "use client";
 
-import { ChartMacroData } from "@/api/getChartMacroData";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { ChartMacroData } from "@/types/types";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
 import { renderCustomizedChartLabel } from "@/utils/renderCustomizedChartLabel";
 import React, { useState, useEffect } from "react";

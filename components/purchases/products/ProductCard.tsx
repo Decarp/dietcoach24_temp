@@ -1,10 +1,7 @@
 "use client";
 
-import type {
-  BasketProductFlat,
-  SelectedBasketProductId,
-} from "@/app/p/[id]/purchases/page";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { BasketProductFlat, SelectedBasketProductId } from "@/types/types";
 import { classNames } from "@/utils/classNames";
 import { CakeIcon } from "@heroicons/react/24/outline";
 import React from "react";

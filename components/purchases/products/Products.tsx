@@ -1,5 +1,4 @@
 import { getBasketProducts } from "@/api/getBasketProducts";
-import { BasketProductFlat } from "@/app/p/[id]/purchases/page";
 import ProductsHeader from "@/components/purchases/products/ProductsHeader";
 import { categories } from "@/data/categories";
 import { useCounterStore } from "@/providers/useStoreProvider";
@@ -17,6 +16,7 @@ import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import RecommendationDrawer from "./RecommendationDrawer";
+import { BasketProductFlat } from "@/types/types";
 
 const sortCriteria = [
   "Einkaufsdatum",
@@ -29,6 +29,9 @@ const sortCriteria = [
 
 const Products = () => {
   const [ascending, setAscending] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
+
   const {
     selectedBasketIds,
     selectedCategories,
@@ -36,15 +39,11 @@ const Products = () => {
     selectedSortCriteria,
     setSelectedSortCriteria,
   } = useCounterStore((state) => state);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [overlayVisible, setOverlayVisible] = useState(false);
 
-  const basketProducts = getBasketProducts(selectedBasketIds);
-  const filteredBasketProducts = basketProducts.filter((basket) =>
-    selectedBasketIds.includes(basket.basketId)
-  );
-  const filteredBasketProductsFlat = filteredBasketProducts.flatMap(
-    (basket) => {
+  const basketProductsResponse = getBasketProducts(selectedBasketIds);
+
+  const basketProductsFlat: BasketProductFlat[] =
+    basketProductsResponse.flatMap((basket) => {
       return basket.products.map((product) => {
         return {
           basketId: basket.basketId,
@@ -53,7 +52,42 @@ const Products = () => {
           ...product,
         };
       });
-    }
+    });
+
+  const sortProducts = (products: BasketProductFlat[]) => {
+    const getSortValue = (product: BasketProductFlat) => {
+      switch (selectedSortCriteria) {
+        case "Kalorien":
+          return product.nutrients.kcal;
+        case "Proteine":
+          return product.nutrients.proteins;
+        case "Fette":
+          return product.nutrients.fats;
+        case "Kohlenhydrate":
+          return product.nutrients.carbohydrates;
+        case "Nahrungsfasern":
+          return product.nutrients.fibers;
+        default:
+          return product.basketIndex;
+      }
+    };
+
+    return [...products].sort((a, b) =>
+      ascending
+        ? getSortValue(a) - getSortValue(b)
+        : getSortValue(b) - getSortValue(a)
+    );
+  };
+
+  const basketProductsFlatFiltered =
+    selectedCategories.length > 0
+      ? basketProductsFlat.filter((product) =>
+          selectedCategories.includes(product.dietCoachCategoryL1.de)
+        )
+      : [];
+
+  const basketProductsFlatFilteredSorted = sortProducts(
+    basketProductsFlatFiltered
   );
 
   useEffect(() => {
@@ -62,57 +96,11 @@ const Products = () => {
     }
   }, [selectedSortCriteria, setSelectedSortCriteria]);
 
-  const sortProducts = (products: BasketProductFlat[]) => {
-    const sortedProducts = [...products].sort((a, b) => {
-      let aValue, bValue;
-
-      switch (selectedSortCriteria) {
-        case "Kalorien":
-          aValue = a.nutrients.kcal;
-          bValue = b.nutrients.kcal;
-          break;
-        case "Proteine":
-          aValue = a.nutrients.proteins;
-          bValue = b.nutrients.proteins;
-          break;
-        case "Fette":
-          aValue = a.nutrients.fats;
-          bValue = b.nutrients.fats;
-          break;
-        case "Kohlenhydrate":
-          aValue = a.nutrients.carbohydrates;
-          bValue = b.nutrients.carbohydrates;
-          break;
-        case "Nahrungsfasern":
-          aValue = a.nutrients.fibers;
-          bValue = b.nutrients.fibers;
-          break;
-        default:
-          aValue = a.basketIndex;
-          bValue = b.basketIndex;
-      }
-
-      return ascending ? aValue - bValue : bValue - aValue;
-    });
-
-    return sortedProducts;
-  };
-
   const handleCategoryChange = (category: string) => {
     selectedCategories.includes(category)
       ? setSelectedCategories(selectedCategories.filter((i) => i !== category))
       : setSelectedCategories([...selectedCategories, category]);
   };
-
-  const filteredProducts =
-    selectedCategories.length > 0
-      ? filteredBasketProductsFlat.filter((product) =>
-          selectedCategories.includes(product.dietCoachCategoryL1.de)
-        )
-      : [];
-
-  const sortedProducts = sortProducts(filteredProducts);
-
   const handleDrawerOpen = (open: boolean) => {
     setDrawerOpen(open);
     setOverlayVisible(open);
@@ -123,7 +111,7 @@ const Products = () => {
       {overlayVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
       )}
-      <ProductsHeader sortedProducts={sortedProducts} />
+      <ProductsHeader products={basketProductsFlatFilteredSorted} />
 
       <div className="px-6 -mt-2 pb-2 flex gap-x-8 items-center">
         <div>
@@ -225,7 +213,7 @@ const Products = () => {
           </p>
         )}
         <ul role="list" className="divide-y divide-gray-100">
-          {sortedProducts.map((product) => {
+          {basketProductsFlatFilteredSorted.map((product) => {
             return (
               <ProductCard
                 key={`${product.basketId},${product.productId}`}

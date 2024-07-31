@@ -1,4 +1,4 @@
-import type { SelectedBasketProductId } from "@/app/p/[id]/purchases/page";
+import { SelectedBasketProductId } from "@/types/types";
 import { createStore } from "zustand/vanilla";
 
 export type CounterState = {
