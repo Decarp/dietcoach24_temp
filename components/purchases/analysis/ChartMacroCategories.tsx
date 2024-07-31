@@ -31,8 +31,9 @@ export default function ChartMacroCategories({
   data: ChartMacroCategoriesData[];
 }) {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
-  const { selectedCategories, setSelectedCategories, basketProductsFlat } =
-    useCounterStore((state) => state);
+  const { selectedCategories, updateCategories } = useCounterStore(
+    (state) => state
+  );
 
   useEffect(() => {
     const updatedIndices = data
@@ -44,37 +45,8 @@ export default function ChartMacroCategories({
   }, [selectedCategories, data]);
 
   const handleClick = (index: number) => {
-    let updatedIndices;
     const majorCategory = data[index].name;
-    const newSelectedCategories = { ...selectedCategories };
-
-    if (activeIndices.includes(index)) {
-      updatedIndices = activeIndices.filter((i) => i !== index);
-      // Deselect the major category and all its sub-categories
-      newSelectedCategories.major = newSelectedCategories.major.filter(
-        (cat) => cat !== majorCategory
-      );
-      newSelectedCategories.sub = newSelectedCategories.sub.filter(
-        (sub) =>
-          !basketProductsFlat.some(
-            (product) =>
-              product.dietCoachCategoryL1.de === majorCategory &&
-              product.dietCoachCategoryL2.de === sub
-          )
-      );
-    } else {
-      updatedIndices = [...activeIndices, index];
-      // Select the major category and all its sub-categories
-      newSelectedCategories.major.push(majorCategory);
-      newSelectedCategories.sub.push(
-        ...basketProductsFlat
-          .filter((product) => product.dietCoachCategoryL1.de === majorCategory)
-          .map((product) => product.dietCoachCategoryL2.de)
-      );
-    }
-
-    setActiveIndices(updatedIndices);
-    setSelectedCategories(newSelectedCategories);
+    updateCategories(majorCategory, "major");
   };
 
   return (

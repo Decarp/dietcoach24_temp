@@ -15,7 +15,7 @@ import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import RecommendationDrawer from "./RecommendationDrawer";
-import { BasketProductFlat, SelectedBasketProductId } from "@/types/types";
+import { BasketProductFlat } from "@/types/types";
 
 const sortCriteria = [
   "Einkaufsdatum",
@@ -34,13 +34,11 @@ const Products = () => {
   const {
     selectedBasketIds,
     selectedCategories,
-    setSelectedCategories,
     selectedSortCriteria,
     setSelectedSortCriteria,
     basketProductsFlat,
     setBasketProductsFlat,
-    selectedBasketProductIds,
-    setSelectedBasketProductIds,
+    updateCategories,
   } = useCounterStore((state) => state);
 
   const basketProductsResponse = getBasketProducts(selectedBasketIds);
@@ -88,95 +86,6 @@ const Products = () => {
         ? getSortValue(a) - getSortValue(b)
         : getSortValue(b) - getSortValue(a)
     );
-  };
-
-  const handleCategoryChange = (category: string, level: "major" | "sub") => {
-    const newCategories = { ...selectedCategories };
-
-    if (level === "major") {
-      if (newCategories.major.includes(category)) {
-        // Deselect major category and all its sub-categories
-        newCategories.major = newCategories.major.filter((i) => i !== category);
-        newCategories.sub = newCategories.sub.filter(
-          (sub) =>
-            !basketProductsFlat.some(
-              (product) =>
-                product.dietCoachCategoryL1.de === category &&
-                product.dietCoachCategoryL2.de === sub
-            )
-        );
-
-        // Remove deselected products from selectedBasketProductIds
-        const newSelectedBasketProductIds = selectedBasketProductIds.filter(
-          (id) =>
-            !basketProductsFlat.some(
-              (product) =>
-                product.basketId === id.basketId &&
-                product.productId === id.productId &&
-                product.dietCoachCategoryL1.de === category
-            )
-        );
-        setSelectedBasketProductIds(newSelectedBasketProductIds);
-      } else {
-        // Select major category and all its sub-categories
-        newCategories.major.push(category);
-        newCategories.sub.push(
-          ...basketProductsFlat
-            .filter((product) => product.dietCoachCategoryL1.de === category)
-            .map((product) => product.dietCoachCategoryL2.de)
-        );
-      }
-    } else {
-      if (newCategories.sub.includes(category)) {
-        // Deselect sub-category
-        newCategories.sub = newCategories.sub.filter((i) => i !== category);
-
-        // Check if all sub-categories of this major category are deselected
-        const majorCategory = basketProductsFlat.find(
-          (product) => product.dietCoachCategoryL2.de === category
-        )?.dietCoachCategoryL1.de;
-
-        if (
-          majorCategory &&
-          !basketProductsFlat.some(
-            (product) =>
-              product.dietCoachCategoryL1.de === majorCategory &&
-              newCategories.sub.includes(product.dietCoachCategoryL2.de)
-          )
-        ) {
-          // Deselect the major category
-          newCategories.major = newCategories.major.filter(
-            (i) => i !== majorCategory
-          );
-        }
-
-        // Remove deselected products from selectedBasketProductIds
-        const newSelectedBasketProductIds = selectedBasketProductIds.filter(
-          (id) =>
-            !basketProductsFlat.some(
-              (product) =>
-                product.basketId === id.basketId &&
-                product.productId === id.productId &&
-                product.dietCoachCategoryL2.de === category
-            )
-        );
-        setSelectedBasketProductIds(newSelectedBasketProductIds);
-      } else {
-        // Select sub-category
-        newCategories.sub.push(category);
-
-        // Automatically select the major category
-        const majorCategory = basketProductsFlat.find(
-          (product) => product.dietCoachCategoryL2.de === category
-        )?.dietCoachCategoryL1.de;
-
-        if (majorCategory && !newCategories.major.includes(majorCategory)) {
-          newCategories.major.push(majorCategory);
-        }
-      }
-    }
-
-    setSelectedCategories(newCategories);
   };
 
   const filteredProducts =
@@ -251,7 +160,7 @@ const Products = () => {
                         value={category}
                         type="checkbox"
                         checked={selectedCategories.major.includes(category)}
-                        onChange={() => handleCategoryChange(category, "major")}
+                        onChange={() => updateCategories(category, "major")}
                         className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                       />
                       <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
@@ -268,7 +177,7 @@ const Products = () => {
                         value={category}
                         type="checkbox"
                         checked={selectedCategories.sub.includes(category)}
-                        onChange={() => handleCategoryChange(category, "sub")}
+                        onChange={() => updateCategories(category, "sub")}
                         className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                       />
                       <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">

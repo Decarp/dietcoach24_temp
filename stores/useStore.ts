@@ -22,6 +22,7 @@ export type CounterActions = {
   setCurrentTab: (tab: string) => void;
   setPatientId: (id: string | null) => void;
   setBasketProductsFlat: (products: BasketProductFlat[]) => void;
+  updateCategories: (category: string, level: "major" | "sub") => void;
 };
 
 export type CounterStore = CounterState & CounterActions;
@@ -85,5 +86,106 @@ export const createCounterStore = (
     setPatientId: (id: string | null) => set(() => ({ patientId: id })),
     setBasketProductsFlat: (products: BasketProductFlat[]) =>
       set(() => ({ basketProductsFlat: products })),
+    updateCategories: (category: string, level: "major" | "sub") =>
+      set((state) => {
+        const newCategories = { ...state.selectedCategories };
+
+        if (level === "major") {
+          if (newCategories.major.includes(category)) {
+            // Deselect major category and all its sub-categories
+            newCategories.major = newCategories.major.filter(
+              (i) => i !== category
+            );
+            newCategories.sub = newCategories.sub.filter(
+              (sub) =>
+                !state.basketProductsFlat.some(
+                  (product) =>
+                    product.dietCoachCategoryL1.de === category &&
+                    product.dietCoachCategoryL2.de === sub
+                )
+            );
+
+            // Remove deselected products from selectedBasketProductIds
+            const newSelectedBasketProductIds =
+              state.selectedBasketProductIds.filter(
+                (id) =>
+                  !state.basketProductsFlat.some(
+                    (product) =>
+                      product.basketId === id.basketId &&
+                      product.productId === id.productId &&
+                      product.dietCoachCategoryL1.de === category
+                  )
+              );
+            return {
+              selectedCategories: newCategories,
+              selectedBasketProductIds: newSelectedBasketProductIds,
+            };
+          } else {
+            // Select major category and all its sub-categories
+            newCategories.major.push(category);
+            newCategories.sub.push(
+              ...state.basketProductsFlat
+                .filter(
+                  (product) => product.dietCoachCategoryL1.de === category
+                )
+                .map((product) => product.dietCoachCategoryL2.de)
+            );
+            return { selectedCategories: newCategories };
+          }
+        } else {
+          if (newCategories.sub.includes(category)) {
+            // Deselect sub-category
+            newCategories.sub = newCategories.sub.filter((i) => i !== category);
+
+            // Check if all sub-categories of this major category are deselected
+            const majorCategory = state.basketProductsFlat.find(
+              (product) => product.dietCoachCategoryL2.de === category
+            )?.dietCoachCategoryL1.de;
+
+            if (
+              majorCategory &&
+              !state.basketProductsFlat.some(
+                (product) =>
+                  product.dietCoachCategoryL1.de === majorCategory &&
+                  newCategories.sub.includes(product.dietCoachCategoryL2.de)
+              )
+            ) {
+              // Deselect the major category
+              newCategories.major = newCategories.major.filter(
+                (i) => i !== majorCategory
+              );
+            }
+
+            // Remove deselected products from selectedBasketProductIds
+            const newSelectedBasketProductIds =
+              state.selectedBasketProductIds.filter(
+                (id) =>
+                  !state.basketProductsFlat.some(
+                    (product) =>
+                      product.basketId === id.basketId &&
+                      product.productId === id.productId &&
+                      product.dietCoachCategoryL2.de === category
+                  )
+              );
+            return {
+              selectedCategories: newCategories,
+              selectedBasketProductIds: newSelectedBasketProductIds,
+            };
+          } else {
+            // Select sub-category
+            newCategories.sub.push(category);
+
+            // Automatically select the major category
+            const majorCategory = state.basketProductsFlat.find(
+              (product) => product.dietCoachCategoryL2.de === category
+            )?.dietCoachCategoryL1.de;
+
+            if (majorCategory && !newCategories.major.includes(majorCategory)) {
+              newCategories.major.push(majorCategory);
+            }
+            return { selectedCategories: newCategories };
+          }
+        }
+      }),
   }));
 };
