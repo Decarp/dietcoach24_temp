@@ -53,7 +53,7 @@ const Products = () => {
       }));
     });
 
-  // Set basketProductsFlat in the store if it has changed
+  // Set basketProductsFlat in the store if it has changed; necessary for category filtering in useStore
   useEffect(() => {
     if (
       JSON.stringify(newBasketProductsFlat) !==
@@ -127,6 +127,14 @@ const Products = () => {
     setOverlayVisible(open);
   };
 
+  const categoriesWithSub = availableCategories.major.map((majorCategory) => ({
+    major: majorCategory,
+    subs: basketProductsFlat
+      .filter((product) => product.dietCoachCategoryL1.de === majorCategory)
+      .map((product) => product.dietCoachCategoryL2.de)
+      .filter((sub, index, self) => self.indexOf(sub) === index),
+  }));
+
   return (
     <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-200 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 max-h-[calc(100vh-187px)]">
       {overlayVisible && (
@@ -152,40 +160,46 @@ const Products = () => {
               className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
             >
               <form className="space-y-4">
-                <div>
-                  <h4 className="font-semibold">Major Categories</h4>
-                  {availableCategories.major.map((category) => (
-                    <div key={category} className="flex items-center">
+                {categoriesWithSub.map((category) => (
+                  <div key={category.major}>
+                    <div className="flex items-center">
                       <input
-                        value={category}
+                        value={category.major}
                         type="checkbox"
-                        checked={selectedCategories.major.includes(category)}
-                        onChange={() => updateCategories(category, "major")}
+                        checked={selectedCategories.major.includes(
+                          category.major
+                        )}
+                        onChange={() =>
+                          updateCategories(category.major, "major")
+                        }
                         className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                       />
                       <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
-                        {category}
+                        {category.major}
                       </label>
                     </div>
-                  ))}
-                </div>
-                <div>
-                  <h4 className="font-semibold">Sub Categories</h4>
-                  {availableCategories.sub.map((category) => (
-                    <div key={category} className="flex items-center">
-                      <input
-                        value={category}
-                        type="checkbox"
-                        checked={selectedCategories.sub.includes(category)}
-                        onChange={() => updateCategories(category, "sub")}
-                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                      />
-                      <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
-                        {category}
-                      </label>
+                    <div className="ml-7">
+                      {category.subs.map((subCategory) => (
+                        <div key={subCategory} className="flex items-center">
+                          <input
+                            value={subCategory}
+                            type="checkbox"
+                            checked={selectedCategories.sub.includes(
+                              subCategory
+                            )}
+                            onChange={() =>
+                              updateCategories(subCategory, "sub")
+                            }
+                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                          />
+                          <label className="ml-3 whitespace-nowrap pr-6 text-sm text-gray-900">
+                            {subCategory}
+                          </label>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </form>
             </PopoverPanel>
           </Popover>
