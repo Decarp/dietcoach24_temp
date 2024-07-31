@@ -1,7 +1,5 @@
 import { getBasketProducts } from "@/api/getBasketProducts";
-import { BasketProductFlat } from "@/app/p/[id]/purchases/page";
 import ProductsHeader from "@/components/purchases/products/ProductsHeader";
-import { categories } from "@/data/categories";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import {
   Menu,
@@ -17,6 +15,7 @@ import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import RecommendationDrawer from "./RecommendationDrawer";
+import { BasketProductFlat } from "@/types/types";
 
 const sortCriteria = [
   "Einkaufsdatum",
@@ -29,32 +28,93 @@ const sortCriteria = [
 
 const Products = () => {
   const [ascending, setAscending] = useState(true);
-  const {
-    selectedBasketIds,
-    selectedCategories,
-    setSelectedCategories,
-    selectedSortCriteria,
-    setSelectedSortCriteria,
-  } = useCounterStore((state) => state);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [overlayVisible, setOverlayVisible] = useState(false);
 
-  const basketProducts = getBasketProducts(selectedBasketIds);
-  const filteredBasketProducts = basketProducts.filter((basket) =>
-    selectedBasketIds.includes(basket.basketId)
-  );
-  const filteredBasketProductsFlat = filteredBasketProducts.flatMap(
-    (basket) => {
-      return basket.products.map((product) => {
-        return {
-          basketId: basket.basketId,
-          basketIndex: basket.index,
-          basketTimestamp: basket.timestamp,
-          ...product,
-        };
-      });
+  const {
+    selectedBasketIds,
+    selectedCategories,
+    selectedSortCriteria,
+    setSelectedSortCriteria,
+    basketProductsFlat,
+    setBasketProductsFlat,
+    updateCategories,
+  } = useCounterStore((state) => state);
+
+  const basketProductsResponse = getBasketProducts(selectedBasketIds);
+
+  const newBasketProductsFlat: BasketProductFlat[] =
+    basketProductsResponse.flatMap((basket) => {
+      return basket.products.map((product) => ({
+        basketId: basket.basketId,
+        basketIndex: basket.index,
+        basketTimestamp: basket.timestamp,
+        ...product,
+      }));
+    });
+
+  // Set basketProductsFlat in the store if it has changed; necessary for category filtering in useStore
+  useEffect(() => {
+    if (
+      JSON.stringify(newBasketProductsFlat) !==
+      JSON.stringify(basketProductsFlat)
+    ) {
+      setBasketProductsFlat(newBasketProductsFlat);
     }
-  );
+  }, [newBasketProductsFlat, basketProductsFlat, setBasketProductsFlat]);
+
+  const sortProducts = (products: BasketProductFlat[]) => {
+    const getSortValue = (product: BasketProductFlat) => {
+      switch (selectedSortCriteria) {
+        case "Kalorien":
+          return product.nutrients.kcal;
+        case "Proteine":
+          return product.nutrients.proteins;
+        case "Fette":
+          return product.nutrients.fats;
+        case "Kohlenhydrate":
+          return product.nutrients.carbohydrates;
+        case "Nahrungsfasern":
+          return product.nutrients.fibers;
+        default:
+          return product.basketIndex;
+      }
+    };
+
+    return [...products].sort((a, b) =>
+      ascending
+        ? getSortValue(a) - getSortValue(b)
+        : getSortValue(b) - getSortValue(a)
+    );
+  };
+
+  const filteredProducts =
+    selectedCategories.major.length === 0 && selectedCategories.sub.length === 0
+      ? []
+      : basketProductsFlat.filter(
+          (product) =>
+            (selectedCategories.major.length === 0 ||
+              selectedCategories.major.includes(
+                product.dietCoachCategoryL1.de
+              )) &&
+            (selectedCategories.sub.length === 0 ||
+              selectedCategories.sub.includes(product.dietCoachCategoryL2.de))
+        );
+
+  const sortedProducts = sortProducts(filteredProducts);
+
+  const availableCategories = {
+    major: Array.from(
+      new Set(
+        basketProductsFlat.map((product) => product.dietCoachCategoryL1.de)
+      )
+    ),
+    sub: Array.from(
+      new Set(
+        basketProductsFlat.map((product) => product.dietCoachCategoryL2.de)
+      )
+    ),
+  };
 
   useEffect(() => {
     if (!sortCriteria.includes(selectedSortCriteria)) {
@@ -62,68 +122,25 @@ const Products = () => {
     }
   }, [selectedSortCriteria, setSelectedSortCriteria]);
 
-  const sortProducts = (products: BasketProductFlat[]) => {
-    const sortedProducts = [...products].sort((a, b) => {
-      let aValue, bValue;
-
-      switch (selectedSortCriteria) {
-        case "Kalorien":
-          aValue = a.nutrients.kcal;
-          bValue = b.nutrients.kcal;
-          break;
-        case "Proteine":
-          aValue = a.nutrients.proteins;
-          bValue = b.nutrients.proteins;
-          break;
-        case "Fette":
-          aValue = a.nutrients.fats;
-          bValue = b.nutrients.fats;
-          break;
-        case "Kohlenhydrate":
-          aValue = a.nutrients.carbohydrates;
-          bValue = b.nutrients.carbohydrates;
-          break;
-        case "Nahrungsfasern":
-          aValue = a.nutrients.fibers;
-          bValue = b.nutrients.fibers;
-          break;
-        default:
-          aValue = a.basketIndex;
-          bValue = b.basketIndex;
-      }
-
-      return ascending ? aValue - bValue : bValue - aValue;
-    });
-
-    return sortedProducts;
-  };
-
-  const handleCategoryChange = (category: string) => {
-    selectedCategories.includes(category)
-      ? setSelectedCategories(selectedCategories.filter((i) => i !== category))
-      : setSelectedCategories([...selectedCategories, category]);
-  };
-
-  const filteredProducts =
-    selectedCategories.length > 0
-      ? filteredBasketProductsFlat.filter((product) =>
-          selectedCategories.includes(product.dietCoachCategoryL1.de)
-        )
-      : [];
-
-  const sortedProducts = sortProducts(filteredProducts);
-
   const handleDrawerOpen = (open: boolean) => {
     setDrawerOpen(open);
     setOverlayVisible(open);
   };
+
+  const categoriesWithSub = availableCategories.major.map((majorCategory) => ({
+    major: majorCategory,
+    subs: basketProductsFlat
+      .filter((product) => product.dietCoachCategoryL1.de === majorCategory)
+      .map((product) => product.dietCoachCategoryL2.de)
+      .filter((sub, index, self) => self.indexOf(sub) === index),
+  }));
 
   return (
     <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-200 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 max-h-[calc(100vh-187px)]">
       {overlayVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
       )}
-      <ProductsHeader sortedProducts={sortedProducts} />
+      <ProductsHeader products={sortedProducts} />
 
       <div className="px-6 -mt-2 pb-2 flex gap-x-8 items-center">
         <div>
@@ -143,18 +160,44 @@ const Products = () => {
               className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
             >
               <form className="space-y-4">
-                {Object.keys(categories.de).map((key) => (
-                  <div key={key} className="flex items-center">
-                    <input
-                      value={key}
-                      type="checkbox"
-                      checked={selectedCategories.includes(key)}
-                      onChange={() => handleCategoryChange(key)}
-                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                    />
-                    <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
-                      {key}
-                    </label>
+                {categoriesWithSub.map((category) => (
+                  <div key={category.major}>
+                    <div className="flex items-center">
+                      <input
+                        value={category.major}
+                        type="checkbox"
+                        checked={selectedCategories.major.includes(
+                          category.major
+                        )}
+                        onChange={() =>
+                          updateCategories(category.major, "major")
+                        }
+                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      />
+                      <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
+                        {category.major}
+                      </label>
+                    </div>
+                    <div className="ml-7">
+                      {category.subs.map((subCategory) => (
+                        <div key={subCategory} className="flex items-center">
+                          <input
+                            value={subCategory}
+                            type="checkbox"
+                            checked={selectedCategories.sub.includes(
+                              subCategory
+                            )}
+                            onChange={() =>
+                              updateCategories(subCategory, "sub")
+                            }
+                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                          />
+                          <label className="ml-3 whitespace-nowrap pr-6 text-sm text-gray-900">
+                            {subCategory}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </form>
@@ -218,12 +261,13 @@ const Products = () => {
       </div>
 
       <div className="-mr-6 flex-1 overflow-y-auto min-h-0 min-h-80 shadow-inner">
-        {selectedCategories.length === 0 && (
-          <p className="px-6 mt-6 text-gray-500">
-            Bitte wählen Sie mindestens eine Lebensmittelkategorie aus, um die
-            Artikel anzuzeigen.
-          </p>
-        )}
+        {selectedCategories.major.length === 0 &&
+          selectedCategories.sub.length === 0 && (
+            <p className="px-6 mt-6 text-gray-500">
+              Bitte wählen Sie mindestens eine Lebensmittelkategorie aus, um die
+              Artikel anzuzeigen.
+            </p>
+          )}
         <ul role="list" className="divide-y divide-gray-100">
           {sortedProducts.map((product) => {
             return (

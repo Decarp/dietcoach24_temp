@@ -1,26 +1,11 @@
 import { basketProductsResponse } from "@/data/basketProductsResponse";
-import type { SelectedBasketIds } from "@/app/p/[id]/purchases/page";
-
-export type ChartMacroCategoriesResponse = {
-  name: {
-    de: string;
-    en: string;
-  };
-  values: {
-    kcal: number;
-    g: number;
-  };
-};
-
-export type ChartMacroCategoriesData = {
-  name: string;
-  value: number;
-  metric: string;
-};
-
-export type MetricOptions = "kcal" | "g";
-
-export type LanguageOptions = "en" | "de";
+import {
+  ChartMacroCategoriesData,
+  ChartMacroCategoriesResponse,
+  LanguageOptions,
+  MetricOptions,
+  SelectedBasketIds,
+} from "@/types/types";
 
 const aggregateCategories = (
   filteredProducts: any[]

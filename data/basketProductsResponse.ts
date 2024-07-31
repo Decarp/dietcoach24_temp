@@ -21,8 +21,8 @@ export const basketProductsResponse = [
           salt: 1,
         },
         dietCoachCategoryL1: {
-          de: "Verzehrfertig",
-          en: "Ready-to-eat",
+          de: "Fertiggerichte",
+          en: "Ready meals",
         },
         dietCoachCategoryL2: {
           de: "Herzhafte Gerichte",
@@ -49,7 +49,7 @@ export const basketProductsResponse = [
           en: "Vegetables",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Gemüse",
+          de: "Unverarbeitetes Gemüse",
           en: "Plain vegetables",
         },
         imageUrl: "",
@@ -106,8 +106,8 @@ export const basketProductsResponse = [
           en: "Beverages",
         },
         dietCoachCategoryL2: {
-          de: "Wasser & einfacher Kaffee/Tee",
-          en: "Water & plain coffee/tea",
+          de: "Wasser, Kaffee & Tee",
+          en: "Water, Coffee & Tea",
         },
         imageUrl: "",
       },
@@ -139,8 +139,8 @@ export const basketProductsResponse = [
           en: "Grain products & potatoes",
         },
         dietCoachCategoryL2: {
-          de: "Kartoffeln und Knollen",
-          en: "Potatos and tubers",
+          de: "Kartoffeln & Knollen",
+          en: "Potatoes & tubers",
         },
         imageUrl: "",
       },
@@ -244,8 +244,8 @@ export const basketProductsResponse = [
           en: "Dairy products & Alternatives",
         },
         dietCoachCategoryL2: {
-          de: "Joghurt und Quark",
-          en: "Yoghurt and quark",
+          de: "Joghurt & Quark",
+          en: "Yoghurt & quark",
         },
         imageUrl: "",
       },
@@ -273,11 +273,11 @@ export const basketProductsResponse = [
           salt: 0,
         },
         dietCoachCategoryL1: {
-          de: "Obst",
+          de: "Früchte",
           en: "Fruits",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Obst",
+          de: "Unverarbeitete Früchte",
           en: "Plain fruits",
         },
         imageUrl: "",
@@ -334,7 +334,7 @@ export const basketProductsResponse = [
           en: "Vegetables",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Gemüse",
+          de: "Unverarbeitetes Gemüse",
           en: "Plain vegetables",
         },
         imageUrl: "",
@@ -411,11 +411,11 @@ export const basketProductsResponse = [
           salt: 0,
         },
         dietCoachCategoryL1: {
-          de: "Obst",
+          de: "Früchte",
           en: "Fruits",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Obst",
+          de: "Unverarbeitete Früchte",
           en: "Plain fruits",
         },
         imageUrl: "",
@@ -444,11 +444,11 @@ export const basketProductsResponse = [
           salt: 0,
         },
         dietCoachCategoryL1: {
-          de: "Obst",
+          de: "Früchte",
           en: "Fruits",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Obst",
+          de: "Unverarbeitete Früchte",
           en: "Plain fruits",
         },
         imageUrl: "",
@@ -468,12 +468,12 @@ export const basketProductsResponse = [
           salt: 0.02,
         },
         dietCoachCategoryL1: {
-          de: "Fette, Öle und Nüsse",
-          en: "Fats, oils and nuts",
+          de: "Fett, Öle & Nüsse",
+          en: "Fats, oils & nuts",
         },
         dietCoachCategoryL2: {
-          de: "Nüsse, Samen, Ölfrüchte",
-          en: "Nuts, seeds, Oleiferous fruits",
+          de: "Nüsse, Samen & Ölfrüchte",
+          en: "Nuts, seeds & oleiferous fruits",
         },
         imageUrl: "",
       },
@@ -505,7 +505,7 @@ export const basketProductsResponse = [
           en: "Vegetables",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Gemüse",
+          de: "Unverarbeitetes Gemüse",
           en: "Plain vegetables",
         },
         imageUrl: "",
@@ -525,8 +525,8 @@ export const basketProductsResponse = [
           salt: 0.9,
         },
         dietCoachCategoryL1: {
-          de: "Hülsenfrüchte & pflanzliche Proteinprodukte",
-          en: "Legumes & plant based protein products",
+          de: "Pflanzliche Proteinquellen",
+          en: "Plant-based protein sources",
         },
         dietCoachCategoryL2: {
           de: "Hülsenfrüchte",
@@ -562,8 +562,8 @@ export const basketProductsResponse = [
           en: "Dairy products & Alternatives",
         },
         dietCoachCategoryL2: {
-          de: "Joghurt und Quark",
-          en: "Yoghurt and quark",
+          de: "Joghurt & Quark",
+          en: "Yoghurt & quark",
         },
         imageUrl: "",
       },
@@ -615,11 +615,11 @@ export const basketProductsResponse = [
           salt: 0,
         },
         dietCoachCategoryL1: {
-          de: "Obst",
+          de: "Früchte",
           en: "Fruits",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Obst",
+          de: "Unverarbeitete Früchte",
           en: "Plain fruits",
         },
         imageUrl: "",
@@ -639,11 +639,11 @@ export const basketProductsResponse = [
           salt: 0,
         },
         dietCoachCategoryL1: {
-          de: "Obst",
+          de: "Früchte",
           en: "Fruits",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Obst",
+          de: "Unverarbeitete Früchte",
           en: "Plain fruits",
         },
         imageUrl: "",
@@ -676,7 +676,7 @@ export const basketProductsResponse = [
           en: "Vegetables",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Gemüse",
+          de: "Unverarbeitetes Gemüse",
           en: "Plain vegetables",
         },
         imageUrl: "",
@@ -700,7 +700,7 @@ export const basketProductsResponse = [
           en: "Vegetables",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Gemüse",
+          de: "Unverarbeitetes Gemüse",
           en: "Plain vegetables",
         },
         imageUrl: "",
@@ -729,12 +729,12 @@ export const basketProductsResponse = [
           salt: 0.5,
         },
         dietCoachCategoryL1: {
-          de: "Fleisch, Fisch und Eier",
-          en: "Meat, fish and eggs",
+          de: "Fleisch, Fisch & Eier",
+          en: "Meat, fish & eggs",
         },
         dietCoachCategoryL2: {
           de: "Fleisch & Geflügel",
-          en: "Meat & Poultry",
+          en: "Meat & poultry",
         },
         imageUrl: "",
       },
@@ -753,8 +753,8 @@ export const basketProductsResponse = [
           salt: 0.1,
         },
         dietCoachCategoryL1: {
-          de: "Fleisch, Fisch und Eier",
-          en: "Meat, fish and eggs",
+          de: "Fleisch, Fisch & Eier",
+          en: "Meat, fish & eggs",
         },
         dietCoachCategoryL2: {
           de: "Fisch & Meeresfrüchte",
@@ -786,11 +786,11 @@ export const basketProductsResponse = [
           salt: 0,
         },
         dietCoachCategoryL1: {
-          de: "Obst",
+          de: "Früchte",
           en: "Fruits",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Obst",
+          de: "Unverarbeitete Früchte",
           en: "Plain fruits",
         },
         imageUrl: "",
@@ -810,12 +810,12 @@ export const basketProductsResponse = [
           salt: 1.2,
         },
         dietCoachCategoryL1: {
-          de: "Fette, Öle und Nüsse",
-          en: "Fats, oils and nuts",
+          de: "Fett, Öle & Nüsse",
+          en: "Fats, oils & nuts",
         },
         dietCoachCategoryL2: {
-          de: "Nüsse, Samen, Ölfrüchte",
-          en: "Nuts, seeds, Oleiferous fruits",
+          de: "Nüsse, Samen & Ölfrüchte",
+          en: "Nuts, seeds & oleiferous fruits",
         },
         imageUrl: "",
       },
@@ -847,7 +847,7 @@ export const basketProductsResponse = [
           en: "Vegetables",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Gemüse",
+          de: "Unverarbeitetes Gemüse",
           en: "Plain vegetables",
         },
         imageUrl: "",
@@ -867,8 +867,8 @@ export const basketProductsResponse = [
           salt: 0.6,
         },
         dietCoachCategoryL1: {
-          de: "Hülsenfrüchte & pflanzliche Proteinprodukte",
-          en: "Legumes & plant based protein products",
+          de: "Pflanzliche Proteinquellen",
+          en: "Plant-based protein sources",
         },
         dietCoachCategoryL2: {
           de: "Hülsenfrüchte",
@@ -904,8 +904,8 @@ export const basketProductsResponse = [
           en: "Dairy products & Alternatives",
         },
         dietCoachCategoryL2: {
-          de: "Joghurt und Quark",
-          en: "Yoghurt and quark",
+          de: "Joghurt & Quark",
+          en: "Yoghurt & quark",
         },
         imageUrl: "",
       },
@@ -924,8 +924,8 @@ export const basketProductsResponse = [
           salt: 0.4,
         },
         dietCoachCategoryL1: {
-          de: "Fleisch, Fisch und Eier",
-          en: "Meat, fish and eggs",
+          de: "Fleisch, Fisch & Eier",
+          en: "Meat, fish & eggs",
         },
         dietCoachCategoryL2: {
           de: "Eier",
@@ -981,11 +981,11 @@ export const basketProductsResponse = [
           salt: 0,
         },
         dietCoachCategoryL1: {
-          de: "Obst",
+          de: "Früchte",
           en: "Fruits",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Obst",
+          de: "Unverarbeitete Früchte",
           en: "Plain fruits",
         },
         imageUrl: "",
@@ -1009,7 +1009,7 @@ export const basketProductsResponse = [
           en: "Vegetables",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Gemüse",
+          de: "Unverarbeitetes Gemüse",
           en: "Plain vegetables",
         },
         imageUrl: "",
@@ -1042,7 +1042,7 @@ export const basketProductsResponse = [
           en: "Vegetables",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Gemüse",
+          de: "Unverarbeitetes Gemüse",
           en: "Plain vegetables",
         },
         imageUrl: "",
@@ -1062,8 +1062,8 @@ export const basketProductsResponse = [
           salt: 0.4,
         },
         dietCoachCategoryL1: {
-          de: "Hülsenfrüchte & pflanzliche Proteinprodukte",
-          en: "Legumes & plant based protein products",
+          de: "Pflanzliche Proteinquellen",
+          en: "Plant-based protein sources",
         },
         dietCoachCategoryL2: {
           de: "Hülsenfrüchte",
@@ -1119,11 +1119,11 @@ export const basketProductsResponse = [
           salt: 0,
         },
         dietCoachCategoryL1: {
-          de: "Obst",
+          de: "Früchte",
           en: "Fruits",
         },
         dietCoachCategoryL2: {
-          de: "Einfaches Obst",
+          de: "Unverarbeitete Früchte",
           en: "Plain fruits",
         },
         imageUrl: "",
@@ -1143,8 +1143,8 @@ export const basketProductsResponse = [
           salt: 0.8,
         },
         dietCoachCategoryL1: {
-          de: "Hülsenfrüchte & pflanzliche Proteinprodukte",
-          en: "Legumes & plant based protein products",
+          de: "Pflanzliche Proteinquellen",
+          en: "Plant-based protein sources",
         },
         dietCoachCategoryL2: {
           de: "Hülsenfrüchte",

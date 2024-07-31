@@ -46,54 +46,45 @@ export const categories = {
     ],
   },
   de: {
-    Getränke: [
-      "Saft",
-      "Milchbasierte Getränke",
-      "Süße Getränke",
-      "Wasser & einfacher Kaffee/Tee",
-    ],
+    Getränke: ["Saft", "Milchgetränke", "Süssgetränke", "Wasser, Kaffee & Tee"],
     "Milchprodukte & Alternativen": [
       "Käse & Käseprodukte",
-      "Frisch- und Streichkäse",
-      "Milch & Alternativen",
-      "Joghurt und Quark",
+      "Frisch- & Streichkäse",
+      "Milch & Milchalternativen",
+      "Joghurt & Quark",
     ],
-    "Fette, Öle und Nüsse": [
-      "Sahne",
-      "Fette und Öl",
-      "Nüsse, Samen, Ölfrüchte",
-    ],
+    "Fett, Öle & Nüsse": ["Rahm", "Fette & Öle", "Nüsse, Samen & Ölfrüchte"],
     "Getreideprodukte & Kartoffeln": [
       "Brot",
       "Frühstückscerealien",
-      "Teig & Mehl",
+      "Teige & Mehl",
       "Pasta",
-      "Kartoffeln und Knollen",
+      "Kartoffeln & Knollen",
       "Reis & Getreide",
     ],
-    "Fleisch, Fisch und Eier": [
+    "Fleisch, Fisch & Eier": [
       "Eier",
       "Fisch & Meeresfrüchte",
       "Fleisch & Geflügel",
-      "Fleischprodukte und Würste",
+      "Fleischprodukte & Wurst",
     ],
-    Verzehrfertig: [
+    Fertiggerichte: [
       "Add-ons",
       "Herzhafte Gerichte",
       "Desserts",
-      "Süße Gerichte",
+      "Süsse Gerichte",
     ],
-    Snacks: ["Salzige Snacks", "Süße Snacks"],
-    Obst: ["einfaches Obst", "verarbeitetes Obst"],
-    Gemüse: ["einfaches Gemüse", "verarbeitetes Gemüse"],
-    "Hülsenfrüchte & pflanzliche Proteinprodukte": [
+    Snacks: ["Salzige Snacks", "Süsse Snacks"],
+    Früchte: ["Unverarbeitete Früchte", "Verarbeitete Früchte"],
+    Gemüse: ["Unverarbeitetes Gemüse", "Verarbeitetes Gemüse"],
+    "Pflanzliche Proteinquellen": [
       "Fleisch- & Fischalternativen",
       "Hülsenfrüchte",
     ],
     Ausgeschlossen: [
       "Alkoholische Getränke",
       "Zutaten",
-      "Nahrungsergänzungsmittel & Speziallebensmittel",
+      "Supplemente & Spezialnahrungsmittel",
     ],
   },
 };
