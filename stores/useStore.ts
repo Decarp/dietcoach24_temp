@@ -1,25 +1,27 @@
-import { SelectedBasketProductId } from "@/types/types";
+import { BasketProductFlat, SelectedBasketProductId } from "@/types/types";
 import { createStore } from "zustand/vanilla";
 
 export type CounterState = {
   count: number;
-  selectedCategories: string[];
+  selectedCategories: { major: string[]; sub: string[] };
   selectedSortCriteria: string;
   selectedBasketIds: number[];
   selectedBasketProductIds: SelectedBasketProductId[];
   currentTab: string;
   patientId: string | null;
+  basketProductsFlat: BasketProductFlat[];
 };
 
 export type CounterActions = {
   decrementCount: () => void;
   incrementCount: () => void;
-  setSelectedCategories: (cats: string[]) => void;
+  setSelectedCategories: (cats: { major: string[]; sub: string[] }) => void;
   setSelectedSortCriteria: (criteria: string) => void;
   setSelectedBasketIds: (ids: number[]) => void;
   setSelectedBasketProductIds: (ids: SelectedBasketProductId[]) => void;
   setCurrentTab: (tab: string) => void;
   setPatientId: (id: string | null) => void;
+  setBasketProductsFlat: (products: BasketProductFlat[]) => void;
 };
 
 export type CounterStore = CounterState & CounterActions;
@@ -27,23 +29,25 @@ export type CounterStore = CounterState & CounterActions;
 export const initCounterStore = (): CounterState => {
   return {
     count: new Date().getFullYear(),
-    selectedCategories: [],
+    selectedCategories: { major: [], sub: [] },
     selectedSortCriteria: "Einkaufsdatum",
     selectedBasketIds: [],
     selectedBasketProductIds: [],
     currentTab: "energy",
     patientId: null,
+    basketProductsFlat: [],
   };
 };
 
 export const defaultInitState: CounterState = {
   count: 0,
-  selectedCategories: [],
+  selectedCategories: { major: [], sub: [] },
   selectedSortCriteria: "Einkaufsdatum",
   selectedBasketIds: [],
   selectedBasketProductIds: [],
   currentTab: "energy",
   patientId: null,
+  basketProductsFlat: [],
 };
 
 export const createCounterStore = (
@@ -53,7 +57,7 @@ export const createCounterStore = (
     ...initState,
     decrementCount: () => set((state) => ({ count: state.count - 1 })),
     incrementCount: () => set((state) => ({ count: state.count + 1 })),
-    setSelectedCategories: (cats: string[]) =>
+    setSelectedCategories: (cats: { major: string[]; sub: string[] }) =>
       set(() => ({ selectedCategories: cats })),
     setSelectedSortCriteria: (criteria: string) =>
       set(() => ({ selectedSortCriteria: criteria })),
@@ -63,5 +67,7 @@ export const createCounterStore = (
       set(() => ({ selectedBasketProductIds: ids })),
     setCurrentTab: (tab: string) => set(() => ({ currentTab: tab })),
     setPatientId: (id: string | null) => set(() => ({ patientId: id })),
+    setBasketProductsFlat: (products: BasketProductFlat[]) =>
+      set(() => ({ basketProductsFlat: products })),
   }));
 };

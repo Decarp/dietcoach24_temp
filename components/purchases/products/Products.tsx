@@ -1,6 +1,5 @@
 import { getBasketProducts } from "@/api/getBasketProducts";
 import ProductsHeader from "@/components/purchases/products/ProductsHeader";
-import { categories } from "@/data/categories";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import {
   Menu,
@@ -38,21 +37,31 @@ const Products = () => {
     setSelectedCategories,
     selectedSortCriteria,
     setSelectedSortCriteria,
+    basketProductsFlat,
+    setBasketProductsFlat,
   } = useCounterStore((state) => state);
 
   const basketProductsResponse = getBasketProducts(selectedBasketIds);
 
-  const basketProductsFlat: BasketProductFlat[] =
+  const newBasketProductsFlat: BasketProductFlat[] =
     basketProductsResponse.flatMap((basket) => {
-      return basket.products.map((product) => {
-        return {
-          basketId: basket.basketId,
-          basketIndex: basket.index,
-          basketTimestamp: basket.timestamp,
-          ...product,
-        };
-      });
+      return basket.products.map((product) => ({
+        basketId: basket.basketId,
+        basketIndex: basket.index,
+        basketTimestamp: basket.timestamp,
+        ...product,
+      }));
     });
+
+  // Set basketProductsFlat in the store if it has changed
+  useEffect(() => {
+    if (
+      JSON.stringify(newBasketProductsFlat) !==
+      JSON.stringify(basketProductsFlat)
+    ) {
+      setBasketProductsFlat(newBasketProductsFlat);
+    }
+  }, [newBasketProductsFlat, basketProductsFlat, setBasketProductsFlat]);
 
   const sortProducts = (products: BasketProductFlat[]) => {
     const getSortValue = (product: BasketProductFlat) => {
@@ -79,20 +88,93 @@ const Products = () => {
     );
   };
 
-  const basketProductsFlatFiltered =
-    selectedCategories.length > 0
-      ? basketProductsFlat.filter((product) =>
-          selectedCategories.includes(product.dietCoachCategoryL1.de)
-        )
-      : [];
+  const handleCategoryChange = (category: string, level: "major" | "sub") => {
+    const newCategories = { ...selectedCategories };
 
-  const basketProductsFlatFilteredSorted = sortProducts(
-    basketProductsFlatFiltered
+    if (level === "major") {
+      if (newCategories.major.includes(category)) {
+        // Deselect major category and all its sub-categories
+        newCategories.major = newCategories.major.filter((i) => i !== category);
+        newCategories.sub = newCategories.sub.filter(
+          (sub) =>
+            !basketProductsFlat.some(
+              (product) =>
+                product.dietCoachCategoryL1.de === category &&
+                product.dietCoachCategoryL2.de === sub
+            )
+        );
+      } else {
+        // Select major category and all its sub-categories
+        newCategories.major.push(category);
+        newCategories.sub.push(
+          ...basketProductsFlat
+            .filter((product) => product.dietCoachCategoryL1.de === category)
+            .map((product) => product.dietCoachCategoryL2.de)
+        );
+      }
+    } else {
+      if (newCategories.sub.includes(category)) {
+        // Deselect sub-category
+        newCategories.sub = newCategories.sub.filter((i) => i !== category);
+
+        // Check if all sub-categories of this major category are deselected
+        const majorCategory = basketProductsFlat.find(
+          (product) => product.dietCoachCategoryL2.de === category
+        )?.dietCoachCategoryL1.de;
+
+        if (
+          majorCategory &&
+          !basketProductsFlat.some(
+            (product) =>
+              product.dietCoachCategoryL1.de === majorCategory &&
+              newCategories.sub.includes(product.dietCoachCategoryL2.de)
+          )
+        ) {
+          // Deselect the major category
+          newCategories.major = newCategories.major.filter(
+            (i) => i !== majorCategory
+          );
+        }
+      } else {
+        // Select sub-category
+        newCategories.sub.push(category);
+
+        // Automatically select the major category
+        const majorCategory = basketProductsFlat.find(
+          (product) => product.dietCoachCategoryL2.de === category
+        )?.dietCoachCategoryL1.de;
+
+        if (majorCategory && !newCategories.major.includes(majorCategory)) {
+          newCategories.major.push(majorCategory);
+        }
+      }
+    }
+
+    setSelectedCategories(newCategories);
+  };
+
+  const filteredProducts = basketProductsFlat.filter(
+    (product) =>
+      (selectedCategories.major.length === 0 ||
+        selectedCategories.major.includes(product.dietCoachCategoryL1.de)) &&
+      (selectedCategories.sub.length === 0 ||
+        selectedCategories.sub.includes(product.dietCoachCategoryL2.de))
   );
 
-  const availableCategories = Array.from(
-    new Set(basketProductsFlat.map((product) => product.dietCoachCategoryL1.de))
-  );
+  const sortedProducts = sortProducts(filteredProducts);
+
+  const availableCategories = {
+    major: Array.from(
+      new Set(
+        basketProductsFlat.map((product) => product.dietCoachCategoryL1.de)
+      )
+    ),
+    sub: Array.from(
+      new Set(
+        basketProductsFlat.map((product) => product.dietCoachCategoryL2.de)
+      )
+    ),
+  };
 
   useEffect(() => {
     if (!sortCriteria.includes(selectedSortCriteria)) {
@@ -100,11 +182,6 @@ const Products = () => {
     }
   }, [selectedSortCriteria, setSelectedSortCriteria]);
 
-  const handleCategoryChange = (category: string) => {
-    selectedCategories.includes(category)
-      ? setSelectedCategories(selectedCategories.filter((i) => i !== category))
-      : setSelectedCategories([...selectedCategories, category]);
-  };
   const handleDrawerOpen = (open: boolean) => {
     setDrawerOpen(open);
     setOverlayVisible(open);
@@ -115,7 +192,7 @@ const Products = () => {
       {overlayVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
       )}
-      <ProductsHeader products={basketProductsFlatFilteredSorted} />
+      <ProductsHeader products={sortedProducts} />
 
       <div className="px-6 -mt-2 pb-2 flex gap-x-8 items-center">
         <div>
@@ -135,20 +212,40 @@ const Products = () => {
               className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
             >
               <form className="space-y-4">
-                {availableCategories.map((category) => (
-                  <div key={category} className="flex items-center">
-                    <input
-                      value={category}
-                      type="checkbox"
-                      checked={selectedCategories.includes(category)}
-                      onChange={() => handleCategoryChange(category)}
-                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                    />
-                    <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
-                      {category}
-                    </label>
-                  </div>
-                ))}
+                <div>
+                  <h4 className="font-semibold">Major Categories</h4>
+                  {availableCategories.major.map((category) => (
+                    <div key={category} className="flex items-center">
+                      <input
+                        value={category}
+                        type="checkbox"
+                        checked={selectedCategories.major.includes(category)}
+                        onChange={() => handleCategoryChange(category, "major")}
+                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      />
+                      <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
+                        {category}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <h4 className="font-semibold">Sub Categories</h4>
+                  {availableCategories.sub.map((category) => (
+                    <div key={category} className="flex items-center">
+                      <input
+                        value={category}
+                        type="checkbox"
+                        checked={selectedCategories.sub.includes(category)}
+                        onChange={() => handleCategoryChange(category, "sub")}
+                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      />
+                      <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
+                        {category}
+                      </label>
+                    </div>
+                  ))}
+                </div>
               </form>
             </PopoverPanel>
           </Popover>
@@ -210,14 +307,15 @@ const Products = () => {
       </div>
 
       <div className="-mr-6 flex-1 overflow-y-auto min-h-0 min-h-80 shadow-inner">
-        {selectedCategories.length === 0 && (
-          <p className="px-6 mt-6 text-gray-500">
-            Bitte wählen Sie mindestens eine Lebensmittelkategorie aus, um die
-            Artikel anzuzeigen.
-          </p>
-        )}
+        {selectedCategories.major.length === 0 &&
+          selectedCategories.sub.length === 0 && (
+            <p className="px-6 mt-6 text-gray-500">
+              Bitte wählen Sie mindestens eine Lebensmittelkategorie aus, um die
+              Artikel anzuzeigen.
+            </p>
+          )}
         <ul role="list" className="divide-y divide-gray-100">
-          {basketProductsFlatFilteredSorted.map((product) => {
+          {sortedProducts.map((product) => {
             return (
               <ProductCard
                 key={`${product.basketId},${product.productId}`}
