@@ -90,6 +90,10 @@ const Products = () => {
     basketProductsFlatFiltered
   );
 
+  const availableCategories = Array.from(
+    new Set(basketProductsFlat.map((product) => product.dietCoachCategoryL1.de))
+  );
+
   useEffect(() => {
     if (!sortCriteria.includes(selectedSortCriteria)) {
       setSelectedSortCriteria(selectedSortCriteria);
@@ -131,17 +135,17 @@ const Products = () => {
               className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
             >
               <form className="space-y-4">
-                {Object.keys(categories.de).map((key) => (
-                  <div key={key} className="flex items-center">
+                {availableCategories.map((category) => (
+                  <div key={category} className="flex items-center">
                     <input
-                      value={key}
+                      value={category}
                       type="checkbox"
-                      checked={selectedCategories.includes(key)}
-                      onChange={() => handleCategoryChange(key)}
+                      checked={selectedCategories.includes(category)}
+                      onChange={() => handleCategoryChange(category)}
                       className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                     />
                     <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
-                      {key}
+                      {category}
                     </label>
                   </div>
                 ))}
