@@ -58,7 +58,23 @@ export const createCounterStore = (
     decrementCount: () => set((state) => ({ count: state.count - 1 })),
     incrementCount: () => set((state) => ({ count: state.count + 1 })),
     setSelectedCategories: (cats: { major: string[]; sub: string[] }) =>
-      set(() => ({ selectedCategories: cats })),
+      set((state) => {
+        const newSelectedBasketProductIds =
+          state.selectedBasketProductIds.filter((id) =>
+            state.basketProductsFlat.some(
+              (product) =>
+                product.basketId === id.basketId &&
+                product.productId === id.productId &&
+                (cats.major.includes(product.dietCoachCategoryL1.de) ||
+                  cats.sub.includes(product.dietCoachCategoryL2.de))
+            )
+          );
+
+        return {
+          selectedCategories: cats,
+          selectedBasketProductIds: newSelectedBasketProductIds,
+        };
+      }),
     setSelectedSortCriteria: (criteria: string) =>
       set(() => ({ selectedSortCriteria: criteria })),
     setSelectedBasketIds: (ids: number[]) =>
