@@ -1,16 +1,14 @@
-import { basketProductsResponse } from "@/data/basketProductsResponse";
 import {
-  BasketProduct,
   ChartEnergyMacroData,
   ChartEnergyMacroResponse,
   LanguageOptions,
   MetricOptions,
+  Product,
   SelectedBasketIds,
 } from "@/types/types";
+import { getBasketProducts } from "./getBasketProducts";
 
-const aggregateMacros = (
-  filteredProducts: any[]
-): ChartEnergyMacroResponse[] => {
+const aggregateMacros = (products: Product[]): ChartEnergyMacroResponse[] => {
   const macros = {
     Carbohydrates: { de: "Kohlenhydrate", en: "Carbohydrates", kcal: 0, g: 0 },
     Fats: { de: "Fette", en: "Fats", kcal: 0, g: 0 },
@@ -18,7 +16,7 @@ const aggregateMacros = (
     Fibre: { de: "Nahrungsfasern", en: "Fibre", kcal: 0, g: 0 },
   };
 
-  filteredProducts.forEach((product) => {
+  products.forEach((product) => {
     const { nutrients } = product;
     const { carbohydrates, fats, proteins, fibers, kcal } = nutrients;
 
@@ -53,27 +51,18 @@ const mapChartEnergyMacroResponse = (
   }));
 };
 
-const fetchData = (
-  selectedBasketIds: SelectedBasketIds // API body parameter
-): BasketProduct[] => {
-  const authentication = ""; // via local storage
-  const participantId = ""; // via url param
-  const body = {
-    basketIds: selectedBasketIds, // list of basketIds
-  };
-  return basketProductsResponse;
-};
-
 export const getChartEnergyMacroData = (
   selectedBasketIds: SelectedBasketIds, // API body parameter
   selectedMetric: MetricOptions // Client side selection
 ): ChartEnergyMacroData[] => {
-  const data = fetchData(selectedBasketIds);
-  const filteredProducts = data
-    .filter((basket) => selectedBasketIds.includes(basket.basketId))
-    .flatMap((basket) => basket.products);
+  const basketProductsResponse = getBasketProducts(selectedBasketIds);
 
-  const dynamicChartMacroResponse = aggregateMacros(filteredProducts);
+  const products = basketProductsResponse.flatMap((basket) => basket.products);
 
-  return mapChartEnergyMacroResponse(dynamicChartMacroResponse, selectedMetric);
+  const dynamicChartEnergyMacroResponse = aggregateMacros(products);
+
+  return mapChartEnergyMacroResponse(
+    dynamicChartEnergyMacroResponse,
+    selectedMetric
+  );
 };

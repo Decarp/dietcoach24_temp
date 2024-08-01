@@ -1,19 +1,19 @@
-import { basketProductsResponse } from "@/data/basketProductsResponse";
 import {
-  BasketProduct,
   ChartEnergyCategoriesData,
   ChartEnergyCategoriesResponse,
   LanguageOptions,
   MetricOptions,
+  Product,
   SelectedBasketIds,
 } from "@/types/types";
+import { getBasketProducts } from "./getBasketProducts";
 
 const aggregateCategories = (
-  filteredProducts: any[]
+  products: Product[]
 ): ChartEnergyCategoriesResponse[] => {
   const categories: { [key: string]: ChartEnergyCategoriesResponse } = {};
 
-  filteredProducts.forEach((product) => {
+  products.forEach((product) => {
     const { dietCoachCategoryL1, nutrients } = product;
     const { kcal, proteins, fats, carbohydrates, fibers } = nutrients;
     const categoryName = dietCoachCategoryL1.en;
@@ -48,31 +48,18 @@ const mapChartEnergyCategoriesResponse = (
   }));
 };
 
-const fetchData = (
-  selectedBasketIds: SelectedBasketIds // API body parameter
-): BasketProduct[] => {
-  const authentication = ""; // via local storage
-  const participantId = ""; // via url param
-  const body = {
-    basketIds: selectedBasketIds, // list of basketIds
-  };
-  return basketProductsResponse;
-};
-
 export const getChartEnergyCategoriesData = (
   selectedBasketIds: SelectedBasketIds, // API body parameter
   selectedMetric: MetricOptions // Client side selection
 ): ChartEnergyCategoriesData[] => {
-  const data = fetchData(selectedBasketIds);
-  const filteredProducts = data
-    .filter((basket) => selectedBasketIds.includes(basket.basketId))
-    .flatMap((basket) => basket.products);
+  const basketProductsResponse = getBasketProducts(selectedBasketIds);
 
-  const dynamicChartMacroCategoriesResponse =
-    aggregateCategories(filteredProducts);
+  const products = basketProductsResponse.flatMap((basket) => basket.products);
+
+  const dynamicChartEnergyCategoriesResponse = aggregateCategories(products);
 
   return mapChartEnergyCategoriesResponse(
-    dynamicChartMacroCategoriesResponse,
+    dynamicChartEnergyCategoriesResponse,
     selectedMetric
   );
 };
