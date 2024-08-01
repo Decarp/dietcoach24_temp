@@ -15,6 +15,12 @@ const ChartEnergyCategories = dynamic(
     ssr: false,
   }
 );
+const ChartEnergyMacroCategories = dynamic(
+  () => import("@/components/purchases/analysis/ChartEnergyMacroCategories"),
+  {
+    ssr: false,
+  }
+);
 
 const Analysis = () => {
   const { selectedBasketIds, currentTab } = useCounterStore((state) => state);
@@ -44,7 +50,7 @@ const Analysis = () => {
                 <>
                   <br />
                   <h4 className="text-lg font-medium mb-2">Makronährstoffe</h4>
-                  <div className="border rounded-lg p-4 bg-white h-96 bg-white" />
+                  <ChartEnergyMacroCategories />
                 </>
               )}
               {currentTab === "micro" && (

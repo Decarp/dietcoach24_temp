@@ -77,6 +77,12 @@ export type MetricOptions = "kcal" | "g";
 
 export type LanguageOptions = "en" | "de";
 
+export type MacroCategory =
+  | "Kohlenhydrate"
+  | "Fette"
+  | "Proteine"
+  | "Nahrungsfasern";
+
 export type ChartEnergyMacroResponse = {
   name: {
     de: string;
