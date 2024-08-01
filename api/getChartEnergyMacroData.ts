@@ -1,13 +1,14 @@
-import { basketProductsResponse } from "@/data/basketProductsResponse";
 import {
-  ChartMacroData,
-  ChartMacroResponse,
+  ChartEnergyMacroData,
+  ChartEnergyMacroResponse,
   LanguageOptions,
   MetricOptions,
+  Product,
   SelectedBasketIds,
 } from "@/types/types";
+import { getBasketProducts } from "./getBasketProducts";
 
-const aggregateMacros = (filteredProducts: any[]): ChartMacroResponse[] => {
+const aggregateMacros = (products: Product[]): ChartEnergyMacroResponse[] => {
   const macros = {
     Carbohydrates: { de: "Kohlenhydrate", en: "Carbohydrates", kcal: 0, g: 0 },
     Fats: { de: "Fette", en: "Fats", kcal: 0, g: 0 },
@@ -15,7 +16,7 @@ const aggregateMacros = (filteredProducts: any[]): ChartMacroResponse[] => {
     Fibre: { de: "Nahrungsfasern", en: "Fibre", kcal: 0, g: 0 },
   };
 
-  filteredProducts.forEach((product) => {
+  products.forEach((product) => {
     const { nutrients } = product;
     const { carbohydrates, fats, proteins, fibers, kcal } = nutrients;
 
@@ -38,11 +39,11 @@ const aggregateMacros = (filteredProducts: any[]): ChartMacroResponse[] => {
   }));
 };
 
-const mapChartMacroResponse = (
-  chartMacroResponse: ChartMacroResponse[],
+const mapChartEnergyMacroResponse = (
+  chartMacroResponse: ChartEnergyMacroResponse[],
   selectedMetric: MetricOptions,
   language: LanguageOptions = "de"
-): ChartMacroData[] => {
+): ChartEnergyMacroData[] => {
   return chartMacroResponse.map((item) => ({
     name: item.name[language],
     value: item.values[selectedMetric],
@@ -50,27 +51,18 @@ const mapChartMacroResponse = (
   }));
 };
 
-const fetchData = (
-  selectedBasketIds: SelectedBasketIds // API body parameter
-) => {
-  const authentication = ""; // via local storage
-  const participantId = ""; // via url param
-  const body = {
-    basketIds: selectedBasketIds, // list of basketIds
-  };
-  return basketProductsResponse;
-};
-
-export const getChartMacroData = (
+export const getChartEnergyMacroData = (
   selectedBasketIds: SelectedBasketIds, // API body parameter
   selectedMetric: MetricOptions // Client side selection
-): ChartMacroData[] => {
-  const data = fetchData(selectedBasketIds);
-  const filteredProducts = data
-    .filter((basket) => selectedBasketIds.includes(basket.basketId))
-    .flatMap((basket) => basket.products);
+): ChartEnergyMacroData[] => {
+  const basketProductsResponse = getBasketProducts(selectedBasketIds);
 
-  const dynamicChartMacroResponse = aggregateMacros(filteredProducts);
+  const products = basketProductsResponse.flatMap((basket) => basket.products);
 
-  return mapChartMacroResponse(dynamicChartMacroResponse, selectedMetric);
+  const dynamicChartEnergyMacroResponse = aggregateMacros(products);
+
+  return mapChartEnergyMacroResponse(
+    dynamicChartEnergyMacroResponse,
+    selectedMetric
+  );
 };
