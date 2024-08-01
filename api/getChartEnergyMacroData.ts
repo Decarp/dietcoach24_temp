@@ -1,13 +1,16 @@
 import { basketProductsResponse } from "@/data/basketProductsResponse";
 import {
-  ChartMacroData,
-  ChartMacroResponse,
+  BasketProduct,
+  ChartEnergyMacroData,
+  ChartEnergyMacroResponse,
   LanguageOptions,
   MetricOptions,
   SelectedBasketIds,
 } from "@/types/types";
 
-const aggregateMacros = (filteredProducts: any[]): ChartMacroResponse[] => {
+const aggregateMacros = (
+  filteredProducts: any[]
+): ChartEnergyMacroResponse[] => {
   const macros = {
     Carbohydrates: { de: "Kohlenhydrate", en: "Carbohydrates", kcal: 0, g: 0 },
     Fats: { de: "Fette", en: "Fats", kcal: 0, g: 0 },
@@ -38,11 +41,11 @@ const aggregateMacros = (filteredProducts: any[]): ChartMacroResponse[] => {
   }));
 };
 
-const mapChartMacroResponse = (
-  chartMacroResponse: ChartMacroResponse[],
+const mapChartEnergyMacroResponse = (
+  chartMacroResponse: ChartEnergyMacroResponse[],
   selectedMetric: MetricOptions,
   language: LanguageOptions = "de"
-): ChartMacroData[] => {
+): ChartEnergyMacroData[] => {
   return chartMacroResponse.map((item) => ({
     name: item.name[language],
     value: item.values[selectedMetric],
@@ -52,7 +55,7 @@ const mapChartMacroResponse = (
 
 const fetchData = (
   selectedBasketIds: SelectedBasketIds // API body parameter
-) => {
+): BasketProduct[] => {
   const authentication = ""; // via local storage
   const participantId = ""; // via url param
   const body = {
@@ -61,10 +64,10 @@ const fetchData = (
   return basketProductsResponse;
 };
 
-export const getChartMacroData = (
+export const getChartEnergyMacroData = (
   selectedBasketIds: SelectedBasketIds, // API body parameter
   selectedMetric: MetricOptions // Client side selection
-): ChartMacroData[] => {
+): ChartEnergyMacroData[] => {
   const data = fetchData(selectedBasketIds);
   const filteredProducts = data
     .filter((basket) => selectedBasketIds.includes(basket.basketId))
@@ -72,5 +75,5 @@ export const getChartMacroData = (
 
   const dynamicChartMacroResponse = aggregateMacros(filteredProducts);
 
-  return mapChartMacroResponse(dynamicChartMacroResponse, selectedMetric);
+  return mapChartEnergyMacroResponse(dynamicChartMacroResponse, selectedMetric);
 };

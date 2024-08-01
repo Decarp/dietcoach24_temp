@@ -1,7 +1,8 @@
 import { basketProductsResponse } from "@/data/basketProductsResponse";
 import {
-  ChartMacroCategoriesData,
-  ChartMacroCategoriesResponse,
+  BasketProduct,
+  ChartEnergyCategoriesData,
+  ChartEnergyCategoriesResponse,
   LanguageOptions,
   MetricOptions,
   SelectedBasketIds,
@@ -9,8 +10,8 @@ import {
 
 const aggregateCategories = (
   filteredProducts: any[]
-): ChartMacroCategoriesResponse[] => {
-  const categories: { [key: string]: ChartMacroCategoriesResponse } = {};
+): ChartEnergyCategoriesResponse[] => {
+  const categories: { [key: string]: ChartEnergyCategoriesResponse } = {};
 
   filteredProducts.forEach((product) => {
     const { dietCoachCategoryL1, nutrients } = product;
@@ -35,11 +36,11 @@ const aggregateCategories = (
   );
 };
 
-const mapChartMacroCategoriesResponse = (
-  chartMacroCategoriesResponse: ChartMacroCategoriesResponse[],
+const mapChartEnergyCategoriesResponse = (
+  chartMacroCategoriesResponse: ChartEnergyCategoriesResponse[],
   selectedMetric: MetricOptions,
   language: LanguageOptions = "de"
-): ChartMacroCategoriesData[] => {
+): ChartEnergyCategoriesData[] => {
   return chartMacroCategoriesResponse.map((item) => ({
     name: item.name[language],
     value: item.values[selectedMetric],
@@ -49,7 +50,7 @@ const mapChartMacroCategoriesResponse = (
 
 const fetchData = (
   selectedBasketIds: SelectedBasketIds // API body parameter
-) => {
+): BasketProduct[] => {
   const authentication = ""; // via local storage
   const participantId = ""; // via url param
   const body = {
@@ -58,10 +59,10 @@ const fetchData = (
   return basketProductsResponse;
 };
 
-export const getChartMacroCategoriesData = (
+export const getChartEnergyCategoriesData = (
   selectedBasketIds: SelectedBasketIds, // API body parameter
   selectedMetric: MetricOptions // Client side selection
-): ChartMacroCategoriesData[] => {
+): ChartEnergyCategoriesData[] => {
   const data = fetchData(selectedBasketIds);
   const filteredProducts = data
     .filter((basket) => selectedBasketIds.includes(basket.basketId))
@@ -70,7 +71,7 @@ export const getChartMacroCategoriesData = (
   const dynamicChartMacroCategoriesResponse =
     aggregateCategories(filteredProducts);
 
-  return mapChartMacroCategoriesResponse(
+  return mapChartEnergyCategoriesResponse(
     dynamicChartMacroCategoriesResponse,
     selectedMetric
   );

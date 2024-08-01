@@ -77,7 +77,7 @@ export type MetricOptions = "kcal" | "g";
 
 export type LanguageOptions = "en" | "de";
 
-export type ChartMacroResponse = {
+export type ChartEnergyMacroResponse = {
   name: {
     de: string;
     en: string;
@@ -88,13 +88,13 @@ export type ChartMacroResponse = {
   };
 };
 
-export type ChartMacroData = {
+export type ChartEnergyMacroData = {
   name: string;
   value: number;
   metric: string;
 };
 
-export type ChartMacroCategoriesResponse = {
+export type ChartEnergyCategoriesResponse = {
   name: {
     de: string;
     en: string;
@@ -105,7 +105,7 @@ export type ChartMacroCategoriesResponse = {
   };
 };
 
-export type ChartMacroCategoriesData = {
+export type ChartEnergyCategoriesData = {
   name: string;
   value: number;
   metric: string;

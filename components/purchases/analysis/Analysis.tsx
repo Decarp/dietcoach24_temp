@@ -1,33 +1,23 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import AnalysisHeader from "@/components/purchases/analysis/AnalysisHeader";
-import { getChartMacroData } from "@/api/getChartMacroData";
-import { getChartMacroCategoriesData } from "@/api/getChartMacroCategoriesData";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { MetricOptions } from "@/types/types";
 
-const ChartMacro = dynamic(
-  () => import("@/components/purchases/analysis/ChartMacro"),
+const ChartEnergyMacro = dynamic(
+  () => import("@/components/purchases/analysis/ChartEnergyMacro"),
   {
     ssr: false,
   }
 );
-const ChartMacroCategories = dynamic(
-  () => import("@/components/purchases/analysis/ChartMacroCategories"),
+const ChartEnergyCategories = dynamic(
+  () => import("@/components/purchases/analysis/ChartEnergyCategories"),
   {
     ssr: false,
   }
 );
 
 const Analysis = () => {
-  const selectedMetric: MetricOptions = "kcal";
   const { selectedBasketIds, currentTab } = useCounterStore((state) => state);
-
-  const chartMacroData = getChartMacroData(selectedBasketIds, selectedMetric);
-  const chartMacroCategoriesData = getChartMacroCategoriesData(
-    selectedBasketIds,
-    selectedMetric
-  );
 
   return (
     <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
@@ -42,12 +32,12 @@ const Analysis = () => {
                   <h4 className="text-lg font-medium mb-2">
                     Energiegehalt aus Makronährstoffen
                   </h4>
-                  <ChartMacro data={chartMacroData} />
+                  <ChartEnergyMacro />
                   <br />
                   <h4 className="text-lg font-medium mb-2">
                     Energiegehalt aus Lebensmittelkategorien
                   </h4>
-                  <ChartMacroCategories data={chartMacroCategoriesData} />
+                  <ChartEnergyCategories />
                 </>
               )}
               {currentTab === "macro" && (

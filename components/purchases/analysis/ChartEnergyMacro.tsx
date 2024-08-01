@@ -1,7 +1,8 @@
 "use client";
 
+import { getChartEnergyMacroData } from "@/api/getChartEnergyMacroData";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { ChartMacroData } from "@/types/types";
+import { ChartEnergyMacroData, MetricOptions } from "@/types/types";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
 import { renderCustomizedChartLabel } from "@/utils/renderCustomizedChartLabel";
 import React, { useState, useEffect } from "react";
@@ -16,10 +17,17 @@ import {
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-export default function ChartMacro({ data }: { data: ChartMacroData[] }) {
+export default function ChartEnergyMacro() {
+  const selectedMetric: MetricOptions = "kcal";
+
   const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
-  const { selectedSortCriteria, setSelectedSortCriteria } = useCounterStore(
-    (state) => state
+
+  const { selectedBasketIds, selectedSortCriteria, setSelectedSortCriteria } =
+    useCounterStore((state) => state);
+
+  const data: ChartEnergyMacroData[] = getChartEnergyMacroData(
+    selectedBasketIds,
+    selectedMetric
   );
 
   useEffect(() => {
