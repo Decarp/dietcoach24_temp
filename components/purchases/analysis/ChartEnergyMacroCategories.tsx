@@ -19,6 +19,34 @@ import { getChartEnergyMacroCategoriesData } from "@/api/getChartEnergyMacroCate
 
 type MacroCategory = "Kohlenhydrate" | "Fette" | "Proteine" | "Nahrungsfasern";
 
+const CustomLabel = ({
+  x = 0,
+  y = 0,
+  value = 0,
+  width = 0,
+  height = 0,
+  selectedMetric,
+}: {
+  x: any;
+  y: any;
+  value: any;
+  width: any;
+  height: any;
+  selectedMetric: string;
+}) => {
+  return (
+    <text
+      x={x + width + 5}
+      y={y + height / 2}
+      fill="#666"
+      textAnchor="start"
+      dominantBaseline="middle"
+    >
+      {`${value}${selectedMetric}`}
+    </text>
+  );
+};
+
 const ChartEnergyMacroCategories: React.FC = () => {
   const [selectedMacro, setSelectedMetric] =
     useState<MacroCategory>("Kohlenhydrate");
@@ -72,50 +100,57 @@ const ChartEnergyMacroCategories: React.FC = () => {
   }, [selectedCategories, data]);
 
   return (
-    <div className="bg-white p-4 border rounded-lg" style={{ height: "500px" }}>
-      <div className="flex justify-center mb-4">
-        {["Kohlenhydrate", "Fette", "Proteine", "Nahrungsfasern"].map(
-          (macro) => (
+    <div className="bg-white p-4 border rounded-lg" style={{ height: "550px" }}>
+      <div className="flex items-center justify-between space-x-4">
+        <div className="grid grid-cols-2 gap-2">
+          {["Kohlenhydrate", "Fette", "Proteine", "Nahrungsfasern"].map(
+            (macro) => (
+              <button
+                key={macro}
+                onClick={() => handleMacroChange(macro as MacroCategory)}
+                className={`rounded-md px-3 py-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
+                  selectedMacro === macro
+                    ? "bg-primary text-white"
+                    : "bg-gray-200"
+                }`}
+              >
+                {macro}
+              </button>
+            )
+          )}
+        </div>
+        <div className="border-l my-3 h-10" />
+        <div className="flex space-x-2">
+          {["g", "kcal"].map((metric) => (
             <button
-              key={macro}
-              onClick={() => handleMacroChange(macro as MacroCategory)}
-              className={`rounded-md px-4 py-2 mx-2 ${
-                selectedMacro === macro
+              key={metric}
+              onClick={() => handleMetricChange(metric as MetricOptions)}
+              className={`rounded-md px-3 py-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white h-10 ${
+                selectedMetric === metric
                   ? "bg-primary text-white"
                   : "bg-gray-200"
               }`}
             >
-              {macro}
+              {metric}
             </button>
-          )
-        )}
-        <div className="flex-1 border-l pl-6 ml-6 my-2" />
-        {["g", "kcal"].map((metric) => (
-          <button
-            key={metric}
-            onClick={() => handleMetricChange(metric as MetricOptions)}
-            className={`rounded-md px-4 py-2 mx-2 ${
-              selectedMetric === metric
-                ? "bg-primary text-white"
-                : "bg-gray-200"
-            }`}
-          >
-            {metric}
-          </button>
-        ))}
+          ))}
+        </div>
       </div>
+
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
           layout="vertical"
-          margin={{ top: 20, right: 30, left: 70, bottom: 60 }}
+          margin={{ top: 20, right: 60, left: 70, bottom: 80 }}
           onClick={(e) => handleClick(e.activeTooltipIndex!)}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis type="number" />
           <YAxis dataKey="name" type="category" tick={{ fontSize: 12 }} />
           <Tooltip />
-          <Legend formatter={(value) => `${value} (${selectedMetric})`} />
+          <Legend
+            formatter={(value) => `${selectedMetric == "g" ? "Gramm" : "Kcal"}`}
+          />
           <Bar dataKey="value" fill="#9ca3af">
             {data.map((entry, index) => (
               <Cell
@@ -124,7 +159,20 @@ const ChartEnergyMacroCategories: React.FC = () => {
                 opacity={activeIndices.includes(index) ? 1 : 1}
               />
             ))}
-            <LabelList dataKey="value" position="right" />
+            <LabelList
+              dataKey="value"
+              position="right"
+              content={({ x, y, width, height, value }) => (
+                <CustomLabel
+                  x={x}
+                  y={y}
+                  width={width}
+                  height={height}
+                  value={value}
+                  selectedMetric={selectedMetric}
+                />
+              )}
+            />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
