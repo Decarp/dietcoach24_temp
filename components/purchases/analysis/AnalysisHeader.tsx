@@ -1,5 +1,4 @@
 import React from "react";
-import { useRouter } from "next/navigation";
 import { classNames } from "@/utils/classNames";
 import { useCounterStore } from "@/providers/useStoreProvider";
 
@@ -11,12 +10,14 @@ const tabs = [
 ];
 
 const AnalysisHeader = () => {
-  const router = useRouter();
-  const { currentTab, patientId } = useCounterStore((state) => state);
+  const { currentTab, setCurrentTab } = useCounterStore((state) => state);
 
   const handleTabChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedTab = event.target.value;
-    router.push(`/p/${patientId}/purchases?chart=${selectedTab}`);
+    setCurrentTab(event.target.value);
+  };
+
+  const handleTabClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setCurrentTab(event.currentTarget.value);
   };
 
   return (
@@ -45,10 +46,10 @@ const AnalysisHeader = () => {
         <div className="hidden sm:block border-b -mx-4 sm:-mx-6 lg:-mx-6 lg:-ml-8 xl:-ml-6">
           <nav className="-mb-px flex space-x-8 px-4 sm:px-5 lg:px-7 xl:px-5">
             {tabs.map((tab) => (
-              <a
+              <button
                 key={tab.path}
-                href={`?chart=${tab.path}`}
-                aria-current={tab.path === currentTab ? "page" : undefined}
+                value={tab.path}
+                onClick={handleTabClick}
                 className={classNames(
                   tab.path === currentTab
                     ? "border-primary text-primary"
@@ -57,7 +58,7 @@ const AnalysisHeader = () => {
                 )}
               >
                 {tab.name}
-              </a>
+              </button>
             ))}
           </nav>
         </div>
