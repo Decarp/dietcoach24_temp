@@ -33,19 +33,19 @@ export default function AvailableProductsSection() {
 
   console.log("selectedCategories", selectedCategories);
 
-  useEffect(() => {
-    const fetchAvailableProducts = async () => {
-      try {
-        const response = await fetch("/api");
-        const data: Products = await response.json();
-        setAvailableProducts(data.products);
-      } catch (error) {
-        console.error("Failed to fetch available products:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchAvailableProducts = async () => {
+  //     try {
+  //       const response = await fetch("/api");
+  //       const data: Products = await response.json();
+  //       setAvailableProducts(data.products);
+  //     } catch (error) {
+  //       console.error("Failed to fetch available products:", error);
+  //     }
+  //   };
 
-    fetchAvailableProducts();
-  }, []);
+  //   fetchAvailableProducts();
+  // }, []);
 
   return (
     <div className="space-y-4 p-4">
