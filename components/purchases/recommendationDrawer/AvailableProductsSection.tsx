@@ -36,7 +36,7 @@ export default function AvailableProductsSection() {
   useEffect(() => {
     const fetchAvailableProducts = async () => {
       try {
-        const response = await fetch("/api/products");
+        const response = await fetch("/api");
         const data: Products = await response.json();
         setAvailableProducts(data.products);
       } catch (error) {
