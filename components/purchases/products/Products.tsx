@@ -1,21 +1,13 @@
 import { getBasketProducts } from "@/api/getBasketProducts";
 import ProductsHeader from "@/components/purchases/products/ProductsHeader";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-} from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import RecommendationDrawer from "./RecommendationDrawer";
 import { BasketProductFlat } from "@/types/types";
+import FilterPopover from "./FilterPopover";
+import SortMenu from "./SortMenu";
 
 const sortCriteria = [
   "Einkaufsdatum",
@@ -53,7 +45,6 @@ const Products = () => {
       }));
     });
 
-  // Set basketProductsFlat in the store if it has changed; necessary for category filtering in useStore
   useEffect(() => {
     if (
       JSON.stringify(newBasketProductsFlat) !==
@@ -143,108 +134,17 @@ const Products = () => {
       <ProductsHeader products={sortedProducts} />
 
       <div className="px-6 -mt-2 pb-2 flex gap-x-8 items-center">
-        <div>
-          <Popover className="relative inline-block text-left">
-            <div>
-              <PopoverButton className="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                <span>Filter</span>
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                />
-              </PopoverButton>
-            </div>
+        <FilterPopover
+          categoriesWithSub={categoriesWithSub}
+          selectedCategories={selectedCategories}
+          updateCategories={updateCategories}
+        />
 
-            <PopoverPanel
-              transition
-              className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-            >
-              <form className="space-y-4">
-                {categoriesWithSub.map((category) => (
-                  <div key={category.major}>
-                    <div className="flex items-center">
-                      <input
-                        value={category.major}
-                        type="checkbox"
-                        checked={selectedCategories.major.includes(
-                          category.major
-                        )}
-                        onChange={() =>
-                          updateCategories(category.major, "major")
-                        }
-                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                      />
-                      <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
-                        {category.major}
-                      </label>
-                    </div>
-                    <div className="ml-7">
-                      {category.subs.map((subCategory) => (
-                        <div key={subCategory} className="flex items-center">
-                          <input
-                            value={subCategory}
-                            type="checkbox"
-                            checked={selectedCategories.sub.includes(
-                              subCategory
-                            )}
-                            onChange={() =>
-                              updateCategories(subCategory, "sub")
-                            }
-                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                          />
-                          <label className="ml-3 whitespace-nowrap pr-6 text-sm text-gray-900">
-                            {subCategory}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </form>
-            </PopoverPanel>
-          </Popover>
-        </div>
-
-        <div>
-          <Menu as="div" className="relative inline-block text-left">
-            <div>
-              <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                Sortieren nach
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                />
-              </MenuButton>
-            </div>
-
-            <MenuItems className="absolute left-0 z-10 mt-2 w-50 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
-              <div className="py-1">
-                {sortCriteria.map((option) => (
-                  <MenuItem key={option}>
-                    {({ active }) => (
-                      <div className=" ml-4 flex items-center">
-                        <input
-                          type="radio"
-                          name="sortCriteria"
-                          value={option}
-                          checked={selectedSortCriteria === option}
-                          onChange={() => setSelectedSortCriteria(option)}
-                          className="h-4 w-4 text-primary focus:ring-primary border-gray-300"
-                        />
-                        <label
-                          className="block px-4 py-2 text-sm font-medium text-gray-900 data-[focus]:bg-gray-100"
-                          onClick={() => setSelectedSortCriteria(option)}
-                        >
-                          {option}
-                        </label>
-                      </div>
-                    )}
-                  </MenuItem>
-                ))}
-              </div>
-            </MenuItems>
-          </Menu>
-        </div>
+        <SortMenu
+          sortCriteria={sortCriteria}
+          selectedSortCriteria={selectedSortCriteria}
+          setSelectedSortCriteria={setSelectedSortCriteria}
+        />
 
         <div>
           <button

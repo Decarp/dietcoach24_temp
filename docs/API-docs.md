@@ -507,36 +507,40 @@ NutriScore-Cutoff: string (optional, default: "C", includes C)
 
 ```
 {
-    products: [
-        {
-            productId: 1,
-            name: "Bio Vollkornbrot 350g",
-            quantity: 10,
-            nutrients: {
-                nutriScore: "A",
-                fsaScore: 3,
-                kcal: 250,
-                proteins: 8,
-                fats: 2,
-                carbohydrates: 60,
-                fibers: 5,
-                salt: 1,
-            }
-            dietCoachCategoryL1: {
-                de: "Getreideprodukte & Kartoffeln",
-                en: "Grain products & potatoes"
-            },
-            dietCoachCategoryL2: {
-                de: "Brot",
-                en: "Bread"
-            },
-            imageUrl: "https://www.image.com/image.jpg"
-        },
-        ...
-    ],
-    meta: {
-        totalPages: 20, // à 100 products
-        totalProducts: 500
-    }
+  products: [
+    {
+      productId: 1,
+      de: {
+       name: "Bio Vollkornbrot 350g",
+      },
+      productSize: 10,
+      nutrients: {
+        kcal: 250,
+        proteins: 8,
+        fats: 2,
+        carbohydrates: 60,
+        fibers: 5,
+        salt: 1,
+      },
+      nutriScoreV2023Detail: {
+        nutriScoreCalculated: "C",
+        nsPoints: 10,
+      }
+      dietCoachCategoryL1: {
+        de: "Getreideprodukte & Kartoffeln",
+        en: "Grain products & potatoes"
+      },
+      dietCoachCategoryL2: {
+        de: "Brot",
+        en: "Bread"
+      },
+      imageUrl: "https://www.image.com/image.jpg"
+    },
+    ...
+  ],
+  meta: {
+    totalPages: 20, // à 100 products
+    totalProducts: 500
+  }
 }
 ```

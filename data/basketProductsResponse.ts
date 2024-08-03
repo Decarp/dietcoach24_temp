@@ -8,17 +8,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 1,
-        name: "Tiefkühlpizza",
-        quantity: 1,
+        de: {
+          name: "Tiefkühlpizza",
+        },
+        productSize: 1, // Assuming quantity corresponds to productSize
         nutrients: {
-          nutriScore: "D",
-          fsaScore: 8,
           kcal: 250,
           proteins: 10,
           fats: 5,
           carbohydrates: 40,
           fibers: 5,
           salt: 1,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "D",
+          nsPoints: 8,
         },
         dietCoachCategoryL1: {
           de: "Fertiggerichte",
@@ -32,17 +36,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 26,
-        name: "Salat",
-        quantity: 1,
+        de: {
+          name: "Salat",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 1,
           kcal: 15,
           proteins: 1,
           fats: 0,
           carbohydrates: 3,
           fibers: 2,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 1,
         },
         dietCoachCategoryL1: {
           de: "Gemüse",
@@ -65,17 +73,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 2,
-        name: "Orangensaft",
-        quantity: 1,
+        de: {
+          name: "Orangensaft",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "C",
-          fsaScore: 4,
           kcal: 45,
           proteins: 0,
           fats: 0,
           carbohydrates: 10,
           fibers: 0,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "C",
+          nsPoints: 4,
         },
         dietCoachCategoryL1: {
           de: "Getränke",
@@ -89,17 +101,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 27,
-        name: "Mineralwasser",
-        quantity: 1,
+        de: {
+          name: "Mineralwasser",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 0,
           kcal: 0,
           proteins: 0,
           fats: 0,
           carbohydrates: 0,
           fibers: 0,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 0,
         },
         dietCoachCategoryL1: {
           de: "Getränke",
@@ -122,17 +138,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 3,
-        name: "Kartoffeln",
-        quantity: 5,
+        de: {
+          name: "Kartoffeln",
+        },
+        productSize: 5,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 100,
           proteins: 2,
           fats: 0,
           carbohydrates: 20,
           fibers: 5,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Getreideprodukte & Kartoffeln",
@@ -146,17 +166,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 28,
-        name: "Vollkornnudeln",
-        quantity: 1,
+        de: {
+          name: "Vollkornnudeln",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 3,
           kcal: 350,
           proteins: 12,
           fats: 2,
           carbohydrates: 70,
           fibers: 8,
           salt: 0.1,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 3,
         },
         dietCoachCategoryL1: {
           de: "Getreideprodukte & Kartoffeln",
@@ -179,17 +203,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 4,
-        name: "Käse",
-        quantity: 1,
+        de: {
+          name: "Käse",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "C",
-          fsaScore: 6,
           kcal: 150,
           proteins: 5,
           fats: 10,
           carbohydrates: 0,
           fibers: 0,
           salt: 1,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "C",
+          nsPoints: 6,
         },
         dietCoachCategoryL1: {
           de: "Milchprodukte & Alternativen",
@@ -203,17 +231,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 5,
-        name: "Brot",
-        quantity: 1,
+        de: {
+          name: "Brot",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 4,
           kcal: 250,
           proteins: 10,
           fats: 5,
           carbohydrates: 40,
           fibers: 5,
           salt: 1,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 4,
         },
         dietCoachCategoryL1: {
           de: "Getreideprodukte & Kartoffeln",
@@ -227,17 +259,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 29,
-        name: "Joghurt",
-        quantity: 4,
+        de: {
+          name: "Joghurt",
+        },
+        productSize: 4,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 3,
           kcal: 100,
           proteins: 5,
           fats: 3,
           carbohydrates: 10,
           fibers: 0,
           salt: 0.1,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 3,
         },
         dietCoachCategoryL1: {
           de: "Milchprodukte & Alternativen",
@@ -260,17 +296,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 6,
-        name: "Äpfel",
-        quantity: 6,
+        de: {
+          name: "Äpfel",
+        },
+        productSize: 6,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 1,
           kcal: 50,
           proteins: 0,
           fats: 0,
           carbohydrates: 13,
           fibers: 2,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 1,
         },
         dietCoachCategoryL1: {
           de: "Früchte",
@@ -284,17 +324,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 30,
-        name: "Orangensaft",
-        quantity: 1,
+        de: {
+          name: "Orangensaft",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "C",
-          fsaScore: 4,
           kcal: 45,
           proteins: 0,
           fats: 0,
           carbohydrates: 10,
           fibers: 0,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "C",
+          nsPoints: 4,
         },
         dietCoachCategoryL1: {
           de: "Getränke",
@@ -317,17 +361,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 7,
-        name: "Tomaten",
-        quantity: 8,
+        de: {
+          name: "Tomaten",
+        },
+        productSize: 8,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 20,
           proteins: 1,
           fats: 0,
           carbohydrates: 4,
           fibers: 1,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Gemüse",
@@ -341,17 +389,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 31,
-        name: "Vollkornbrot",
-        quantity: 1,
+        de: {
+          name: "Vollkornbrot",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 3,
           kcal: 250,
           proteins: 8,
           fats: 2,
           carbohydrates: 60,
           fibers: 5,
           salt: 1,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 3,
         },
         dietCoachCategoryL1: {
           de: "Getreideprodukte & Kartoffeln",
@@ -374,17 +426,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 8,
-        name: "Müsli",
-        quantity: 1,
+        de: {
+          name: "Müsli",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 3,
           kcal: 350,
           proteins: 10,
           fats: 5,
           carbohydrates: 60,
           fibers: 7,
           salt: 0.1,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 3,
         },
         dietCoachCategoryL1: {
           de: "Getreideprodukte & Kartoffeln",
@@ -398,17 +454,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 32,
-        name: "Banane",
-        quantity: 6,
+        de: {
+          name: "Banane",
+        },
+        productSize: 6,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 2,
           kcal: 90,
           proteins: 1,
           fats: 0,
           carbohydrates: 23,
           fibers: 2,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Früchte",
@@ -431,17 +491,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 9,
-        name: "Kiwis",
-        quantity: 4,
+        de: {
+          name: "Kiwis",
+        },
+        productSize: 4,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 1,
           kcal: 60,
           proteins: 1,
           fats: 0,
           carbohydrates: 15,
           fibers: 3,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 1,
         },
         dietCoachCategoryL1: {
           de: "Früchte",
@@ -455,17 +519,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 33,
-        name: "Mandeln",
-        quantity: 1,
+        de: {
+          name: "Mandeln",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 3,
           kcal: 575,
           proteins: 21,
           fats: 49,
           carbohydrates: 22,
           fibers: 12,
           salt: 0.02,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 3,
         },
         dietCoachCategoryL1: {
           de: "Fett, Öle & Nüsse",
@@ -488,17 +556,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 10,
-        name: "Karotten",
-        quantity: 6,
+        de: {
+          name: "Karotten",
+        },
+        productSize: 6,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 40,
           proteins: 1,
           fats: 0,
           carbohydrates: 10,
           fibers: 3,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Gemüse",
@@ -512,17 +584,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 34,
-        name: "Hummus",
-        quantity: 1,
+        de: {
+          name: "Hummus",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 3,
           kcal: 177,
           proteins: 8,
           fats: 10,
           carbohydrates: 14,
           fibers: 6,
           salt: 0.9,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 3,
         },
         dietCoachCategoryL1: {
           de: "Pflanzliche Proteinquellen",
@@ -545,17 +621,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 11,
-        name: "Joghurt",
-        quantity: 4,
+        de: {
+          name: "Joghurt",
+        },
+        productSize: 4,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 3,
           kcal: 100,
           proteins: 5,
           fats: 3,
           carbohydrates: 10,
           fibers: 0,
           salt: 0.1,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 3,
         },
         dietCoachCategoryL1: {
           de: "Milchprodukte & Alternativen",
@@ -569,17 +649,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 35,
-        name: "Cheddar Käse",
-        quantity: 1,
+        de: {
+          name: "Cheddar Käse",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "C",
-          fsaScore: 6,
           kcal: 400,
           proteins: 25,
           fats: 33,
           carbohydrates: 1,
           fibers: 0,
           salt: 1.8,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "C",
+          nsPoints: 6,
         },
         dietCoachCategoryL1: {
           de: "Milchprodukte & Alternativen",
@@ -602,17 +686,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 12,
-        name: "Trauben",
-        quantity: 3,
+        de: {
+          name: "Trauben",
+        },
+        productSize: 3,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 70,
           proteins: 1,
           fats: 0,
           carbohydrates: 17,
           fibers: 1,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Früchte",
@@ -626,17 +714,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 36,
-        name: "Wassermelone",
-        quantity: 1,
+        de: {
+          name: "Wassermelone",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 1,
           kcal: 30,
           proteins: 1,
           fats: 0,
           carbohydrates: 8,
           fibers: 0,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 1,
         },
         dietCoachCategoryL1: {
           de: "Früchte",
@@ -659,17 +751,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 13,
-        name: "Zucchini",
-        quantity: 4,
+        de: {
+          name: "Zucchini",
+        },
+        productSize: 4,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 20,
           proteins: 1,
           fats: 0,
           carbohydrates: 4,
           fibers: 2,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Gemüse",
@@ -683,17 +779,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 37,
-        name: "Aubergine",
-        quantity: 2,
+        de: {
+          name: "Aubergine",
+        },
+        productSize: 2,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 25,
           proteins: 1,
           fats: 0,
           carbohydrates: 5,
           fibers: 3,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Gemüse",
@@ -716,17 +816,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 14,
-        name: "Hähnchenbrust",
-        quantity: 1,
+        de: {
+          name: "Hähnchenbrust",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 120,
           proteins: 25,
           fats: 2,
           carbohydrates: 0,
           fibers: 0,
           salt: 0.5,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Fleisch, Fisch & Eier",
@@ -740,17 +844,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 38,
-        name: "Lachsfilet",
-        quantity: 1,
+        de: {
+          name: "Lachsfilet",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 4,
           kcal: 206,
           proteins: 22,
           fats: 13,
           carbohydrates: 0,
           fibers: 0,
           salt: 0.1,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 4,
         },
         dietCoachCategoryL1: {
           de: "Fleisch, Fisch & Eier",
@@ -773,17 +881,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 15,
-        name: "Bananen",
-        quantity: 6,
+        de: {
+          name: "Bananen",
+        },
+        productSize: 6,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 90,
           proteins: 1,
           fats: 0,
           carbohydrates: 23,
           fibers: 2,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Früchte",
@@ -797,17 +909,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 39,
-        name: "Erdnussbutter",
-        quantity: 1,
+        de: {
+          name: "Erdnussbutter",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "C",
-          fsaScore: 7,
           kcal: 588,
           proteins: 25,
           fats: 50,
           carbohydrates: 20,
           fibers: 6,
           salt: 1.2,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "C",
+          nsPoints: 7,
         },
         dietCoachCategoryL1: {
           de: "Fett, Öle & Nüsse",
@@ -830,17 +946,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 16,
-        name: "Paprika",
-        quantity: 3,
+        de: {
+          name: "Paprika",
+        },
+        productSize: 3,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 30,
           proteins: 1,
           fats: 0,
           carbohydrates: 7,
           fibers: 2,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Gemüse",
@@ -854,17 +974,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 40,
-        name: "Kichererbsen",
-        quantity: 1,
+        de: {
+          name: "Kichererbsen",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 164,
           proteins: 9,
           fats: 3,
           carbohydrates: 27,
           fibers: 8,
           salt: 0.6,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Pflanzliche Proteinquellen",
@@ -887,17 +1011,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 17,
-        name: "Quark",
-        quantity: 2,
+        de: {
+          name: "Quark",
+        },
+        productSize: 2,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 3,
           kcal: 80,
           proteins: 10,
           fats: 2,
           carbohydrates: 4,
           fibers: 0,
           salt: 0.1,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 3,
         },
         dietCoachCategoryL1: {
           de: "Milchprodukte & Alternativen",
@@ -911,17 +1039,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 41,
-        name: "Eier",
-        quantity: 12,
+        de: {
+          name: "Eier",
+        },
+        productSize: 12,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 155,
           proteins: 13,
           fats: 11,
           carbohydrates: 1,
           fibers: 0,
           salt: 0.4,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Fleisch, Fisch & Eier",
@@ -944,17 +1076,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 18,
-        name: "Apfelsaft",
-        quantity: 1,
+        de: {
+          name: "Apfelsaft",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "C",
-          fsaScore: 4,
           kcal: 45,
           proteins: 0,
           fats: 0,
           carbohydrates: 11,
           fibers: 0,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "C",
+          nsPoints: 4,
         },
         dietCoachCategoryL1: {
           de: "Getränke",
@@ -968,17 +1104,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 19,
-        name: "Erdbeeren",
-        quantity: 2,
+        de: {
+          name: "Erdbeeren",
+        },
+        productSize: 2,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 1,
           kcal: 30,
           proteins: 1,
           fats: 0,
           carbohydrates: 7,
           fibers: 2,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 1,
         },
         dietCoachCategoryL1: {
           de: "Früchte",
@@ -992,17 +1132,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 20,
-        name: "Kürbis",
-        quantity: 1,
+        de: {
+          name: "Kürbis",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 1,
           kcal: 20,
           proteins: 1,
           fats: 0,
           carbohydrates: 5,
           fibers: 1,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 1,
         },
         dietCoachCategoryL1: {
           de: "Gemüse",
@@ -1025,17 +1169,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 21,
-        name: "Spinat",
-        quantity: 1,
+        de: {
+          name: "Spinat",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 25,
           proteins: 2,
           fats: 0,
           carbohydrates: 3,
           fibers: 2,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Gemüse",
@@ -1049,17 +1197,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 22,
-        name: "Bohnen",
-        quantity: 1,
+        de: {
+          name: "Bohnen",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 120,
           proteins: 8,
           fats: 0,
           carbohydrates: 22,
           fibers: 6,
           salt: 0.4,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Pflanzliche Proteinquellen",
@@ -1073,17 +1225,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 23,
-        name: "Hirse",
-        quantity: 1,
+        de: {
+          name: "Hirse",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "B",
-          fsaScore: 3,
           kcal: 150,
           proteins: 4,
           fats: 1,
           carbohydrates: 30,
           fibers: 2,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "B",
+          nsPoints: 3,
         },
         dietCoachCategoryL1: {
           de: "Getreideprodukte & Kartoffeln",
@@ -1106,17 +1262,21 @@ export const basketProductsResponse = [
     products: [
       {
         productId: 24,
-        name: "Kiwis",
-        quantity: 4,
+        de: {
+          name: "Kiwis",
+        },
+        productSize: 4,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 1,
           kcal: 60,
           proteins: 1,
           fats: 0,
           carbohydrates: 15,
           fibers: 3,
           salt: 0,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 1,
         },
         dietCoachCategoryL1: {
           de: "Früchte",
@@ -1130,17 +1290,21 @@ export const basketProductsResponse = [
       },
       {
         productId: 25,
-        name: "Linsensuppe",
-        quantity: 1,
+        de: {
+          name: "Linsensuppe",
+        },
+        productSize: 1,
         nutrients: {
-          nutriScore: "A",
-          fsaScore: 2,
           kcal: 200,
           proteins: 10,
           fats: 3,
           carbohydrates: 25,
           fibers: 5,
           salt: 0.8,
+        },
+        nutriScoreV2023Detail: {
+          nutriScoreCalculated: "A",
+          nsPoints: 2,
         },
         dietCoachCategoryL1: {
           de: "Pflanzliche Proteinquellen",

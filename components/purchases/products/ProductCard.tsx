@@ -6,11 +6,7 @@ import { classNames } from "@/utils/classNames";
 import { CakeIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
-interface ProductCardProps {
-  product: BasketProductFlat;
-}
-
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard = ({ product }: { product: BasketProductFlat }) => {
   const uniqueId = `${product.basketId},${product.productId}`;
 
   const { selectedBasketProductIds, setSelectedBasketProductIds } =
@@ -68,7 +64,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             selected ? "text-white" : "text-gray-900"
           )}
         >
-          {product.name}
+          {product.de.name}
         </p>
         <p
           className={classNames(
@@ -76,7 +72,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             selected ? "text-white" : "text-gray-500"
           )}
         >
-          {product.nutrients.nutriScore}
+          {product.nutriScoreV2023Detail.nutriScoreCalculated}
         </p>
       </div>
       <input

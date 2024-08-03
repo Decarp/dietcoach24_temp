@@ -3,14 +3,17 @@
 // -------------------
 
 export type Nutrients = {
-  nutriScore: string;
-  fsaScore: number;
   kcal: number;
   proteins: number;
   fats: number;
   carbohydrates: number;
   fibers: number;
   salt: number;
+};
+
+export type NutriScoreV2023Detail = {
+  nutriScoreCalculated: string;
+  nsPoints: number;
 };
 
 export type DietCoachCategory = {
@@ -20,12 +23,23 @@ export type DietCoachCategory = {
 
 export type Product = {
   productId: number;
-  name: string;
-  quantity: number;
+  de: {
+    name: string;
+  };
+  productSize: number;
   nutrients: Nutrients;
+  nutriScoreV2023Detail: NutriScoreV2023Detail;
   dietCoachCategoryL1: DietCoachCategory;
   dietCoachCategoryL2: DietCoachCategory;
   imageUrl: string;
+};
+
+export type Products = {
+  products: Product[];
+  meta: {
+    totalPages: number;
+    totalProducts: number;
+  };
 };
 
 // -------------------
@@ -54,9 +68,12 @@ export type BasketProductFlat = {
   basketIndex: number;
   basketTimestamp: number;
   productId: number;
-  name: string;
-  quantity: number;
+  de: {
+    name: string;
+  };
+  productSize: number;
   nutrients: Nutrients;
+  nutriScoreV2023Detail: NutriScoreV2023Detail;
   dietCoachCategoryL1: DietCoachCategory;
   dietCoachCategoryL2: DietCoachCategory;
   imageUrl: string;
