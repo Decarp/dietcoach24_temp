@@ -4,12 +4,12 @@ import { useCounterStore } from "@/providers/useStoreProvider";
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import RecommendationDrawer from "./RecommendationDrawer";
+import RecommendationDrawer from "../recommendationDrawer/RecommendationDrawer";
 import { BasketProductFlat } from "@/types/types";
 import FilterPopover from "./FilterPopover";
 import SortMenu from "./SortMenu";
 
-const sortCriteria = [
+export const sortCriteria = [
   "Einkaufsdatum",
   "Kalorien",
   "Proteine",
