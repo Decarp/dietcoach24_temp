@@ -5,7 +5,7 @@ import { useCounterStore } from "@/providers/useStoreProvider";
 import { ChartEnergyMacroData, MetricOptions } from "@/types/types";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
 import { renderCustomizedChartLabel } from "@/utils/renderCustomizedChartLabel";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   PieChart,
   Pie,
@@ -25,10 +25,9 @@ export default function ChartEnergyMacro() {
   const { selectedBasketIds, selectedSortCriteria, setSelectedSortCriteria } =
     useCounterStore((state) => state);
 
-  const data: ChartEnergyMacroData[] = getChartEnergyMacroData(
-    selectedBasketIds,
-    selectedMetric
-  );
+  const data: ChartEnergyMacroData[] = useMemo(() => {
+    return getChartEnergyMacroData(selectedBasketIds, selectedMetric);
+  }, [selectedBasketIds, selectedMetric]);
 
   useEffect(() => {
     const updatedIndex = data.findIndex(

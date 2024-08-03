@@ -5,7 +5,7 @@ import { useCounterStore } from "@/providers/useStoreProvider";
 import { ChartEnergyCategoriesData, MetricOptions } from "@/types/types";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
 import { renderCustomizedChartLabel } from "@/utils/renderCustomizedChartLabel";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   PieChart,
   Pie,
@@ -34,10 +34,9 @@ export default function ChartEnergyCategories() {
   const { selectedBasketIds, selectedCategories, updateCategories } =
     useCounterStore((state) => state);
 
-  const data: ChartEnergyCategoriesData[] = getChartEnergyCategoriesData(
-    selectedBasketIds,
-    selectedMetric
-  );
+  const data: ChartEnergyCategoriesData[] = useMemo(() => {
+    return getChartEnergyCategoriesData(selectedBasketIds, selectedMetric);
+  }, [selectedBasketIds, selectedMetric]);
 
   useEffect(() => {
     const updatedIndices = data

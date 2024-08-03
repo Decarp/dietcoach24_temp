@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   BarChart,
   Bar,
@@ -56,19 +56,22 @@ const ChartEnergyMacroCategories: React.FC = () => {
   const { selectedBasketIds, selectedCategories, updateCategories } =
     useCounterStore((state) => state);
 
-  const [data, setData] = useState<{ name: string; value: number }[]>([]);
+  const data = useMemo(() => {
+    return getChartEnergyMacroCategoriesData(
+      selectedBasketIds,
+      selectedMacro,
+      selectedMetric
+    );
+  }, [selectedBasketIds, selectedMacro, selectedMetric]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = getChartEnergyMacroCategoriesData(
-        selectedBasketIds,
-        selectedMacro,
-        selectedMetric
-      );
-      setData(result);
-    };
-    fetchData();
-  }, [selectedBasketIds, selectedMacro, selectedMetric]);
+    const updatedIndices = data
+      .map((item, index) =>
+        selectedCategories.major.includes(item.name) ? index : -1
+      )
+      .filter((index) => index !== -1);
+    setActiveIndices(updatedIndices);
+  }, [selectedCategories, data]);
 
   const handleMacroChange = (macro: MacroCategory) => {
     setSelectedMetric(macro);
@@ -89,15 +92,6 @@ const ChartEnergyMacroCategories: React.FC = () => {
         : [...prevIndices, index]
     );
   };
-
-  useEffect(() => {
-    const updatedIndices = data
-      .map((item, index) =>
-        selectedCategories.major.includes(item.name) ? index : -1
-      )
-      .filter((index) => index !== -1);
-    setActiveIndices(updatedIndices);
-  }, [selectedCategories, data]);
 
   return (
     <div className="bg-white p-4 border rounded-lg" style={{ height: "550px" }}>
