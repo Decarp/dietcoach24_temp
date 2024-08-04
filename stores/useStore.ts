@@ -7,6 +7,7 @@ export type CounterState = {
   selectedSortCriteria: string;
   selectedBasketIds: number[];
   selectedBasketProductIds: SelectedBasketProductId[];
+  selectedBasketProductsFlat: BasketProductFlat[];
   currentTab: string;
   patientId: string | null;
   basketProductsFlat: BasketProductFlat[];
@@ -19,6 +20,7 @@ export type CounterActions = {
   setSelectedSortCriteria: (criteria: string) => void;
   setSelectedBasketIds: (ids: number[]) => void;
   setSelectedBasketProductIds: (ids: SelectedBasketProductId[]) => void;
+  setSelectedBasketProductsFlat: (products: BasketProductFlat[]) => void;
   setCurrentTab: (tab: string) => void;
   setPatientId: (id: string | null) => void;
   setBasketProductsFlat: (products: BasketProductFlat[]) => void;
@@ -34,6 +36,7 @@ export const initCounterStore = (): CounterState => {
     selectedSortCriteria: "Einkaufsdatum",
     selectedBasketIds: [],
     selectedBasketProductIds: [],
+    selectedBasketProductsFlat: [],
     currentTab: "energy",
     patientId: null,
     basketProductsFlat: [],
@@ -46,6 +49,7 @@ export const defaultInitState: CounterState = {
   selectedSortCriteria: "Einkaufsdatum",
   selectedBasketIds: [],
   selectedBasketProductIds: [],
+  selectedBasketProductsFlat: [],
   currentTab: "energy",
   patientId: null,
   basketProductsFlat: [],
@@ -71,9 +75,19 @@ export const createCounterStore = (
             )
           );
 
+        const newSelectedBasketProductsFlat = state.basketProductsFlat.filter(
+          (product) =>
+            newSelectedBasketProductIds.some(
+              (id) =>
+                product.basketId === id.basketId &&
+                product.productId === id.productId
+            )
+        );
+
         return {
           selectedCategories: cats,
           selectedBasketProductIds: newSelectedBasketProductIds,
+          selectedBasketProductsFlat: newSelectedBasketProductsFlat,
         };
       }),
     setSelectedSortCriteria: (criteria: string) =>
@@ -81,11 +95,27 @@ export const createCounterStore = (
     setSelectedBasketIds: (ids: number[]) =>
       set(() => ({ selectedBasketIds: ids })),
     setSelectedBasketProductIds: (ids: SelectedBasketProductId[]) =>
-      set(() => ({ selectedBasketProductIds: ids })),
+      set((state) => {
+        const newSelectedBasketProductsFlat = state.basketProductsFlat.filter(
+          (product) =>
+            ids.some(
+              (id) =>
+                product.basketId === id.basketId &&
+                product.productId === id.productId
+            )
+        );
+
+        return {
+          selectedBasketProductIds: ids,
+          selectedBasketProductsFlat: newSelectedBasketProductsFlat,
+        };
+      }),
     setCurrentTab: (tab: string) => set(() => ({ currentTab: tab })),
     setPatientId: (id: string | null) => set(() => ({ patientId: id })),
     setBasketProductsFlat: (products: BasketProductFlat[]) =>
       set(() => ({ basketProductsFlat: products })),
+    setSelectedBasketProductsFlat: (products: BasketProductFlat[]) =>
+      set(() => ({ selectedBasketProductsFlat: products })),
     updateCategories: (category: string, level: "major" | "sub") =>
       set((state) => {
         const newCategories = { ...state.selectedCategories };
@@ -116,9 +146,20 @@ export const createCounterStore = (
                       product.dietCoachCategoryL1.de === category
                   )
               );
+
+            const newSelectedBasketProductsFlat =
+              state.basketProductsFlat.filter((product) =>
+                newSelectedBasketProductIds.some(
+                  (id) =>
+                    product.basketId === id.basketId &&
+                    product.productId === id.productId
+                )
+              );
+
             return {
               selectedCategories: newCategories,
               selectedBasketProductIds: newSelectedBasketProductIds,
+              selectedBasketProductsFlat: newSelectedBasketProductsFlat,
             };
           } else {
             // Select major category and all its sub-categories
@@ -130,7 +171,36 @@ export const createCounterStore = (
                 )
                 .map((product) => product.dietCoachCategoryL2.de)
             );
-            return { selectedCategories: newCategories };
+
+            const newSelectedBasketProductIds =
+              state.selectedBasketProductIds.filter((id) =>
+                state.basketProductsFlat.some(
+                  (product) =>
+                    product.basketId === id.basketId &&
+                    product.productId === id.productId &&
+                    (newCategories.major.includes(
+                      product.dietCoachCategoryL1.de
+                    ) ||
+                      newCategories.sub.includes(
+                        product.dietCoachCategoryL2.de
+                      ))
+                )
+              );
+
+            const newSelectedBasketProductsFlat =
+              state.basketProductsFlat.filter((product) =>
+                newSelectedBasketProductIds.some(
+                  (id) =>
+                    product.basketId === id.basketId &&
+                    product.productId === id.productId
+                )
+              );
+
+            return {
+              selectedCategories: newCategories,
+              selectedBasketProductIds: newSelectedBasketProductIds,
+              selectedBasketProductsFlat: newSelectedBasketProductsFlat,
+            };
           }
         } else {
           if (newCategories.sub.includes(category)) {
@@ -167,9 +237,20 @@ export const createCounterStore = (
                       product.dietCoachCategoryL2.de === category
                   )
               );
+
+            const newSelectedBasketProductsFlat =
+              state.basketProductsFlat.filter((product) =>
+                newSelectedBasketProductIds.some(
+                  (id) =>
+                    product.basketId === id.basketId &&
+                    product.productId === id.productId
+                )
+              );
+
             return {
               selectedCategories: newCategories,
               selectedBasketProductIds: newSelectedBasketProductIds,
+              selectedBasketProductsFlat: newSelectedBasketProductsFlat,
             };
           } else {
             // Select sub-category
@@ -183,7 +264,36 @@ export const createCounterStore = (
             if (majorCategory && !newCategories.major.includes(majorCategory)) {
               newCategories.major.push(majorCategory);
             }
-            return { selectedCategories: newCategories };
+
+            const newSelectedBasketProductIds =
+              state.selectedBasketProductIds.filter((id) =>
+                state.basketProductsFlat.some(
+                  (product) =>
+                    product.basketId === id.basketId &&
+                    product.productId === id.productId &&
+                    (newCategories.major.includes(
+                      product.dietCoachCategoryL1.de
+                    ) ||
+                      newCategories.sub.includes(
+                        product.dietCoachCategoryL2.de
+                      ))
+                )
+              );
+
+            const newSelectedBasketProductsFlat =
+              state.basketProductsFlat.filter((product) =>
+                newSelectedBasketProductIds.some(
+                  (id) =>
+                    product.basketId === id.basketId &&
+                    product.productId === id.productId
+                )
+              );
+
+            return {
+              selectedCategories: newCategories,
+              selectedBasketProductIds: newSelectedBasketProductIds,
+              selectedBasketProductsFlat: newSelectedBasketProductsFlat,
+            };
           }
         }
       }),

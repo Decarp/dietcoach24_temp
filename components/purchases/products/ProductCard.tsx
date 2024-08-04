@@ -9,8 +9,12 @@ import React from "react";
 const ProductCard = ({ product }: { product: BasketProductFlat }) => {
   const uniqueId = `${product.basketId},${product.productId}`;
 
-  const { selectedBasketProductIds, setSelectedBasketProductIds } =
-    useCounterStore((state) => state);
+  const {
+    selectedBasketProductIds,
+    setSelectedBasketProductIds,
+    selectedBasketProductsFlat,
+    setSelectedBasketProductsFlat,
+  } = useCounterStore((state) => state);
 
   const isProductSelected = (productId: number, basketId: number) =>
     selectedBasketProductIds.some(
@@ -26,18 +30,35 @@ const ProductCard = ({ product }: { product: BasketProductFlat }) => {
         selectedBasketProductId.basketId
       )
     ) {
-      setSelectedBasketProductIds(
-        selectedBasketProductIds.filter(
-          (product) =>
-            product.productId !== selectedBasketProductId.productId &&
-            product.basketId !== selectedBasketProductId.basketId
-        )
+      const newSelectedBasketProductIds = selectedBasketProductIds.filter(
+        (product) =>
+          product.productId !== selectedBasketProductId.productId &&
+          product.basketId !== selectedBasketProductId.basketId
       );
+
+      setSelectedBasketProductIds(newSelectedBasketProductIds);
+
+      const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
+        (product) =>
+          product.productId !== selectedBasketProductId.productId &&
+          product.basketId !== selectedBasketProductId.basketId
+      );
+
+      setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
     } else {
-      setSelectedBasketProductIds([
+      const newSelectedBasketProductIds = [
         ...selectedBasketProductIds,
         selectedBasketProductId,
-      ]);
+      ];
+
+      setSelectedBasketProductIds(newSelectedBasketProductIds);
+
+      const newSelectedBasketProductsFlat = [
+        ...selectedBasketProductsFlat,
+        product,
+      ];
+
+      setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
     }
   };
 

@@ -1,5 +1,7 @@
 // SelectedAlternativesSection.tsx
 import { TrashIcon } from "@heroicons/react/24/outline";
+import ProductPopup from "./productPopup.tsx/ProductPopup";
+import { useState } from "react";
 
 const selectedAlternatives = [
   {
@@ -17,8 +19,14 @@ const selectedAlternatives = [
 ];
 
 export default function SelectedAlternativesSection() {
+  const [popupOpen, setPopupOpen] = useState(false);
+  const handlePopopOpen = (open: boolean) => {
+    setPopupOpen(open);
+  };
+
   return (
-    <div className="space-y-4 overflow-y-scroll p-4 pr-4 border-r mr-4">
+    <div className="bg-white p-4 border rounded-md h-[420px] overflow-y-scroll space-y-4">
+      <ProductPopup open={popupOpen} setOpen={handlePopopOpen} />
       <h3 className="block text-md font-base text-gray-500">
         Selektierte alternative Artikel
       </h3>
@@ -41,6 +49,12 @@ export default function SelectedAlternativesSection() {
           <TrashIcon className="h-6 w-6 text-gray-500 hover:text-red-500 cursor-pointer" />
         </div>
       ))}
+      <button
+        className="col-span-1 bg-white border rounded-md px-4 mx-auto"
+        onClick={() => handlePopopOpen(true)}
+      >
+        Add products
+      </button>
     </div>
   );
 }

@@ -5,6 +5,7 @@ const FilterPopover = ({
   categoriesWithSub,
   selectedCategories,
   updateCategories,
+  layout = "left",
 }: {
   categoriesWithSub: {
     major: string;
@@ -15,6 +16,7 @@ const FilterPopover = ({
     sub: string[];
   };
   updateCategories: (category: string, type: "major" | "sub") => void;
+  layout?: "left" | "right";
 }) => {
   return (
     <Popover className="relative inline-block text-left">
@@ -30,7 +32,11 @@ const FilterPopover = ({
 
       <PopoverPanel
         transition
-        className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+        className={
+          layout === "left"
+            ? "absolute right-0 z-80 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+            : "absolute left-0 h-96 overflow-y-scroll z-80 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+        }
       >
         <form className="space-y-4">
           {categoriesWithSub.map((category) => (

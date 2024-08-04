@@ -21,7 +21,6 @@ export const sortCriteria = [
 const Products = () => {
   const [ascending, setAscending] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [overlayVisible, setOverlayVisible] = useState(false);
 
   const {
     selectedBasketIds,
@@ -115,7 +114,6 @@ const Products = () => {
 
   const handleDrawerOpen = (open: boolean) => {
     setDrawerOpen(open);
-    setOverlayVisible(open);
   };
 
   const categoriesWithSub = availableCategories.major.map((majorCategory) => ({
@@ -128,9 +126,6 @@ const Products = () => {
 
   return (
     <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-200 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 max-h-[calc(100vh-187px)]">
-      {overlayVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
-      )}
       <ProductsHeader products={sortedProducts} />
 
       <div className="px-6 -mt-2 pb-2 flex gap-x-8 items-center">
