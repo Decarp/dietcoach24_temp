@@ -18,7 +18,6 @@ import {
   PlusCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
-import FilterPopover from "../../products/FilterPopover";
 import NutriScoreMenu from "../../products/NutriScoreMenu";
 import SortMenu from "../../products/SortMenu";
 import FilterPopoverProduct from "./FilterPopoverProduct";
@@ -133,7 +132,7 @@ export default function ProductPopup({
       selectedProductCategories.sub.length === 0 &&
       searchTerm.length === 0
     ) {
-      return;
+      setTotalPages(1);
     } else {
       const fetchAvailableProducts = async () => {
         console.log("headers", headers);
@@ -362,7 +361,10 @@ export default function ProductPopup({
                             {product.de.name}
                           </h4>
                           <p className="text-gray-500">
-                            {product.nutriScoreV2023Detail.nutriScoreCalculated}
+                            {
+                              product.nutriScoreV2023Detail
+                                ?.nutriScoreCalculated
+                            }
                           </p>
                           <p className="text-gray-500">
                             {product.dietCoachCategoryL1.de}
