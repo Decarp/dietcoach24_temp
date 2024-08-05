@@ -23,6 +23,8 @@ import NutriScoreMenu from "../../products/NutriScoreMenu";
 import SortMenu from "../../products/SortMenu";
 import FilterPopoverProduct from "./FilterPopoverProduct";
 
+type CategoryKeys = keyof typeof categories.de;
+
 const sortCriteria = [
   "Standard",
   "Kalorien",
@@ -220,28 +222,30 @@ export default function ProductPopup({
       if (type === "major") {
         if (newMajor.includes(category)) {
           newMajor = newMajor.filter((cat) => cat !== category);
-          const relatedSubs = categories.de[category];
+          const relatedSubs = categories.de[category as CategoryKeys];
           newSub = newSub.filter((sub) => !relatedSubs.includes(sub));
         } else {
           newMajor.push(category);
-          newSub = [...newSub, ...categories.de[category]];
+          newSub = [...newSub, ...categories.de[category as CategoryKeys]];
         }
       } else if (type === "sub") {
         if (newSub.includes(category)) {
           newSub = newSub.filter((sub) => sub !== category);
           const parentMajor = Object.keys(categories.de).find((major) =>
-            categories.de[major].includes(category)
+            categories.de[major as CategoryKeys].includes(category)
           );
           if (
             parentMajor &&
-            !newSub.some((sub) => categories.de[parentMajor].includes(sub))
+            !newSub.some((sub) =>
+              categories.de[parentMajor as CategoryKeys].includes(sub)
+            )
           ) {
             newMajor = newMajor.filter((major) => major !== parentMajor);
           }
         } else {
           newSub.push(category);
           const parentMajor = Object.keys(categories.de).find((major) =>
-            categories.de[major].includes(category)
+            categories.de[major as CategoryKeys].includes(category)
           );
           if (parentMajor && !newMajor.includes(parentMajor)) {
             newMajor.push(parentMajor);
