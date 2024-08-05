@@ -1,4 +1,8 @@
-import { BasketProductFlat, SelectedBasketProductId } from "@/types/types";
+import {
+  BasketProductFlat,
+  Product,
+  SelectedBasketProductId,
+} from "@/types/types";
 import { createStore } from "zustand/vanilla";
 
 export type CounterState = {
@@ -8,6 +12,7 @@ export type CounterState = {
   selectedBasketIds: number[];
   selectedBasketProductIds: SelectedBasketProductId[];
   selectedBasketProductsFlat: BasketProductFlat[];
+  selectedAlternativeProducts: Product[];
   currentTab: string;
   patientId: string | null;
   basketProductsFlat: BasketProductFlat[];
@@ -21,6 +26,7 @@ export type CounterActions = {
   setSelectedBasketIds: (ids: number[]) => void;
   setSelectedBasketProductIds: (ids: SelectedBasketProductId[]) => void;
   setSelectedBasketProductsFlat: (products: BasketProductFlat[]) => void;
+  setSelectedAlternativeProducts: (products: Product[]) => void;
   setCurrentTab: (tab: string) => void;
   setPatientId: (id: string | null) => void;
   setBasketProductsFlat: (products: BasketProductFlat[]) => void;
@@ -37,6 +43,7 @@ export const initCounterStore = (): CounterState => {
     selectedBasketIds: [],
     selectedBasketProductIds: [],
     selectedBasketProductsFlat: [],
+    selectedAlternativeProducts: [],
     currentTab: "energy",
     patientId: null,
     basketProductsFlat: [],
@@ -50,6 +57,7 @@ export const defaultInitState: CounterState = {
   selectedBasketIds: [],
   selectedBasketProductIds: [],
   selectedBasketProductsFlat: [],
+  selectedAlternativeProducts: [],
   currentTab: "energy",
   patientId: null,
   basketProductsFlat: [],
@@ -116,6 +124,8 @@ export const createCounterStore = (
       set(() => ({ basketProductsFlat: products })),
     setSelectedBasketProductsFlat: (products: BasketProductFlat[]) =>
       set(() => ({ selectedBasketProductsFlat: products })),
+    setSelectedAlternativeProducts: (products: Product[]) =>
+      set(() => ({ selectedAlternativeProducts: products })),
     updateCategories: (category: string, level: "major" | "sub") =>
       set((state) => {
         const newCategories = { ...state.selectedCategories };

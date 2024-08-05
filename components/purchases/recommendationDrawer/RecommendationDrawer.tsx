@@ -10,6 +10,7 @@ import SelectedAlternativesSection from "./SelectedAlternativesSection";
 import NotesSection from "./NotesSection";
 import { useCounterStore } from "@/providers/useStoreProvider";
 
+// Replace with useStore state
 const selectedAlternatives = [
   {
     id: 4,

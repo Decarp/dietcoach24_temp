@@ -8,18 +8,62 @@ import {
 } from "@headlessui/react";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import {
-  ArrowDownIcon,
-  ArrowLeftIcon,
-  ArrowUpIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import { Product, Products } from "@/types/types";
 import { useEffect, useState } from "react";
 import { categories } from "@/data/categories";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import SortMenu from "../../products/SortMenu";
 import FilterPopover from "../../products/FilterPopover";
-import { sortCriteria } from "../../products/Products";
+import NutriScoreMenu from "../../products/NutriScoreMenu";
+
+const sortCriteria = [
+  "Standard",
+  "Kalorien",
+  "Proteine",
+  "Fette",
+  "Kohlenhydrate",
+  "Nahrungsfasern",
+];
+
+const sortProducts = (
+  products: Product[],
+  selectedSortCriteria: string,
+  ascending: boolean
+) => {
+  const getSortValue = (product: Product) => {
+    switch (selectedSortCriteria) {
+      case "Kalorien":
+        return product.nutrients.kcal;
+      case "Proteine":
+        return product.nutrients.proteins;
+      case "Fette":
+        return product.nutrients.fats;
+      case "Kohlenhydrate":
+        return product.nutrients.carbohydrates;
+      case "Nahrungsfasern":
+        return product.nutrients.fibers;
+      default:
+        return 0;
+    }
+  };
+
+  return [...products].sort((a, b) =>
+    ascending
+      ? getSortValue(a) - getSortValue(b)
+      : getSortValue(b) - getSortValue(a)
+  );
+};
+
+type HeadersType = {
+  retailer: string;
+  Page: string;
+  Limit: string;
+  "Search-De"?: string;
+  "DietCoach-Category-L2-De"?: string;
+  "DietCoach-Category-L1-De"?: string;
+  "Nutri-Score-Cutoff"?: string;
+};
 
 export default function ProductPopup({
   open,
@@ -30,14 +74,12 @@ export default function ProductPopup({
 }) {
   const [ascending, setAscending] = useState(true);
   const [availableProducts, setAvailableProducts] = useState<Product[]>([]);
-  const [headers, setHeaders] = useState({
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [nutriScoreCutOff, setNutriScoreCutOff] = useState("E");
+  const [headers, setHeaders] = useState<HeadersType>({
     retailer: "Migros",
     Page: "1",
     Limit: "110",
-    // "Search-De": "",
-    "DietCoach-Category-L2-De": "",
-    "DietCoach-Category-L1-De": "",
-    "Nutri-Score-Cutoff": "E",
   });
 
   const categoriesWithSub: { major: string; subs: string[] }[] = Object.entries(
@@ -50,8 +92,10 @@ export default function ProductPopup({
   const {
     selectedCategories,
     selectedSortCriteria,
+    selectedAlternativeProducts,
     setSelectedSortCriteria,
     updateCategories,
+    setSelectedAlternativeProducts,
   } = useCounterStore((state) => state);
 
   useEffect(() => {
@@ -70,16 +114,49 @@ export default function ProductPopup({
   }, [headers]);
 
   const updateHeaders = () => {
-    setHeaders((prevHeaders) => ({
-      ...prevHeaders,
-      "DietCoach-Category-L1-De": selectedCategories.major.join(","),
-      "DietCoach-Category-L2-De": selectedCategories.sub.join(","),
-    }));
+    const newHeaders: HeadersType = {
+      retailer: "Migros",
+      Page: "1",
+      Limit: "110",
+      "Nutri-Score-Cutoff": nutriScoreCutOff,
+    };
+
+    if (selectedCategories.major.length > 0) {
+      newHeaders["DietCoach-Category-L1-De"] = selectedCategories.major[0];
+    }
+
+    if (selectedCategories.sub.length > 0) {
+      newHeaders["DietCoach-Category-L2-De"] = selectedCategories.sub[0];
+    }
+
+    if (searchTerm.length > 0) {
+      newHeaders["Search-De"] = searchTerm;
+    }
+
+    setHeaders(newHeaders);
   };
 
   useEffect(() => {
     updateHeaders();
-  }, [selectedCategories]);
+  }, [selectedCategories, searchTerm, nutriScoreCutOff]);
+
+  const handleAddProduct = (product: Product) => {
+    setSelectedAlternativeProducts([...selectedAlternativeProducts, product]);
+  };
+
+  const handleRemoveProduct = (productId: number) => {
+    setSelectedAlternativeProducts(
+      selectedAlternativeProducts.filter(
+        (product) => product.productId !== productId
+      )
+    );
+  };
+
+  const sortedProducts = sortProducts(
+    availableProducts,
+    selectedSortCriteria,
+    ascending
+  );
 
   return (
     <Dialog
@@ -129,6 +206,11 @@ export default function ProductPopup({
                     selectedSortCriteria={selectedSortCriteria}
                     setSelectedSortCriteria={setSelectedSortCriteria}
                   />
+
+                  <NutriScoreMenu
+                    selectedNutriScore={nutriScoreCutOff}
+                    setSelectedNutriScore={setNutriScoreCutOff}
+                  />
                 </div>
 
                 <div>
@@ -144,27 +226,62 @@ export default function ProductPopup({
                   </button>
                 </div>
               </div>
+              <div className="">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-md"
+                />
+              </div>
               <div className="bg-white p-4 border rounded-md h-[420px] overflow-y-scroll space-y-4">
-                {availableProducts?.map((product) => (
-                  <div
-                    key={product.productId}
-                    className="flex items-center space-x-4 justify-between"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="w-16 h-16 rounded-md bg-gray-200"></div>
-                      <div>
-                        <h4 className="text-gray-900 font-semibold">
-                          {product.de.name}
-                        </h4>
-                        <p className="text-gray-500">
-                          {product.dietCoachCategoryL1.de}
-                        </p>
-                      </div>
-                    </div>
-                    <PlusCircleIcon className="h-6 w-6 text-gray-500 hover:text-primary cursor-pointer" />
-                    <CheckCircleIcon className="h-6 w-6 text-primary hover:text-gray-500 cursor-pointer" />
+                {selectedCategories.major.length === 0 &&
+                selectedCategories.sub.length === 0 &&
+                searchTerm.length === 0 ? (
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-gray-500">
+                      Bitte wählen Sie eine Kategorie oder geben Sie einen
+                      Suchbegriff ein.
+                    </p>
                   </div>
-                ))}
+                ) : (
+                  sortedProducts?.map((product) => (
+                    <div
+                      key={product.productId}
+                      className="flex items-center space-x-4 justify-between"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className="w-16 h-16 rounded-md bg-gray-200"></div>
+                        <div>
+                          <h4 className="text-gray-900 font-semibold">
+                            {product.de.name}
+                          </h4>
+                          <p className="text-gray-500">
+                            {product.nutriScoreV2023Detail.nutriScoreCalculated}
+                          </p>
+                          <p className="text-gray-500">
+                            {product.dietCoachCategoryL1.de}
+                          </p>
+                        </div>
+                      </div>
+                      {selectedAlternativeProducts.some(
+                        (altProduct) =>
+                          altProduct.productId === product.productId
+                      ) ? (
+                        <CheckCircleIcon
+                          className="h-6 w-6 text-primary hover:text-gray-500 cursor-pointer"
+                          onClick={() => handleRemoveProduct(product.productId)}
+                        />
+                      ) : (
+                        <PlusCircleIcon
+                          className="h-6 w-6 text-gray-500 hover:text-primary cursor-pointer"
+                          onClick={() => handleAddProduct(product)}
+                        />
+                      )}
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
@@ -174,7 +291,11 @@ export default function ProductPopup({
                 onClick={() => setOpen(false)}
                 className="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
-                Fertig
+                {selectedAlternativeProducts.length === 0 && "Zurück"}
+                {selectedAlternativeProducts.length === 1 &&
+                  "1 Produkt emphfehlen"}
+                {selectedAlternativeProducts.length > 1 &&
+                  `${selectedAlternativeProducts.length} Produkte emphfehlen`}
               </button>
             </div>
           </DialogPanel>

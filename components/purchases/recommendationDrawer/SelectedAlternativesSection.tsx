@@ -2,26 +2,23 @@
 import { TrashIcon } from "@heroicons/react/24/outline";
 import ProductPopup from "./productPopup.tsx/ProductPopup";
 import { useState } from "react";
-
-const selectedAlternatives = [
-  {
-    id: 4,
-    name: "Erdnüsse",
-    category: "Nüsse",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 5,
-    name: "Haselnüsse",
-    category: "Nüsse",
-    image: "https://via.placeholder.com/150",
-  },
-];
+import { useCounterStore } from "@/providers/useStoreProvider";
 
 export default function SelectedAlternativesSection() {
   const [popupOpen, setPopupOpen] = useState(false);
   const handlePopopOpen = (open: boolean) => {
     setPopupOpen(open);
+  };
+
+  const { selectedAlternativeProducts, setSelectedAlternativeProducts } =
+    useCounterStore((state) => state);
+
+  const handleRemoveProduct = (productId: number) => {
+    setSelectedAlternativeProducts(
+      selectedAlternativeProducts.filter(
+        (product) => product.productId !== productId
+      )
+    );
   };
 
   return (
@@ -30,23 +27,25 @@ export default function SelectedAlternativesSection() {
       <h3 className="block text-md font-base text-gray-500">
         Selektierte alternative Artikel
       </h3>
-      {selectedAlternatives.map((product) => (
+      {selectedAlternativeProducts.map((product) => (
         <div
-          key={product.id}
+          key={product.productId}
           className="flex items-center space-x-4 justify-between"
         >
           <div className="flex items-center space-x-4">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-16 h-16 rounded-md"
-            />
+            <div className="w-16 h-16 rounded-md bg-gray-200"></div>
             <div>
-              <h4 className="text-gray-900 font-semibold">{product.name}</h4>
-              <p className="text-gray-500">{product.category}</p>
+              <h4 className="text-gray-900 font-semibold">{product.de.name}</h4>
+              <p className="text-gray-500">
+                {product.nutriScoreV2023Detail.nutriScoreCalculated}
+              </p>
+              <p className="text-gray-500">{product.dietCoachCategoryL1.de}</p>
             </div>
           </div>
-          <TrashIcon className="h-6 w-6 text-gray-500 hover:text-red-500 cursor-pointer" />
+          <TrashIcon
+            className="h-6 w-6 text-gray-500 hover:text-red-500 cursor-pointer"
+            onClick={() => handleRemoveProduct(product.productId)}
+          />
         </div>
       ))}
       <button

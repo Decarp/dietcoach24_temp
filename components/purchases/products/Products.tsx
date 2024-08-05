@@ -9,7 +9,7 @@ import { BasketProductFlat } from "@/types/types";
 import FilterPopover from "./FilterPopover";
 import SortMenu from "./SortMenu";
 
-export const sortCriteria = [
+const sortCriteria = [
   "Einkaufsdatum",
   "Kalorien",
   "Proteine",
@@ -17,6 +17,35 @@ export const sortCriteria = [
   "Kohlenhydrate",
   "Nahrungsfasern",
 ];
+
+const sortProducts = (
+  products: BasketProductFlat[],
+  selectedSortCriteria: string,
+  ascending: boolean
+) => {
+  const getSortValue = (product: BasketProductFlat) => {
+    switch (selectedSortCriteria) {
+      case "Kalorien":
+        return product.nutrients.kcal;
+      case "Proteine":
+        return product.nutrients.proteins;
+      case "Fette":
+        return product.nutrients.fats;
+      case "Kohlenhydrate":
+        return product.nutrients.carbohydrates;
+      case "Nahrungsfasern":
+        return product.nutrients.fibers;
+      default:
+        return product.basketIndex;
+    }
+  };
+
+  return [...products].sort((a, b) =>
+    ascending
+      ? getSortValue(a) - getSortValue(b)
+      : getSortValue(b) - getSortValue(a)
+  );
+};
 
 const Products = () => {
   const [ascending, setAscending] = useState(true);
@@ -53,31 +82,6 @@ const Products = () => {
     }
   }, [newBasketProductsFlat, basketProductsFlat, setBasketProductsFlat]);
 
-  const sortProducts = (products: BasketProductFlat[]) => {
-    const getSortValue = (product: BasketProductFlat) => {
-      switch (selectedSortCriteria) {
-        case "Kalorien":
-          return product.nutrients.kcal;
-        case "Proteine":
-          return product.nutrients.proteins;
-        case "Fette":
-          return product.nutrients.fats;
-        case "Kohlenhydrate":
-          return product.nutrients.carbohydrates;
-        case "Nahrungsfasern":
-          return product.nutrients.fibers;
-        default:
-          return product.basketIndex;
-      }
-    };
-
-    return [...products].sort((a, b) =>
-      ascending
-        ? getSortValue(a) - getSortValue(b)
-        : getSortValue(b) - getSortValue(a)
-    );
-  };
-
   const filteredProducts =
     selectedCategories.major.length === 0 && selectedCategories.sub.length === 0
       ? []
@@ -91,7 +95,11 @@ const Products = () => {
               selectedCategories.sub.includes(product.dietCoachCategoryL2.de))
         );
 
-  const sortedProducts = sortProducts(filteredProducts);
+  const sortedProducts = sortProducts(
+    filteredProducts,
+    selectedSortCriteria,
+    ascending
+  );
 
   const availableCategories = {
     major: Array.from(
