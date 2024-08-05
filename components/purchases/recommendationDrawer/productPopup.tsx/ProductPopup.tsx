@@ -1,21 +1,26 @@
 "use client";
 
+import { categories } from "@/data/categories";
+import { useCounterStore } from "@/providers/useStoreProvider";
+import { Product, Products } from "@/types/types";
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
-import { Product, Products } from "@/types/types";
-import { useEffect, useState } from "react";
-import { categories } from "@/data/categories";
-import { useCounterStore } from "@/providers/useStoreProvider";
-import SortMenu from "../../products/SortMenu";
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  CheckCircleIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  PlusCircleIcon,
+} from "@heroicons/react/24/outline";
+import { useEffect, useRef, useState } from "react";
 import FilterPopover from "../../products/FilterPopover";
 import NutriScoreMenu from "../../products/NutriScoreMenu";
+import SortMenu from "../../products/SortMenu";
 
 const sortCriteria = [
   "Standard",
@@ -76,10 +81,12 @@ export default function ProductPopup({
   const [availableProducts, setAvailableProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [nutriScoreCutOff, setNutriScoreCutOff] = useState("E");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [headers, setHeaders] = useState<HeadersType>({
     retailer: "Migros",
     Page: "1",
-    Limit: "110",
+    Limit: "100",
   });
 
   const categoriesWithSub: { major: string; subs: string[] }[] = Object.entries(
@@ -98,26 +105,46 @@ export default function ProductPopup({
     setSelectedAlternativeProducts,
   } = useCounterStore((state) => state);
 
-  useEffect(() => {
-    const fetchAvailableProducts = async () => {
-      const query = new URLSearchParams(headers).toString();
-      try {
-        const response = await fetch(`/api?${query}`);
-        const data: Products = await response.json();
-        setAvailableProducts(data.products);
-      } catch (error) {
-        console.error("Failed to fetch available products:", error);
-      }
-    };
+  const scrollableContainerRef = useRef<HTMLDivElement>(null);
 
-    fetchAvailableProducts();
+  const scrollToTop = () => {
+    if (scrollableContainerRef.current) {
+      scrollableContainerRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (
+      selectedCategories.major.length === 0 &&
+      selectedCategories.sub.length === 0 &&
+      searchTerm.length === 0
+    ) {
+      return;
+    } else {
+      const fetchAvailableProducts = async () => {
+        const query = new URLSearchParams(headers).toString();
+        try {
+          const response = await fetch(`/api?${query}`);
+          const data: Products = await response.json();
+          setAvailableProducts(data.products);
+          setTotalPages(data.meta.totalPages);
+        } catch (error) {
+          console.error("Failed to fetch available products:", error);
+        }
+      };
+
+      fetchAvailableProducts();
+    }
   }, [headers]);
 
   const updateHeaders = () => {
     const newHeaders: HeadersType = {
       retailer: "Migros",
-      Page: "1",
-      Limit: "110",
+      Page: currentPage.toString(),
+      Limit: "100",
       "Nutri-Score-Cutoff": nutriScoreCutOff,
     };
 
@@ -138,7 +165,12 @@ export default function ProductPopup({
 
   useEffect(() => {
     updateHeaders();
-  }, [selectedCategories, searchTerm, nutriScoreCutOff]);
+  }, [selectedCategories, searchTerm, nutriScoreCutOff, currentPage]);
+
+  const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
 
   const handleAddProduct = (product: Product) => {
     setSelectedAlternativeProducts([...selectedAlternativeProducts, product]);
@@ -150,6 +182,20 @@ export default function ProductPopup({
         (product) => product.productId !== productId
       )
     );
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      scrollToTop();
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      scrollToTop();
+    }
   };
 
   const sortedProducts = sortProducts(
@@ -231,11 +277,14 @@ export default function ProductPopup({
                   type="text"
                   placeholder="Search products..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleSearchTermChange}
                   className="w-full px-4 py-2 border rounded-md"
                 />
               </div>
-              <div className="bg-white p-4 border rounded-md h-[420px] overflow-y-scroll space-y-4">
+              <div
+                ref={scrollableContainerRef}
+                className="bg-white p-4 border rounded-md h-[420px] overflow-y-scroll space-y-4"
+              >
                 {selectedCategories.major.length === 0 &&
                 selectedCategories.sub.length === 0 &&
                 searchTerm.length === 0 ? (
@@ -285,19 +334,43 @@ export default function ProductPopup({
               </div>
             </div>
 
-            <div className="mt-5 sm:mt-6">
+            <div className="mt-5 sm:mt-6 flex justify-between">
               <button
                 type="button"
-                onClick={() => setOpen(false)}
-                className="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
               >
-                {selectedAlternativeProducts.length === 0 && "Zurück"}
-                {selectedAlternativeProducts.length === 1 &&
-                  "1 Produkt emphfehlen"}
-                {selectedAlternativeProducts.length > 1 &&
-                  `${selectedAlternativeProducts.length} Produkte emphfehlen`}
+                <ChevronLeftIcon
+                  className="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+                Zurück
+              </button>
+              <span className="text-sm text-gray-700">
+                Seite {currentPage} von {totalPages} mit{" "}
+                {availableProducts.length} Produkten
+              </span>
+              <button
+                type="button"
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Vor
+                <ChevronRightIcon
+                  className="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
               </button>
             </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="mt-4 rounded-md w-full bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400"
+            >
+              Speichern
+            </button>
           </DialogPanel>
         </div>
       </div>
