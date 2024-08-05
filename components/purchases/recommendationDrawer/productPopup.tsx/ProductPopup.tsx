@@ -21,6 +21,7 @@ import { useEffect, useRef, useState } from "react";
 import FilterPopover from "../../products/FilterPopover";
 import NutriScoreMenu from "../../products/NutriScoreMenu";
 import SortMenu from "../../products/SortMenu";
+import FilterPopoverProduct from "./FilterPopoverProduct";
 
 const sortCriteria = [
   "Standard",
@@ -79,6 +80,7 @@ export default function ProductPopup({
 }) {
   const [ascending, setAscending] = useState(true);
   const [availableProducts, setAvailableProducts] = useState<Product[]>([]);
+  const [sortedProducts, setSortedProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [nutriScoreCutOff, setNutriScoreCutOff] = useState("E");
   const [currentPage, setCurrentPage] = useState(1);
@@ -87,6 +89,13 @@ export default function ProductPopup({
     retailer: "Migros",
     Page: "1",
     Limit: "100",
+  });
+  const [selectedProductCategories, setSelectedProductCategories] = useState<{
+    major: string[];
+    sub: string[];
+  }>({
+    major: [],
+    sub: [],
   });
 
   const categoriesWithSub: { major: string; subs: string[] }[] = Object.entries(
@@ -97,11 +106,9 @@ export default function ProductPopup({
   }));
 
   const {
-    selectedCategories,
     selectedSortCriteria,
     selectedAlternativeProducts,
     setSelectedSortCriteria,
-    updateCategories,
     setSelectedAlternativeProducts,
   } = useCounterStore((state) => state);
 
@@ -117,19 +124,25 @@ export default function ProductPopup({
   };
 
   useEffect(() => {
+    console.log("selectedProductCategories", selectedProductCategories);
+    console.log("searchTerm", searchTerm);
     if (
-      selectedCategories.major.length === 0 &&
-      selectedCategories.sub.length === 0 &&
+      selectedProductCategories.major.length === 0 &&
+      selectedProductCategories.sub.length === 0 &&
       searchTerm.length === 0
     ) {
       return;
     } else {
       const fetchAvailableProducts = async () => {
+        console.log("headers", headers);
         const query = new URLSearchParams(headers).toString();
         try {
           const response = await fetch(`/api?${query}`);
           const data: Products = await response.json();
           setAvailableProducts(data.products);
+          setSortedProducts(
+            sortProducts(availableProducts, selectedSortCriteria, ascending)
+          );
           setTotalPages(data.meta.totalPages);
         } catch (error) {
           console.error("Failed to fetch available products:", error);
@@ -148,12 +161,13 @@ export default function ProductPopup({
       "Nutri-Score-Cutoff": nutriScoreCutOff,
     };
 
-    if (selectedCategories.major.length > 0) {
-      newHeaders["DietCoach-Category-L1-De"] = selectedCategories.major[0];
+    if (selectedProductCategories.major.length > 0) {
+      newHeaders["DietCoach-Category-L1-De"] =
+        selectedProductCategories.major[0];
     }
 
-    if (selectedCategories.sub.length > 0) {
-      newHeaders["DietCoach-Category-L2-De"] = selectedCategories.sub[0];
+    if (selectedProductCategories.sub.length > 0) {
+      newHeaders["DietCoach-Category-L2-De"] = selectedProductCategories.sub[0];
     }
 
     if (searchTerm.length > 0) {
@@ -165,7 +179,7 @@ export default function ProductPopup({
 
   useEffect(() => {
     updateHeaders();
-  }, [selectedCategories, searchTerm, nutriScoreCutOff, currentPage]);
+  }, [selectedProductCategories, searchTerm, nutriScoreCutOff, currentPage]);
 
   const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -198,11 +212,49 @@ export default function ProductPopup({
     }
   };
 
-  const sortedProducts = sortProducts(
-    availableProducts,
-    selectedSortCriteria,
-    ascending
-  );
+  const updateCategories = (category: string, type: "major" | "sub") => {
+    setSelectedProductCategories((prevState) => {
+      let newMajor = [...prevState.major];
+      let newSub = [...prevState.sub];
+
+      if (type === "major") {
+        if (newMajor.includes(category)) {
+          newMajor = newMajor.filter((cat) => cat !== category);
+          const relatedSubs = categories.de[category];
+          newSub = newSub.filter((sub) => !relatedSubs.includes(sub));
+        } else {
+          newMajor.push(category);
+          newSub = [...newSub, ...categories.de[category]];
+        }
+      } else if (type === "sub") {
+        if (newSub.includes(category)) {
+          newSub = newSub.filter((sub) => sub !== category);
+          const parentMajor = Object.keys(categories.de).find((major) =>
+            categories.de[major].includes(category)
+          );
+          if (
+            parentMajor &&
+            !newSub.some((sub) => categories.de[parentMajor].includes(sub))
+          ) {
+            newMajor = newMajor.filter((major) => major !== parentMajor);
+          }
+        } else {
+          newSub.push(category);
+          const parentMajor = Object.keys(categories.de).find((major) =>
+            categories.de[major].includes(category)
+          );
+          if (parentMajor && !newMajor.includes(parentMajor)) {
+            newMajor.push(parentMajor);
+          }
+        }
+      }
+
+      return {
+        major: newMajor,
+        sub: newSub,
+      };
+    });
+  };
 
   return (
     <Dialog
@@ -240,11 +292,10 @@ export default function ProductPopup({
             <div className="space-y-4 p-4">
               <div className="px-6 -mt-2 pb-2 flex justify-between items-center">
                 <div className="space-x-8">
-                  <FilterPopover
+                  <FilterPopoverProduct
                     categoriesWithSub={categoriesWithSub}
-                    selectedCategories={selectedCategories}
+                    selectedCategories={selectedProductCategories}
                     updateCategories={updateCategories}
-                    layout="right"
                   />
 
                   <SortMenu
@@ -285,8 +336,8 @@ export default function ProductPopup({
                 ref={scrollableContainerRef}
                 className="bg-white p-4 border rounded-md h-[420px] overflow-y-scroll space-y-4"
               >
-                {selectedCategories.major.length === 0 &&
-                selectedCategories.sub.length === 0 &&
+                {selectedProductCategories.major.length === 0 &&
+                selectedProductCategories.sub.length === 0 &&
                 searchTerm.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
                     <p className="text-gray-500">
@@ -349,7 +400,7 @@ export default function ProductPopup({
               </button>
               <span className="text-sm text-gray-700">
                 Seite {currentPage} von {totalPages} mit{" "}
-                {availableProducts.length} Produkten
+                {availableProducts?.length} Produkten
               </span>
               <button
                 type="button"
