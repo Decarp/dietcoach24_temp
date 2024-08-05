@@ -544,3 +544,103 @@ NutriScore-Cutoff: string (optional, default: "C", includes C)
   }
 }
 ```
+
+## GET /dietcoach/backend/dietician/table
+
+> Status: TODO ⚙️
+
+> Priority: HIGH
+
+> Reuse: /nutrient-table
+
+### Headers
+
+```
+Authentication: string
+Participant-Id: string
+Start-Timestamp: number
+End-Timestamp: number
+```
+
+### Response Types
+
+```
+category: string[]
+quantity: number,
+energyShare: number,
+energyKJ: number,
+sugar: number,
+saturatedFat: number,
+sodium: number,
+fVPN: number,
+dietaryFiber: number,
+protein: number,
+```
+
+### Response Exanple
+
+```
+[
+    {
+        category: ["Getränke"],
+        quantity: 120,
+        energyShare: 100,
+        energyKJ: 400,
+        sugar: 20,
+        saturatedFat: 0,
+        sodium: 0,
+        fVPN: 5,
+        dietaryFiber: 2,
+        protein: 0,
+    },
+    {
+        category: ["Getränke", "Saft"],
+        quantity: 80
+        energyShare: 60,
+        energyKJ: 240,
+        sugar: 15,
+        saturatedFat: 0,
+        sodium: 0,
+        fVPN: 2,
+        dietaryFiber: 1,
+        protein: 0,
+    },
+    {
+        category: ["Getränke", "Milchgetränke"],
+        quantity: 40,
+        energyShare: 40,
+        energyKJ: 160,
+        sugar: 5,
+        saturatedFat: 0,
+        sodium: 0,
+        fVPN: 3,
+        dietaryFiber: 1,
+        protein: 0,
+    },
+    {
+        category: ["Getränke", "Süssgetränke"],
+        quantity: 0,
+        energyShare: 7,
+        energyKJ: 0,
+        sugar: 0,
+        saturatedFat: 0,
+        sodium: 0,
+        fVPN: 0,
+        dietaryFiber: 0,
+        protein: 0,
+    },
+    {
+        category: ["Getränke", "Wasser, Kaffee & Tee"],
+        quantity: 0,
+        energyShare: 7,
+        energyKJ: 0,
+        sugar: 0,
+        saturatedFat: 0,
+        sodium: 0,
+        fVPN: 0,
+        dietaryFiber: 0,
+        protein: 0,
+    },
+    ...
+];
+```
