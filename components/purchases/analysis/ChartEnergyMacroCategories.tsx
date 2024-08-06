@@ -26,13 +26,15 @@ const CustomLabel = ({
   width = 0,
   height = 0,
   selectedMetric,
+  percent = 0,
 }: {
-  x: any;
-  y: any;
-  value: any;
-  width: any;
-  height: any;
+  x?: number;
+  y?: number;
+  value?: number;
+  width?: number;
+  height?: number;
   selectedMetric: string;
+  percent?: number;
 }) => {
   return (
     <text
@@ -42,7 +44,10 @@ const CustomLabel = ({
       textAnchor="start"
       dominantBaseline="middle"
     >
-      {`${value}${selectedMetric}`}
+      {`${value}${selectedMetric} `}
+      <tspan fill="#999" fontSize="12" fontWeight="300">
+        ({(percent * 100).toFixed(0)}%)
+      </tspan>{" "}
     </text>
   );
 };
@@ -63,6 +68,10 @@ const ChartEnergyMacroCategories: React.FC = () => {
       selectedMetric
     );
   }, [selectedBasketIds, selectedMacro, selectedMetric]);
+
+  const totalValue = useMemo(() => {
+    return data.reduce((sum, item) => sum + item.value, 0);
+  }, [data]);
 
   useEffect(() => {
     const updatedIndices = data
@@ -135,7 +144,7 @@ const ChartEnergyMacroCategories: React.FC = () => {
         <BarChart
           data={data}
           layout="vertical"
-          margin={{ top: 20, right: 60, left: 70, bottom: 80 }}
+          margin={{ top: 20, right: 100, left: 70, bottom: 80 }}
           onClick={(e) => handleClick(e.activeTooltipIndex!)}
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -156,14 +165,15 @@ const ChartEnergyMacroCategories: React.FC = () => {
             <LabelList
               dataKey="value"
               position="right"
-              content={({ x, y, width, height, value }) => (
+              content={({ x = 0, y = 0, width = 0, height = 0, value = 0 }) => (
                 <CustomLabel
-                  x={x}
-                  y={y}
-                  width={width}
-                  height={height}
-                  value={value}
+                  x={Number(x)}
+                  y={Number(y)}
+                  width={Number(width)}
+                  height={Number(height)}
+                  value={Number(value)}
                   selectedMetric={selectedMetric}
+                  percent={totalValue ? Number(value) / totalValue : 0}
                 />
               )}
             />
