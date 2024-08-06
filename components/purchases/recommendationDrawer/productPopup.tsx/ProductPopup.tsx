@@ -62,16 +62,6 @@ const sortProducts = (
   );
 };
 
-type HeadersType = {
-  retailer: string;
-  Page: string;
-  Limit: string;
-  "Search-De"?: string;
-  "DietCoach-Category-L2-De"?: string;
-  "DietCoach-Category-L1-De"?: string;
-  "Nutri-Score-Cutoff"?: string;
-};
-
 export default function ProductPopup({
   open,
   setOpen,
@@ -86,11 +76,6 @@ export default function ProductPopup({
   const [nutriScoreCutOff, setNutriScoreCutOff] = useState("E");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [headers, setHeaders] = useState<HeadersType>({
-    retailer: "Migros",
-    Page: "1",
-    Limit: "100",
-  });
   const [selectedProductCategories, setSelectedProductCategories] = useState<{
     major: string[];
     sub: string[];
@@ -125,8 +110,6 @@ export default function ProductPopup({
   };
 
   useEffect(() => {
-    console.log("selectedProductCategories", selectedProductCategories);
-    console.log("searchTerm", searchTerm);
     if (
       selectedProductCategories.major.length === 0 &&
       selectedProductCategories.sub.length === 0 &&
@@ -135,14 +118,36 @@ export default function ProductPopup({
       setTotalPages(1);
     } else {
       const fetchAvailableProducts = async () => {
-        console.log("headers", headers);
-        const query = new URLSearchParams(headers).toString();
+        const queryParams = new URLSearchParams({
+          retailer: "Migros",
+          page: currentPage.toString(),
+          limit: "100",
+          "nutri-score-cutoff": nutriScoreCutOff,
+        });
+
+        if (selectedProductCategories.major.length > 0) {
+          selectedProductCategories.major.forEach((major) =>
+            queryParams.append("dietcoach-category-l1-de", major)
+          );
+        }
+
+        if (selectedProductCategories.sub.length > 0) {
+          selectedProductCategories.sub.forEach((sub) =>
+            queryParams.append("dietcoach-category-l2-de", sub)
+          );
+        }
+
+        if (searchTerm.length > 0) {
+          queryParams.append("search-de", searchTerm);
+        }
+
+        const queryString = queryParams.toString();
         try {
-          const response = await fetch(`/api?${query}`);
+          const response = await fetch(`/api?${queryString}`);
           const data: Products = await response.json();
           setAvailableProducts(data.products);
           setSortedProducts(
-            sortProducts(availableProducts, selectedSortCriteria, ascending)
+            sortProducts(data.products, selectedSortCriteria, ascending)
           );
           setTotalPages(data.meta.totalPages);
         } catch (error) {
@@ -152,35 +157,14 @@ export default function ProductPopup({
 
       fetchAvailableProducts();
     }
-  }, [headers]);
-
-  const updateHeaders = () => {
-    const newHeaders: HeadersType = {
-      retailer: "Migros",
-      Page: currentPage.toString(),
-      Limit: "100",
-      "Nutri-Score-Cutoff": nutriScoreCutOff,
-    };
-
-    if (selectedProductCategories.major.length > 0) {
-      newHeaders["DietCoach-Category-L1-De"] =
-        selectedProductCategories.major[0];
-    }
-
-    if (selectedProductCategories.sub.length > 0) {
-      newHeaders["DietCoach-Category-L2-De"] = selectedProductCategories.sub[0];
-    }
-
-    if (searchTerm.length > 0) {
-      newHeaders["Search-De"] = searchTerm;
-    }
-
-    setHeaders(newHeaders);
-  };
-
-  useEffect(() => {
-    updateHeaders();
-  }, [selectedProductCategories, searchTerm, nutriScoreCutOff, currentPage]);
+  }, [
+    selectedProductCategories,
+    searchTerm,
+    nutriScoreCutOff,
+    currentPage,
+    selectedSortCriteria,
+    ascending,
+  ]);
 
   const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
