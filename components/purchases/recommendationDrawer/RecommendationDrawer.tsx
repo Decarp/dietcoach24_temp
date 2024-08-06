@@ -1,30 +1,18 @@
-// RecommendationDrawer.tsx
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
-import DialogHeader from "./DialogHeader";
-import TabSection from "./TabSection";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
+import SessionSelector from "./SessionSelector";
+import TabSection from "./tabSection/TabSection";
 import SelectedProductsSection from "./SelectedProductsSection";
 import SelectedAlternativesSection from "./SelectedAlternativesSection";
 import NotesSection from "./NotesSection";
 import { useCounterStore } from "@/providers/useStoreProvider";
-
-// Replace with useStore state
-const selectedAlternatives = [
-  {
-    id: 4,
-    name: "Erdnüsse",
-    category: "Nüsse",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 5,
-    name: "Haselnüsse",
-    category: "Nüsse",
-    image: "https://via.placeholder.com/150",
-  },
-];
 
 export default function RecommendationDrawer({
   open,
@@ -33,21 +21,25 @@ export default function RecommendationDrawer({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const [session, setSession] = useState("Sitzung #1");
+  const [session, setSession] = useState("Sitzung auswählen");
   const [currentTab, setCurrentTab] = useState("Variante 1");
   const [variante1State, setVariante1State] = useState({
-    mode: "",
-    nutrient: "",
-    category: "",
+    mode: "Erhöhen / Reduzieren",
+    nutrient: "Nährstoff",
+    category: "Kategorie",
   });
   const [variante2State, setVariante2State] = useState({
-    mode: "",
-    category: "",
+    mode: "Erhöhen / Reduzieren",
+    category: "Kategorie",
   });
   const [freitextState, setFreitextState] = useState("");
   const [notes, setNotes] = useState("");
 
-  const { selectedBasketProductsFlat } = useCounterStore((state) => state);
+  const {
+    selectedBasketIds,
+    selectedBasketProductsFlat,
+    selectedAlternativeProducts,
+  } = useCounterStore((state) => state);
 
   const handleSave = () => {
     let recommendation;
@@ -86,13 +78,13 @@ export default function RecommendationDrawer({
     const selectedProductIds = selectedBasketProductsFlat.map(
       (product) => product.productId
     );
-    const selectedAlternativeIds = selectedAlternatives.map(
-      (product) => product.id
+    const selectedAlternativeIds = selectedAlternativeProducts.map(
+      (product) => product.productId
     );
     const data = {
       sessionId: session,
       recommendation: recommendation,
-      basketIds: ["basketId1", "basketId2", "basketId3"],
+      basketIds: selectedBasketIds,
       productSuggestions: {
         current: selectedProductIds,
         alternatives: selectedAlternativeIds,
@@ -123,11 +115,15 @@ export default function RecommendationDrawer({
               >
                 <div className="bg-gray-50 flex h-full flex-col divide-y divide-gray-200 shadow-xl">
                   <div className="flex min-h-0 flex-1 flex-col overflow-y-scroll py-6">
-                    <div className="px-4 sm:px-6">
-                      <DialogHeader
+                    <DialogTitle className="mb-3 px-6 text-2xl font-semibold leading-6 text-gray-900">
+                      Empfehlung erstellen
+                    </DialogTitle>
+                    <hr />
+
+                    <div className="px-6">
+                      <SessionSelector
                         session={session}
                         setSession={setSession}
-                        setOpen={setOpen}
                       />
                       <TabSection
                         currentTab={currentTab}
@@ -141,7 +137,7 @@ export default function RecommendationDrawer({
                       />
                       <section className="mt-8">
                         <h2 className="mt-8 block text-xl font-medium leading-6 text-gray-900">
-                          Alternative Artikel vorschlagen
+                          Alternative Produkte vorschlagen
                         </h2>
                         <div className="grid grid-cols-2 gap-4 mt-4 rounded-lg">
                           <SelectedProductsSection />
