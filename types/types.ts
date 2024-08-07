@@ -159,7 +159,7 @@ export type Recommendation = {
     current: number[];
     alternatives: number[];
   };
-  notes: string;
+  notes: string | null;
 };
 
 export type Session = {
@@ -168,7 +168,7 @@ export type Session = {
   timestamp: number;
   recommendations: Recommendation[];
   notes: {
-    patient: string;
-    personal: string;
+    patient: string | null;
+    personal: string | null;
   };
 };
