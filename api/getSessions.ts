@@ -4,7 +4,7 @@ import { SessionOverview } from "@/types/types";
 const fetchData = (): SessionOverview[] => {
   const authentication = ""; // via local storage
   const participantId = ""; // via url param
-  return sessionsResponse;
+  return [...sessionsResponse].reverse();
 };
 
 export const getSessions = (): SessionOverview[] => {
