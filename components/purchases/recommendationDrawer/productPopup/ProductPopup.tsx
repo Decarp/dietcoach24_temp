@@ -18,9 +18,9 @@ import {
   PlusCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
-import NutriScoreMenu from "../../products/NutriScoreMenu";
-import SortMenu from "../../products/SortMenu";
 import FilterPopoverProduct from "./FilterPopoverProduct";
+import SortMenu from "../../products/SortMenu";
+import NutriScoreMenu from "../../products/NutriScoreMenu";
 
 type CategoryKeys = keyof typeof categories.de;
 
