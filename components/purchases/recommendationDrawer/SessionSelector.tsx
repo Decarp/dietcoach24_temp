@@ -1,6 +1,7 @@
 import { getSessions } from "@/api/getSessions";
 import { format } from "date-fns";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function SessionSelector({
   session,
@@ -25,6 +26,7 @@ export default function SessionSelector({
       };
       setSessionsFetched([...sessionsFetched, newSession]);
       setSession(`Sitzung #${newSessionIndex}`);
+      toast.success("Neue Sitzung erstellt", { duration: 3000 });
     } else {
       setSession(value);
     }

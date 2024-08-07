@@ -13,6 +13,7 @@ import SelectedProductsSection from "./SelectedProductsSection";
 import SelectedAlternativesSection from "./SelectedAlternativesSection";
 import NotesSection from "./NotesSection";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import toast from "react-hot-toast";
 
 export default function RecommendationDrawer({
   open,
@@ -93,6 +94,7 @@ export default function RecommendationDrawer({
     };
     console.log("Data to send to API:", data);
     setOpen(false);
+    toast.success("Empfehlung gespeichert", { duration: 3000 });
   };
 
   return (

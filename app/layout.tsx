@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import { CounterStoreProvider } from "@/providers/useStoreProvider";
 import ClientWrapper from "@/components/ClientWrapper";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,10 @@ export default function RootLayout({
       <body className={inter.className + " h-full"}>
         <Header>
           <CounterStoreProvider>
-            <ClientWrapper>{children}</ClientWrapper>
+            <ClientWrapper>
+              {children}
+              <Toaster position="bottom-center" />
+            </ClientWrapper>
           </CounterStoreProvider>
         </Header>
       </body>
