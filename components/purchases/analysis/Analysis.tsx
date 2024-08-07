@@ -69,10 +69,14 @@ const Analysis = () => {
               )}
             </>
           ) : (
-            <p className="mt-6 text-gray-500">
-              Bitte wählen Sie mindestens einen Einkauf aus, um die Analyse
-              anzuzeigen.
-            </p>
+            <div className="text-center">
+              <h3 className="mt-6 text-sm font-semibold text-gray-900">
+                Keine Einkäufe ausgewählt
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">
+                Bitte wählen Sie einen Einkauf aus, um Analysen anzuzeigen.
+              </p>
+            </div>
           )}
         </div>
       </div>
