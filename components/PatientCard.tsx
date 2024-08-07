@@ -8,8 +8,8 @@ const tabs = [
   { name: "Profil", path: "profile" },
   { name: "Einkäufe", path: "purchases" },
   { name: "Empfehlungen", path: "recommendations" },
-  { name: "Vergleich", path: "comparison" },
-  { name: "Modifikation", path: "modification" },
+  // { name: "Vergleich", path: "comparison" },
+  // { name: "Modifikation", path: "modification" },
 ];
 
 export default function PatientCard() {

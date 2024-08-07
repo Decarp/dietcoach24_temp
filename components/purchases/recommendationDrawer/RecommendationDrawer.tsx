@@ -155,13 +155,13 @@ export default function RecommendationDrawer({
                     >
                       Zurück
                     </button>
-                    <button
+                    {/* <button
                       type="button"
                       onClick={handleSave}
                       className="ml-4 inline-flex justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                     >
                       Log Data
-                    </button>
+                    </button> */}
                     <button
                       type="submit"
                       onClick={handleSave}
