@@ -7,7 +7,7 @@ import Products from "@/components/purchases/products/Products";
 import { patients } from "@/data/patients";
 import { usePathname } from "next/navigation";
 
-export default function Purchases() {
+export default function PurchasesPage() {
   const pathname = usePathname();
   const pathSegments = pathname.split("/");
   const patientId = pathSegments[2];
