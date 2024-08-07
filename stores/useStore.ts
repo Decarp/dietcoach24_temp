@@ -13,6 +13,7 @@ export type CounterState = {
   selectedBasketProductIds: SelectedBasketProductId[];
   selectedBasketProductsFlat: BasketProductFlat[];
   selectedAlternativeProducts: Product[];
+  selectedSessionId: number | null;
   currentTab: string;
   patientId: string | null;
   basketProductsFlat: BasketProductFlat[];
@@ -27,6 +28,7 @@ export type CounterActions = {
   setSelectedBasketProductIds: (ids: SelectedBasketProductId[]) => void;
   setSelectedBasketProductsFlat: (products: BasketProductFlat[]) => void;
   setSelectedAlternativeProducts: (products: Product[]) => void;
+  setSelectedSessionId: (id: number | null) => void;
   setCurrentTab: (tab: string) => void;
   setPatientId: (id: string | null) => void;
   setBasketProductsFlat: (products: BasketProductFlat[]) => void;
@@ -44,6 +46,7 @@ export const initCounterStore = (): CounterState => {
     selectedBasketProductIds: [],
     selectedBasketProductsFlat: [],
     selectedAlternativeProducts: [],
+    selectedSessionId: null,
     currentTab: "energy",
     patientId: null,
     basketProductsFlat: [],
@@ -58,6 +61,7 @@ export const defaultInitState: CounterState = {
   selectedBasketProductIds: [],
   selectedBasketProductsFlat: [],
   selectedAlternativeProducts: [],
+  selectedSessionId: null,
   currentTab: "energy",
   patientId: null,
   basketProductsFlat: [],
@@ -126,6 +130,8 @@ export const createCounterStore = (
       set(() => ({ selectedBasketProductsFlat: products })),
     setSelectedAlternativeProducts: (products: Product[]) =>
       set(() => ({ selectedAlternativeProducts: products })),
+    setSelectedSessionId: (id: number | null) =>
+      set(() => ({ selectedSessionId: id })),
     updateCategories: (category: string, level: "major" | "sub") =>
       set((state) => {
         const newCategories = { ...state.selectedCategories };

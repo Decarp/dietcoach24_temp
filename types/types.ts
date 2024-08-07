@@ -133,3 +133,42 @@ export type ChartEnergyCategoriesData = {
   value: number;
   metric: string;
 };
+
+// -------------------
+// Sessions
+// -------------------
+
+export type SessionOverview = {
+  sessionId: number;
+  index: number;
+  timestamp: number;
+};
+
+export type Recommendation = {
+  recommendationId: number;
+  index: number;
+  rule: {
+    variant: string;
+    mode: string;
+    nutrient: string;
+    category: string;
+    text: string;
+  };
+  basketIds: string[];
+  suggestions: {
+    current: number[];
+    alternatives: number[];
+  };
+  notes: string;
+};
+
+export type Session = {
+  sessionId: number;
+  index: number;
+  timestamp: number;
+  recommendations: Recommendation[];
+  notes: {
+    patient: string;
+    personal: string;
+  };
+};

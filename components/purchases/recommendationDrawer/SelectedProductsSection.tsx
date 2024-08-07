@@ -2,7 +2,6 @@
 import { useCounterStore } from "@/providers/useStoreProvider";
 import {
   ArrowDownIcon,
-  PlusIcon,
   ShoppingCartIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";

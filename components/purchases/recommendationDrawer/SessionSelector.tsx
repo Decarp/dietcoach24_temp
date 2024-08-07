@@ -1,3 +1,4 @@
+import { getSessions } from "@/api/getSessions";
 import { format } from "date-fns";
 import { useState } from "react";
 
@@ -8,23 +9,8 @@ export default function SessionSelector({
   session: string;
   setSession: (session: string) => void;
 }) {
-  const [sessionsFetched, setSessionsFetched] = useState([
-    {
-      sessionId: 123,
-      index: 1,
-      timestamp: 1716336000,
-    },
-    {
-      sessionId: 124,
-      index: 2,
-      timestamp: 1726339000,
-    },
-    {
-      sessionId: 125,
-      index: 3,
-      timestamp: 1756636000,
-    },
-  ]);
+  const sessionsResponse = getSessions();
+  const [sessionsFetched, setSessionsFetched] = useState(sessionsResponse);
 
   const handleSessionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
