@@ -1,27 +1,41 @@
-import React, { useState } from "react";
-import RecommendationsHeader from "./RecommendationsHeader";
+import { getBasketProducts } from "@/api/getBasketProducts";
+import { getSession } from "@/api/getSession";
+import { useCounterStore } from "@/providers/useStoreProvider";
+import { BasketProductFlat } from "@/types/types";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   ShoppingCartIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
-import { BasketProductFlat } from "@/types/types";
-import { getSession } from "@/api/getSession";
-import { useCounterStore } from "@/providers/useStoreProvider";
+import { useState } from "react";
+import RecommendationsHeader from "./RecommendationsHeader";
 
 const Recommendations = () => {
+  const basketProductsResponse = getBasketProducts([16189, 17200, 18211]);
+
+  const products: BasketProductFlat[] = basketProductsResponse.flatMap(
+    (basket) => {
+      return basket.products.map((product) => ({
+        basketId: basket.basketId,
+        basketIndex: basket.index,
+        basketTimestamp: basket.timestamp,
+        ...product,
+      }));
+    }
+  );
+
   const { selectedSessionId } = useCounterStore((state) => ({
     selectedSessionId: state.selectedSessionId,
   }));
   const [selectedBasketProductsFlat, setSelectedBasketProductsFlat] = useState<
     BasketProductFlat[]
-  >([]);
+  >(products.slice(2, 4));
   const [selectedBasketProductIds, setSelectedBasketProductIds] = useState<
     { productId: number; basketId: number }[]
   >([]);
   const [selectedAlternativeProducts, setSelectedAlternativeProducts] =
-    useState<BasketProductFlat[]>([]);
+    useState<BasketProductFlat[]>(products.slice(0, 2));
 
   if (selectedSessionId === null) {
     return (
@@ -155,26 +169,22 @@ const Recommendations = () => {
                           className="flex items-center space-x-4 justify-between"
                         >
                           <div className="flex items-center space-x-4">
-                            <div className="w-16 h-16 rounded-md bg-gray-200"></div>
-
+                            <div className="w-16 h-16 rounded-md bg-gray-200 flex-shrink-0" />
                             <div>
                               <h4 className="text-gray-900 font-semibold">
                                 {product.de.name}
                               </h4>
                               <p className="text-gray-500">
+                                {
+                                  product.nutriScoreV2023Detail
+                                    .nutriScoreCalculated
+                                }
+                              </p>
+                              <p className="text-gray-500">
                                 {product.dietCoachCategoryL1.de}
                               </p>
                             </div>
                           </div>
-                          <TrashIcon
-                            className="h-6 w-6 text-gray-500 hover:text-red-500 cursor-pointer"
-                            onClick={() =>
-                              handleRemoveSelectedProduct(
-                                product.productId,
-                                product.basketId
-                              )
-                            }
-                          />
                         </div>
                       ))}
                     </div>
@@ -207,7 +217,7 @@ const Recommendations = () => {
                           className="flex items-center space-x-4 justify-between"
                         >
                           <div className="flex items-center space-x-4">
-                            <div className="w-16 h-16 rounded-md bg-gray-200"></div>
+                            <div className="w-16 h-16 rounded-md bg-gray-200 flex-shrink-0" />
                             <div>
                               <h4 className="text-gray-900 font-semibold">
                                 {product.de.name}
@@ -223,12 +233,6 @@ const Recommendations = () => {
                               </p>
                             </div>
                           </div>
-                          <TrashIcon
-                            className="h-6 w-6 text-gray-500 hover:text-red-500 cursor-pointer"
-                            onClick={() =>
-                              handleRemoveAlternativeProduct(product.productId)
-                            }
-                          />
                         </div>
                       ))}
                     </div>
