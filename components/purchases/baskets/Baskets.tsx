@@ -35,7 +35,7 @@ const Baskets = () => {
   };
 
   return (
-    <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-200 xl:w-64 xl:shrink-0 max-h-[calc(100vh-187px)]">
+    <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-200 xl:w-64 xl:shrink-0 h-[calc(100vh-183px)]">
       <BasketsHeader baskets={baskets} />
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
@@ -64,7 +64,7 @@ const Baskets = () => {
                           : "bg-gray-50 text-primary"
                       )}
                     />
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <p
                         className={classNames(
                           "text-base font-semibold leading-6",
@@ -88,7 +88,7 @@ const Baskets = () => {
                     </div>
                     <input
                       type="checkbox"
-                      className="h-4 w-4 mx-auto rounded border-gray-300 text-primary focus:ring-primary"
+                      className="h-4 w-4 mr-4 rounded border-gray-300 text-primary focus:ring-primary"
                       checked={selectedBasketIds.includes(person.basketId)}
                       onChange={() =>
                         handleBasketCheckboxChange(person.basketId)

@@ -20,7 +20,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="bg-white h-screen -m-8 p-8 border-x border-b max-h-[calc(100vh-180px)]">
+    <div className="bg-white h-screen -m-8 p-8 border-x border-b h-[calc(100vh-176px)]">
       <h2 className="text-xl font-semibold">Profil</h2>
       <h3 className="text-sm font-light mb-4 text-gray-500">
         Persönliche Daten und Gesundheitsinformationen
