@@ -143,7 +143,7 @@ export default function ProductPopup({
 
         const queryString = queryParams.toString();
         try {
-          const response = await fetch(`/api?${queryString}`);
+          const response = await fetch(`/api/products?${queryString}`);
           const data: Products = await response.json();
           setAvailableProducts(data.products);
           setSortedProducts(
