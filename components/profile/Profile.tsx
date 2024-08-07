@@ -1,4 +1,3 @@
-import { classNames } from "@/utils/classNames";
 import { PaperClipIcon } from "@heroicons/react/24/outline";
 import {
   CreditCardIcon,
@@ -27,7 +26,7 @@ export default function Profile() {
         Persönliche Daten und Gesundheitsinformationen
       </h3>
 
-      <hr className="border-gray-100 -mx-8" />
+      <hr className="border-gray-200 -mx-8" />
 
       <div className="">
         <dl className="grid grid-cols-1 sm:grid-cols-2">
@@ -65,7 +64,7 @@ export default function Profile() {
         </dl>
       </div>
 
-      <hr className="border-gray-100 -mx-8" />
+      <hr className="border-gray-200 -mx-8" />
 
       <div className="my-6 mt-6 mt-2 text-sm text-gray-900 border border-gray-200 rounded-md flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
         <div className="flex w-0 flex-1 items-center">
@@ -87,7 +86,7 @@ export default function Profile() {
         </div>
       </div>
 
-      <hr className="border-gray-100 -mx-8" />
+      <hr className="border-gray-200 -mx-8" />
 
       <div className="mt-6">
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
