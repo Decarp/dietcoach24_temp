@@ -1,5 +1,6 @@
 import {
   BasketProductFlat,
+  CategorySelection,
   Product,
   SelectedBasketProductId,
 } from "@/types/types";
@@ -7,7 +8,7 @@ import { createStore } from "zustand/vanilla";
 
 export type CounterState = {
   count: number;
-  selectedCategories: { major: string[]; sub: string[] };
+  selectedCategories: CategorySelection;
   selectedSortCriteria: string;
   selectedBasketIds: number[];
   selectedBasketProductIds: SelectedBasketProductId[];
@@ -22,7 +23,7 @@ export type CounterState = {
 export type CounterActions = {
   decrementCount: () => void;
   incrementCount: () => void;
-  setSelectedCategories: (cats: { major: string[]; sub: string[] }) => void;
+  setSelectedCategories: (cats: CategorySelection) => void;
   setSelectedSortCriteria: (criteria: string) => void;
   setSelectedBasketIds: (ids: number[]) => void;
   setSelectedBasketProductIds: (ids: SelectedBasketProductId[]) => void;
@@ -74,7 +75,7 @@ export const createCounterStore = (
     ...initState,
     decrementCount: () => set((state) => ({ count: state.count - 1 })),
     incrementCount: () => set((state) => ({ count: state.count + 1 })),
-    setSelectedCategories: (cats: { major: string[]; sub: string[] }) =>
+    setSelectedCategories: (cats: CategorySelection) =>
       set((state) => {
         const newSelectedBasketProductIds =
           state.selectedBasketProductIds.filter((id) =>

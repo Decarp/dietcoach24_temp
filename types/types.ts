@@ -42,6 +42,8 @@ export type Products = {
   };
 };
 
+export type CategorySelection = { major: string[]; sub: string[] };
+
 // -------------------
 // Basket
 // -------------------
