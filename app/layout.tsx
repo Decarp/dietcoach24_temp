@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import { CounterStoreProvider } from "@/providers/useStoreProvider";
 import ClientWrapper from "@/components/ClientWrapper";
 import { Toaster } from "react-hot-toast";
+import "dotenv/config";
 
 const inter = Inter({ subsets: ["latin"] });
 

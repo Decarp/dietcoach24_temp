@@ -2,8 +2,7 @@ import { Products } from "@/types/types";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  // const baseUrl = "http://nutristorage.ch/";
-  const baseUrl = "http://localhost:8000/";
+  const DB_URL = process.env.DB_URL;
 
   const url = new URL(request.url);
   const queryParams = new URLSearchParams(url.searchParams);
@@ -11,7 +10,7 @@ export async function GET(request: Request) {
   const queryString = queryParams.toString();
 
   try {
-    const res = await fetch(`${baseUrl}/products/?${queryString}`, {
+    const res = await fetch(`${DB_URL}/products/?${queryString}`, {
       method: "GET",
     });
 
