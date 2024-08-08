@@ -10,7 +10,7 @@ export type CounterState = {
   count: number;
   selectedCategories: CategorySelection;
   selectedSortCriteria: string;
-  selectedBasketIds: number[];
+  selectedBasketIds: string[];
   selectedBasketProductIds: SelectedBasketProductId[];
   selectedBasketProductsFlat: BasketProductFlat[];
   selectedAlternativeProducts: Product[];
@@ -25,7 +25,7 @@ export type CounterActions = {
   incrementCount: () => void;
   setSelectedCategories: (cats: CategorySelection) => void;
   setSelectedSortCriteria: (criteria: string) => void;
-  setSelectedBasketIds: (ids: number[]) => void;
+  setSelectedBasketIds: (ids: string[]) => void;
   setSelectedBasketProductIds: (ids: SelectedBasketProductId[]) => void;
   setSelectedBasketProductsFlat: (products: BasketProductFlat[]) => void;
   setSelectedAlternativeProducts: (products: Product[]) => void;
@@ -105,7 +105,7 @@ export const createCounterStore = (
       }),
     setSelectedSortCriteria: (criteria: string) =>
       set(() => ({ selectedSortCriteria: criteria })),
-    setSelectedBasketIds: (ids: number[]) =>
+    setSelectedBasketIds: (ids: string[]) =>
       set(() => ({ selectedBasketIds: ids })),
     setSelectedBasketProductIds: (ids: SelectedBasketProductId[]) =>
       set((state) => {

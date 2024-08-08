@@ -1,6 +1,6 @@
 export const basketProductsResponse = [
   {
-    basketId: 1234,
+    basketId: "1234",
     index: 1,
     timestamp: 1716336000,
     avgNutriScore: "B",
@@ -65,7 +65,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 2345,
+    basketId: "2345",
     index: 2,
     timestamp: 1719532800,
     avgNutriScore: "C",
@@ -130,7 +130,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 3456,
+    basketId: "3456",
     index: 3,
     timestamp: 1720656000,
     avgNutriScore: "A",
@@ -195,7 +195,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 4567,
+    basketId: "4567",
     index: 4,
     timestamp: 1721174400,
     avgNutriScore: "B",
@@ -288,7 +288,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 5678,
+    basketId: "5678",
     index: 5,
     timestamp: 1721782400,
     avgNutriScore: "A",
@@ -353,7 +353,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 6789,
+    basketId: "6789",
     index: 6,
     timestamp: 1722390400,
     avgNutriScore: "A",
@@ -418,7 +418,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 7890,
+    basketId: "7890",
     index: 7,
     timestamp: 1722998400,
     avgNutriScore: "B",
@@ -483,7 +483,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 8901,
+    basketId: "8901",
     index: 8,
     timestamp: 1723606400,
     avgNutriScore: "A",
@@ -548,7 +548,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 9012,
+    basketId: "9012",
     index: 9,
     timestamp: 1724214400,
     avgNutriScore: "A",
@@ -613,7 +613,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 10123,
+    basketId: "10123",
     index: 10,
     timestamp: 1724822400,
     avgNutriScore: "B",
@@ -678,7 +678,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 11134,
+    basketId: "11134",
     index: 11,
     timestamp: 1725430400,
     avgNutriScore: "A",
@@ -743,7 +743,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 12145,
+    basketId: "12145",
     index: 12,
     timestamp: 1726038400,
     avgNutriScore: "A",
@@ -808,7 +808,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 13156,
+    basketId: "13156",
     index: 13,
     timestamp: 1726646400,
     avgNutriScore: "A",
@@ -873,7 +873,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 14167,
+    basketId: "14167",
     index: 14,
     timestamp: 1727254400,
     avgNutriScore: "A",
@@ -938,7 +938,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 15178,
+    basketId: "15178",
     index: 15,
     timestamp: 1727862400,
     avgNutriScore: "A",
@@ -1003,7 +1003,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 16189,
+    basketId: "16189",
     index: 16,
     timestamp: 1728470400,
     avgNutriScore: "B",
@@ -1068,7 +1068,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 17200,
+    basketId: "17200",
     index: 17,
     timestamp: 1729078400,
     avgNutriScore: "B",
@@ -1161,7 +1161,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 18211,
+    basketId: "18211",
     index: 18,
     timestamp: 1729686400,
     avgNutriScore: "A",
@@ -1254,7 +1254,7 @@ export const basketProductsResponse = [
     ],
   },
   {
-    basketId: 19222,
+    basketId: "19222",
     index: 19,
     timestamp: 1730294400,
     avgNutriScore: "A",

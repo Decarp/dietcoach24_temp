@@ -49,7 +49,7 @@ export type CategorySelection = { major: string[]; sub: string[] };
 // -------------------
 
 export type Basket = {
-  basketId: number;
+  basketId: string;
   index: number;
   timestamp: number;
   avgNutriScore: string;
@@ -57,7 +57,7 @@ export type Basket = {
 };
 
 export type BasketProduct = {
-  basketId: number;
+  basketId: string;
   index: number;
   timestamp: number;
   avgNutriScore: string;
@@ -66,7 +66,7 @@ export type BasketProduct = {
 };
 
 export type BasketProductFlat = {
-  basketId: number;
+  basketId: string;
   basketIndex: number;
   basketTimestamp: number;
   productId: number;
@@ -81,10 +81,10 @@ export type BasketProductFlat = {
   imageUrl: string;
 };
 
-export type SelectedBasketIds = number[];
+export type SelectedBasketIds = string[];
 
 export type SelectedBasketProductId = {
-  basketId: number;
+  basketId: string;
   productId: number;
 };
 
