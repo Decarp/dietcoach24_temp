@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { getBaskets } from "@/api/getBaskets";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { classNames } from "@/utils/classNames";
@@ -5,15 +6,12 @@ import { formatDate } from "@/utils/formatDate";
 import { mapBasketsResponse } from "@/utils/mapBasketsResponse";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import BasketsHeader from "./BasketsHeader";
+import { parse } from "date-fns";
+import { de } from "date-fns/locale";
 
 const Baskets = () => {
   const basketsResponse = getBaskets();
   const baskets = mapBasketsResponse(basketsResponse);
-
-  // TODO: Add "Letzer Monat"
-  // TODO: If at least 1 session exists: Add "Seit letzter Sitzung"
-  // TODO: By default, if no session exists: select "Letzer Monat" and set selectedBasketIds to all basketIds of that month
-  // TODO: By default, if at least 1 session exists: select "Seit letzter Sitzung" and set selectedBasketIds to all basketIds since last session
 
   const {
     selectedBasketIds,
@@ -21,6 +19,31 @@ const Baskets = () => {
     selectedBasketProductIds,
     setSelectedBasketProductIds,
   } = useCounterStore((state) => state);
+
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (!initialized.current) {
+      const sortedMonths = Object.keys(baskets).sort((a, b) => {
+        const dateA = parse(a, "MMMM yyyy", new Date(), {
+          locale: de,
+        }).getTime();
+        const dateB = parse(b, "MMMM yyyy", new Date(), {
+          locale: de,
+        }).getTime();
+        return dateB - dateA;
+      });
+
+      const latestMonth = sortedMonths[0];
+      console.log("Latest month:", latestMonth); // Debugging log
+      const latestMonthBasketIds = baskets[latestMonth].map(
+        (basket: any) => basket.basketId
+      );
+      console.log("Latest month basket IDs:", latestMonthBasketIds); // Debugging log
+      setSelectedBasketIds(latestMonthBasketIds);
+      initialized.current = true;
+    }
+  }, [baskets, setSelectedBasketIds]);
 
   const handleBasketCheckboxChange = (basketId: string) => {
     if (selectedBasketIds.includes(basketId)) {
