@@ -1,7 +1,11 @@
 import { getBasketProducts } from "@/api/getBasketProducts";
 import ProductsHeader from "@/components/purchases/products/ProductsHeader";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import RecommendationDrawer from "../recommendationDrawer/RecommendationDrawer";
@@ -133,7 +137,7 @@ const Products = () => {
   }));
 
   return (
-    <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-200 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-183px)]">
+    <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-300 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-183px)]">
       <ProductsHeader products={sortedProducts} />
 
       <div className="px-6 -mt-2 pb-2 flex gap-x-8 items-center">
@@ -166,10 +170,19 @@ const Products = () => {
       <div className="-mr-6 flex-1 overflow-y-auto min-h-0 min-h-80 shadow-inner">
         {selectedCategories.major.length === 0 &&
           selectedCategories.sub.length === 0 && (
-            <p className="px-6 mt-6 text-gray-500">
-              Bitte wählen Sie mindestens eine Lebensmittelkategorie aus, um die
-              Artikel anzuzeigen.
-            </p>
+            <div className="flex mt-6 px-4">
+              <ArrowUpIcon className="ml-3 h-12 w-12 text-gray-400 mr-6 flex-shrink-0" />
+              <div className="text-center">
+                <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-semibold text-gray-900">
+                  Keine Lebensmittelkategorie ausgewählt
+                </h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  Bitte wählen Sie mindestens eine Lebensmittelkategorie aus, um
+                  die Artikel anzuzeigen.
+                </p>
+              </div>
+            </div>
           )}
         <ul role="list" className="divide-y divide-gray-100">
           {sortedProducts.map((product) => {
@@ -181,15 +194,18 @@ const Products = () => {
             );
           })}
         </ul>
-        <div className="flex justify-end p-6">
-          <button
-            type="button"
-            onClick={() => handleDrawerOpen(true)}
-            className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-700"
-          >
-            Alternative Produkte empfehlen
-          </button>
-        </div>
+        {(selectedCategories.major.length !== 0 ||
+          selectedCategories.sub.length !== 0) && (
+          <div className="flex justify-end p-6">
+            <button
+              type="button"
+              onClick={() => handleDrawerOpen(true)}
+              className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-700"
+            >
+              Alternative Produkte empfehlen
+            </button>
+          </div>
+        )}
       </div>
       <RecommendationDrawer open={drawerOpen} setOpen={handleDrawerOpen} />
     </div>

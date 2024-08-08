@@ -18,7 +18,7 @@ export default function ModeDropdown({
   return (
     <Popover className="relative inline-block text-left block w-full min-w-0 flex-1 rounded-md text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
       <div>
-        <PopoverButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-primary">
+        <PopoverButton className="items-center justify-between inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 border border-gray-300 focus:ring-2 focus:ring-primary">
           {selectedOption}
           <ChevronDownIcon
             aria-hidden="true"

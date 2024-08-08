@@ -2,7 +2,7 @@
 
 import { categories } from "@/data/categories";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { Product, Products } from "@/types/types";
+import { CategorySelection, Product, Products } from "@/types/types";
 import {
   Dialog,
   DialogBackdrop,
@@ -12,15 +12,17 @@ import {
 import {
   ArrowDownIcon,
   ArrowUpIcon,
-  CheckCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   PlusCircleIcon,
+  ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useRef, useState } from "react";
 import FilterPopoverProduct from "./FilterPopoverProduct";
 import SortMenu from "../../products/SortMenu";
 import NutriScoreMenu from "../../products/NutriScoreMenu";
+import { Spinner } from "@/components/Spinner";
 
 type CategoryKeys = keyof typeof categories.de;
 
@@ -76,13 +78,12 @@ export default function ProductPopup({
   const [nutriScoreCutOff, setNutriScoreCutOff] = useState("E");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [selectedProductCategories, setSelectedProductCategories] = useState<{
-    major: string[];
-    sub: string[];
-  }>({
-    major: [],
-    sub: [],
-  });
+  const [selectedProductCategories, setSelectedProductCategories] =
+    useState<CategorySelection>({
+      major: [],
+      sub: [],
+    });
+  const [loading, setLoading] = useState(false);
 
   const categoriesWithSub: { major: string; subs: string[] }[] = Object.entries(
     categories.de
@@ -142,6 +143,7 @@ export default function ProductPopup({
         }
 
         const queryString = queryParams.toString();
+        setLoading(true); // Set loading state to true before fetching
         try {
           const response = await fetch(`/api/products?${queryString}`);
           const data: Products = await response.json();
@@ -152,6 +154,8 @@ export default function ProductPopup({
           setTotalPages(data.meta.totalPages);
         } catch (error) {
           console.error("Failed to fetch available products:", error);
+        } finally {
+          setLoading(false); // Set loading state to false after fetching
         }
       };
 
@@ -276,8 +280,8 @@ export default function ProductPopup({
                 </div>
               </div>
             </div>
-            <div className="space-y-4 p-4">
-              <div className="px-6 -mt-2 pb-2 flex justify-between items-center">
+            <div className="space-y-4 mt-6">
+              <div className="px-6 flex justify-between items-center">
                 <div className="space-x-8">
                   <FilterPopoverProduct
                     categoriesWithSub={categoriesWithSub}
@@ -310,44 +314,86 @@ export default function ProductPopup({
                   </button>
                 </div>
               </div>
-              <div className="">
+              <div>
                 <input
                   type="text"
-                  placeholder="Search products..."
+                  placeholder="Suchbegiff eingeben"
                   value={searchTerm}
                   onChange={handleSearchTermChange}
-                  className="w-full px-4 py-2 border rounded-md"
+                  className="w-full px-4 py-2 border-gray-300 rounded-md focus:ring-primary focus:border-primary"
                 />
               </div>
               <div
                 ref={scrollableContainerRef}
-                className="bg-white p-4 border rounded-md h-[420px] overflow-y-scroll space-y-4"
+                className="bg-white border border-gray-300 rounded-md h-[420px] overflow-y-scroll"
               >
-                {selectedProductCategories.major.length === 0 &&
-                selectedProductCategories.sub.length === 0 &&
-                searchTerm.length === 0 ? (
+                {loading ? (
+                  <Spinner />
+                ) : selectedProductCategories.major.length === 0 &&
+                  selectedProductCategories.sub.length === 0 &&
+                  searchTerm.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
-                    <p className="text-gray-500">
-                      Bitte wählen Sie eine Kategorie oder geben Sie einen
-                      Suchbegriff ein.
-                    </p>
+                    <div className="text-center">
+                      <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
+                      <h3 className="mt-2 text-sm font-semibold text-gray-900">
+                        Keine Produkte ausgewählt
+                      </h3>
+                      <p className="mt-1 text-sm text-gray-500">
+                        Bitte wählen Sie eine Kategorie oder geben Sie einen
+                        Suchbegriff ein.
+                      </p>
+                    </div>
                   </div>
                 ) : (
                   sortedProducts?.map((product) => (
                     <div
                       key={product.productId}
-                      className="flex items-center space-x-4 justify-between"
+                      className={
+                        selectedAlternativeProducts.some(
+                          (altProduct) =>
+                            altProduct.productId === product.productId
+                        )
+                          ? "flex items-center space-x-4 justify-between bg-primary p-4"
+                          : "flex items-center space-x-4 justify-between p-4"
+                      }
                     >
                       <div className="flex items-center space-x-4">
                         <div className="w-16 h-16 rounded-md bg-gray-200 flex-shrink-0" />
                         <div>
-                          <h4 className="text-gray-900 font-semibold">
+                          <h4
+                            className={
+                              selectedAlternativeProducts.some(
+                                (altProduct) =>
+                                  altProduct.productId === product.productId
+                              )
+                                ? "text-white font-semibold"
+                                : "text-gray-900 font-semibold"
+                            }
+                          >
                             {product.de.name}
                           </h4>
-                          <p className="text-gray-500">
+                          <p
+                            className={
+                              selectedAlternativeProducts.some(
+                                (altProduct) =>
+                                  altProduct.productId === product.productId
+                              )
+                                ? "text-gray-300"
+                                : "text-gray-500"
+                            }
+                          >
                             {product.nutriScoreV2023Detail.nutriScoreCalculated}
                           </p>
-                          <p className="text-gray-500">
+                          <p
+                            className={
+                              selectedAlternativeProducts.some(
+                                (altProduct) =>
+                                  altProduct.productId === product.productId
+                              )
+                                ? "text-gray-300"
+                                : "text-gray-500"
+                            }
+                          >
                             {product.dietCoachCategoryL1.de}
                           </p>
                         </div>
@@ -357,7 +403,7 @@ export default function ProductPopup({
                           altProduct.productId === product.productId
                       ) ? (
                         <CheckCircleIcon
-                          className="h-6 w-6 text-primary hover:text-gray-500 cursor-pointer flex-shrink-0"
+                          className="h-6 w-6 text-white hover:text-gray-200 cursor-pointer flex-shrink-0"
                           onClick={() => handleRemoveProduct(product.productId)}
                         />
                       ) : (
@@ -372,7 +418,7 @@ export default function ProductPopup({
               </div>
             </div>
 
-            <div className="mt-5 sm:mt-6 flex justify-between">
+            <div className="mt-5 sm:mt-6 flex justify-between items-center">
               <button
                 type="button"
                 onClick={handlePreviousPage}
@@ -380,12 +426,12 @@ export default function ProductPopup({
                 className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 <ChevronLeftIcon
-                  className="h-5 w-5 text-gray-400"
+                  className="mr-2 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
                 Zurück
               </button>
-              <span className="text-sm text-gray-700">
+              <span className="text-sm text-gray-700 font-medium">
                 Seite {currentPage} von {totalPages} mit{" "}
                 {availableProducts?.length} Produkten
               </span>
@@ -397,7 +443,7 @@ export default function ProductPopup({
               >
                 Vor
                 <ChevronRightIcon
-                  className="h-5 w-5 text-gray-400"
+                  className="ml-2 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
               </button>
@@ -405,7 +451,7 @@ export default function ProductPopup({
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="mt-4 rounded-md w-full bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400"
+              className="mt-4 w-full rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Speichern
             </button>

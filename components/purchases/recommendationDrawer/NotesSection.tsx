@@ -18,7 +18,7 @@ export default function NotesSection({
           rows={4}
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+          className="block w-full rounded-md py-1.5 text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:ring-primary focus:border-primary sm:text-sm"
         />
       </div>
     </section>

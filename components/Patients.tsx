@@ -17,7 +17,7 @@ export default function Patients() {
         {patients.map((person) => (
           <li
             key={person.id}
-            className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white rounded-md border border-gray-200 hover:bg-gray-50"
+            className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white rounded-md border border-gray-300 hover:bg-gray-50"
           >
             <Link href={`/p/${person.id}`}>
               <div className="flex w-full items-center justify-between space-x-6 p-6">

@@ -16,7 +16,7 @@ const Notes = () => {
   };
 
   return (
-    <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-200 lg:w-64 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-183px)]">
+    <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-300 lg:w-64 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-183px)]">
       <NotesHeader />
       <div className="ml-6">
         <div className="sm:hidden">

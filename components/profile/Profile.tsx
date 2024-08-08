@@ -26,7 +26,7 @@ export default function Profile() {
         Persönliche Daten und Gesundheitsinformationen
       </h3>
 
-      <hr className="border-gray-200 -mx-8" />
+      <hr className="border-gray-300 -mx-8" />
 
       <div className="">
         <dl className="grid grid-cols-1 sm:grid-cols-2">
@@ -64,9 +64,9 @@ export default function Profile() {
         </dl>
       </div>
 
-      <hr className="border-gray-200 -mx-8" />
+      <hr className="border-gray-300 -mx-8" />
 
-      <div className="my-6 mt-6 mt-2 text-sm text-gray-900 border border-gray-200 rounded-md flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+      <div className="my-6 mt-6 mt-2 text-sm text-gray-900 border border-gray-300 rounded-md flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
         <div className="flex w-0 flex-1 items-center">
           <PaperClipIcon
             aria-hidden="true"
@@ -86,11 +86,11 @@ export default function Profile() {
         </div>
       </div>
 
-      <hr className="border-gray-200 -mx-8" />
+      <hr className="border-gray-300 -mx-8" />
 
       <div className="mt-6">
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="relative overflow-hidden rounded-lg bg-white p-6 rounded-md border border-gray-200">
+          <div className="relative overflow-hidden rounded-lg bg-white p-6 rounded-md border border-gray-300">
             <dt>
               <div className="absolute rounded-md bg-primary p-3">
                 <HomeIcon aria-hidden="true" className="h-6 w-6 text-white" />
@@ -109,7 +109,7 @@ export default function Profile() {
             </dd>
           </div>
 
-          <div className="relative overflow-hidden rounded-lg bg-white p-6 rounded-md border border-gray-200">
+          <div className="relative overflow-hidden rounded-lg bg-white p-6 rounded-md border border-gray-300">
             <dt>
               <div className="absolute rounded-md bg-primary p-3">
                 <ShoppingCartIcon
@@ -128,7 +128,7 @@ export default function Profile() {
             </dd>
           </div>
 
-          <div className="relative overflow-hidden rounded-lg bg-white p-6 rounded-md border border-gray-200">
+          <div className="relative overflow-hidden rounded-lg bg-white p-6 rounded-md border border-gray-300">
             <dt>
               <div className="absolute rounded-md bg-primary p-3">
                 <CreditCardIcon

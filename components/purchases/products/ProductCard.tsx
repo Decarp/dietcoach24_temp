@@ -74,7 +74,7 @@ const ProductCard = ({ product }: { product: BasketProductFlat }) => {
     >
       <CakeIcon
         className={classNames(
-          "border border-gray-200 h-20 w-20 p-2 flex-none rounded-md",
+          "border border-gray-300 h-20 w-20 p-2 flex-none rounded-md",
           selected ? "bg-white text-primary" : "bg-gray-50 text-primary"
         )}
       />

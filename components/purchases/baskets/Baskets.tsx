@@ -79,7 +79,7 @@ const Baskets = () => {
   };
 
   return (
-    <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-200 xl:w-64 xl:shrink-0 h-[calc(100vh-183px)]">
+    <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-300 xl:w-64 xl:shrink-0 h-[calc(100vh-183px)]">
       <BasketsHeader baskets={baskets} />
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
@@ -117,7 +117,7 @@ const Baskets = () => {
                     >
                       <ShoppingCartIcon
                         className={classNames(
-                          "border border-gray-200 h-12 w-12 p-2 flex-none rounded-md",
+                          "border border-gray-300 h-12 w-12 p-2 flex-none rounded-md",
                           selectedBasketIds.includes(person.basketId)
                             ? "bg-white text-primary"
                             : "bg-gray-50 text-primary"
