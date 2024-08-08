@@ -26,36 +26,44 @@ export default function CategoryDropdown({
         </PopoverButton>
       </div>
 
-      <PopoverPanel className="overflow-y-scroll max-h-96 absolute right-0 z-10 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none">
+      <PopoverPanel className="overflow-y-scroll h-[420px] absolute right-0 z-10 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none">
         {({ close }) => (
           <div className="py-1">
-            {Object.entries(categories.de).map(([category, subCategories]) => (
-              <div key={category}>
-                <button
-                  onClick={() => handleSelection(category, close)}
-                  className={`group flex w-full items-center px-4 py-2 text-sm font-bold ${
-                    selectedOption === category
-                      ? "bg-gray-100 text-gray-900"
-                      : "text-gray-700"
-                  }`}
-                >
-                  {category}
-                </button>
-                {subCategories.map((subCategory) => (
+            {Object.entries(categories.de)
+              .sort(([a], [b]) => {
+                if (a === "Ausgeschlossen") return 1; // Move "Ausgeschlossen" to the end
+                if (b === "Ausgeschlossen") return -1; // Move "Ausgeschlossen" to the end
+                return a.localeCompare(b);
+              })
+              .map(([category, subCategories]) => (
+                <div key={category}>
                   <button
-                    key={subCategory}
-                    onClick={() => handleSelection(subCategory, close)}
-                    className={`group flex w-full items-center px-4 py-2 text-sm ml-4 ${
-                      selectedOption === subCategory
+                    onClick={() => handleSelection(category, close)}
+                    className={`group flex w-full items-center px-4 py-2 text-sm font-bold ${
+                      selectedOption === category
                         ? "bg-gray-100 text-gray-900"
                         : "text-gray-700"
                     }`}
                   >
-                    {subCategory}
+                    {category}
                   </button>
-                ))}
-              </div>
-            ))}
+                  {subCategories
+                    .sort((a, b) => a.localeCompare(b))
+                    .map((subCategory) => (
+                      <button
+                        key={subCategory}
+                        onClick={() => handleSelection(subCategory, close)}
+                        className={`group flex w-full items-center px-4 py-2 text-sm ml-4 ${
+                          selectedOption === subCategory
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        {subCategory}
+                      </button>
+                    ))}
+                </div>
+              ))}
           </div>
         )}
       </PopoverPanel>
