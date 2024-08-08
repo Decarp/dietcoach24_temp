@@ -4,7 +4,7 @@ import { BasketProductFlat } from "@/types/types";
 
 interface ProductCardProps {
   product: BasketProductFlat;
-  handleRemoveSelectedProduct: (productId: number, basketId: number) => void;
+  handleRemoveSelectedProduct: (productId: number, basketId: string) => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({

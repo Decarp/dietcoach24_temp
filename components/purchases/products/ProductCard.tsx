@@ -16,7 +16,7 @@ const ProductCard = ({ product }: { product: BasketProductFlat }) => {
     setSelectedBasketProductsFlat,
   } = useCounterStore((state) => state);
 
-  const isProductSelected = (productId: number, basketId: number) =>
+  const isProductSelected = (productId: number, basketId: string) =>
     selectedBasketProductIds.some(
       (item) => item.productId === productId && item.basketId === basketId
     );

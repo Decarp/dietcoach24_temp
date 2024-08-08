@@ -1,7 +1,7 @@
 import { getBasketProducts } from "@/api/getBasketProducts";
 import { getSession } from "@/api/getSession";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { BasketProductFlat } from "@/types/types";
+import { BasketProductFlat, SelectedBasketProductId } from "@/types/types";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -12,7 +12,7 @@ import { useState } from "react";
 import RecommendationsHeader from "./RecommendationsHeader";
 
 const Recommendations = () => {
-  const basketProductsResponse = getBasketProducts([16189, 17200, 18211]);
+  const basketProductsResponse = getBasketProducts(["16189", "17200", "18211"]);
 
   const products: BasketProductFlat[] = basketProductsResponse.flatMap(
     (basket) => {
@@ -32,7 +32,7 @@ const Recommendations = () => {
     BasketProductFlat[]
   >(products.slice(2, 4));
   const [selectedBasketProductIds, setSelectedBasketProductIds] = useState<
-    { productId: number; basketId: number }[]
+    SelectedBasketProductId[]
   >([]);
   const [selectedAlternativeProducts, setSelectedAlternativeProducts] =
     useState<BasketProductFlat[]>(products.slice(0, 2));
@@ -59,7 +59,7 @@ const Recommendations = () => {
 
   const session = getSession(selectedSessionId);
 
-  const handleRemoveSelectedProduct = (productId: number, basketId: number) => {
+  const handleRemoveSelectedProduct = (productId: number, basketId: string) => {
     const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
       (product) =>
         !(product.productId === productId && product.basketId === basketId)
