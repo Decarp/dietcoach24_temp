@@ -15,7 +15,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#FF8042"];
 
 export default function ChartEnergyMacro() {
   const selectedMetric: MetricOptions = "kcal";
@@ -47,7 +47,7 @@ export default function ChartEnergyMacro() {
   };
 
   return (
-    <div className="bg-white border p-4 rounded-lg" style={{ height: "310px" }}>
+    <div className="bg-white border p-4 rounded-lg" style={{ height: "350px" }}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie

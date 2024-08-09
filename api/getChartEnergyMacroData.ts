@@ -14,6 +14,7 @@ const aggregateMacros = (products: Product[]): ChartEnergyMacroResponse[] => {
     Fats: { de: "Fette", en: "Fats", kcal: 0, g: 0 },
     Proteins: { de: "Proteine", en: "Proteins", kcal: 0, g: 0 },
     Fibre: { de: "Nahrungsfasern", en: "Fibre", kcal: 0, g: 0 },
+    Other: { de: "Weitere Nährstoffe", en: "Other Nutrients", kcal: 0, g: 0 }, // TODO:
   };
 
   products.forEach((product) => {
