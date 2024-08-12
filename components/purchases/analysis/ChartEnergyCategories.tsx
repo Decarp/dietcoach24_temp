@@ -36,7 +36,13 @@ export default function ChartEnergyCategories() {
     useCounterStore((state) => state);
 
   const data: ChartEnergyCategoriesData[] = useMemo(() => {
-    return getChartEnergyCategoriesData(selectedBasketIds, selectedMetric);
+    const chartData = getChartEnergyCategoriesData(
+      selectedBasketIds,
+      selectedMetric
+    );
+
+    // Sort the data alphabetically by name
+    return chartData.sort((a, b) => a.name.localeCompare(b.name));
   }, [selectedBasketIds, selectedMetric]);
 
   useEffect(() => {
