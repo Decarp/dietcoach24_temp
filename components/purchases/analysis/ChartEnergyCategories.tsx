@@ -1,6 +1,7 @@
 "use client";
 
 import { getChartEnergyCategoriesData } from "@/api/getChartEnergyCategoriesData";
+import { CustomTooltip } from "@/components/CustomTooltip";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { ChartEnergyCategoriesData, MetricOptions } from "@/types/types";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
@@ -79,7 +80,7 @@ export default function ChartEnergyCategories() {
               />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
           <Legend />
         </PieChart>
       </ResponsiveContainer>

@@ -1,6 +1,7 @@
 "use client";
 
 import { getChartEnergyMacroData } from "@/api/getChartEnergyMacroData";
+import { CustomTooltip } from "@/components/CustomTooltip";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { ChartEnergyMacroData, MetricOptions } from "@/types/types";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
@@ -73,7 +74,7 @@ export default function ChartEnergyMacro() {
               />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
           <Legend />
         </PieChart>
       </ResponsiveContainer>

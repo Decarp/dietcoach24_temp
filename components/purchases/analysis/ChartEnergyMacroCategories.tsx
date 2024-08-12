@@ -16,6 +16,7 @@ import {
 import { MetricOptions } from "@/types/types";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { getChartEnergyMacroCategoriesData } from "@/api/getChartEnergyMacroCategoriesData";
+import { CustomTooltip } from "@/components/CustomTooltip";
 
 type MacroCategory = "Kohlenhydrate" | "Fette" | "Proteine" | "Nahrungsfasern";
 
@@ -150,7 +151,7 @@ const ChartEnergyMacroCategories: React.FC = () => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis type="number" />
           <YAxis dataKey="name" type="category" tick={{ fontSize: 12 }} />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
           <Legend
             formatter={(value) => `${selectedMetric == "g" ? "Gramm" : "Kcal"}`}
           />
