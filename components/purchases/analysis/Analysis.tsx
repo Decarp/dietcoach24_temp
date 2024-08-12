@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import AnalysisHeader from "@/components/purchases/analysis/AnalysisHeader";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { NutriScoreTable } from "./nutriScoreTable/NutriScoreTable";
 
 const ChartEnergyMacro = dynamic(
   () => import("@/components/purchases/analysis/ChartEnergyMacro"),
@@ -65,7 +66,7 @@ const Analysis = () => {
                 <>
                   <br />
                   <h4 className="text-lg font-medium mb-2">Nutri-Score</h4>
-                  <div className="border rounded-lg p-4 bg-white h-96 bg-white" />
+                  <NutriScoreTable />
                 </>
               )}
             </>
