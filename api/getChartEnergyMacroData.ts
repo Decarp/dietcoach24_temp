@@ -13,25 +13,20 @@ const aggregateMacros = (products: Product[]): ChartEnergyMacroResponse[] => {
     Carbohydrates: { de: "Kohlenhydrate", en: "Carbohydrates", kcal: 0, g: 0 },
     Fats: { de: "Fette", en: "Fats", kcal: 0, g: 0 },
     Proteins: { de: "Proteine", en: "Proteins", kcal: 0, g: 0 },
-    Fibre: { de: "Nahrungsfasern", en: "Fibre", kcal: 0, g: 0 },
-    Other: { de: "Weitere Nährstoffe", en: "Other Nutrients", kcal: 0, g: 0 }, // TODO:
+    Other: { de: "Weitere Nährstoffe", en: "Other Nutrients", kcal: 0, g: 0 },
   };
 
   products.forEach((product) => {
     const { nutrients } = product;
     const { carbohydrates, fats, proteins, fibers, kcal } = nutrients;
-
-    macros.Carbohydrates.kcal += carbohydrates * 4; // Carbohydrates: 4 kcal per gram
-    macros.Carbohydrates.g += carbohydrates;
-
-    macros.Fats.kcal += fats * 9; // Fats: 9 kcal per gram
-    macros.Fats.g += fats;
-
-    macros.Proteins.kcal += proteins * 4; // Proteins: 4 kcal per gram
-    macros.Proteins.g += proteins;
-
-    macros.Fibre.kcal += fibers * 2; // Fibres: 2 kcal per gram (approx.)
-    macros.Fibre.g += fibers;
+    macros.Carbohydrates.kcal += (carbohydrates - fibers) * 4 + fibers * 2;
+    macros.Fats.kcal += fats * 9;
+    macros.Proteins.kcal += proteins * 4;
+    macros.Other.kcal +=
+      kcal -
+      ((carbohydrates - fibers) * 4 + fibers * 2) -
+      fats * 9 -
+      proteins * 4;
   });
 
   return Object.values(macros).map(({ de, en, kcal, g }) => ({
