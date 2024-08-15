@@ -1,6 +1,6 @@
 # API docs
 
-_Last updated: Jul 28, 2024_
+_Last updated: Aug 15, 2024_
 
 ## POST /dietcoach/backend/dietician/register
 
@@ -32,7 +32,7 @@ _Last updated: Jul 28, 2024_
 
 ## GET /dietcoach/backend/dietician/participants
 
-> Status: TODO ⚙️
+> Status: TODO ⚙️ - waiting for participant structure
 
 > Priority: LOW
 
@@ -60,7 +60,7 @@ Authentication: string
 
 ## GET /dietcoach/backend/dietician/participant-details
 
-> Status: TODO ⚙️
+> Status: TODO ⚙️ - waiting for participant structure
 
 > Priority: LOW
 
@@ -86,7 +86,7 @@ Participant-Id: string
 
 ## GET /dietcoach/backend/dietician/profile
 
-> Status: TODO ⚙️
+> Status: DONE ✅
 
 > Priority: LOW
 
@@ -110,7 +110,7 @@ Authentication: string
 
 ## GET /dietcoach/backend/dietician/baskets
 
-> Status: TODO ⚙️
+> Status: DONE ✅
 
 > Priority: HIGH
 
@@ -159,7 +159,7 @@ End-Timestamp: number (EoD)
 
 ## POST /dietcoach/backend/dietician/basket-products
 
-> Status: TODO ⚙️
+> Status: DONE ✅
 
 > Priority: HIGH
 
@@ -190,13 +190,14 @@ Participant-Id: string
 [
     {
         basketId: "basketId3",
-        index: 6,
+        index: 6, // not yet implemented
         timestamp: 1720656000,
         avgNutriScore: "A",
         avgFsaScore: 3,
+        numNonMatchedProducts: 2,
         products: [
             {
-                productId: 1,
+                productId: 1, // not yet implemented
                 name: "Bio Vollkornbrot 350g",
                 quantity: 10,
                 nutrients: {
@@ -205,9 +206,12 @@ Participant-Id: string
                     kcal: 250,
                     proteins: 8,
                     fats: 2,
+                    saturatedFats: 1,
                     carbohydrates: 60,
+                    sugar: 40,
                     fibers: 5,
                     salt: 1,
+                    sodium: 1,
                 }
                 dietCoachCategoryL1: {
                     de: "Getreideprodukte & Kartoffeln",
@@ -226,9 +230,9 @@ Participant-Id: string
 ]
 ```
 
-## POST /dietcoach/backend/dietician/recommendation
+## POST /dietcoach/backend/dietician/session
 
-> Status: TODO ⚙️
+> Status: DONE ✅
 
 > Priority: HIGH
 
@@ -239,6 +243,28 @@ Participant-Id: string
 ```
 Authentication: string
 Participant-Id: string
+```
+
+### Response
+
+```
+{
+    sessionId: 123,
+}
+```
+
+## POST /dietcoach/backend/dietician/recommendation
+
+> Status: DONE ✅
+
+> Priority: HIGH
+
+> Reuse: -
+
+### Headers
+
+```
+Authentication: string
 Session-Id: string
 ```
 
@@ -275,7 +301,7 @@ Session-Id: string
 
 ## GET /dietcoach/backend/dietician/session
 
-> Status: TODO ⚙️
+> Status: DONE ✅
 
 > Priority: HIGH
 
@@ -285,7 +311,6 @@ Session-Id: string
 
 ```
 Authentication: string
-Participant-Id: string
 Session-Id: number
 ```
 
@@ -336,7 +361,7 @@ Session-Id: number
 
 ## GET /dietcoach/backend/dietician/sessions
 
-> Status: TODO ⚙️
+> Status: DONE ✅
 
 > Priority: HIGH
 
@@ -362,9 +387,9 @@ Participant-Id: string
 ]
 ```
 
-## POST /dietcoach/backend/dietician/note
+## POST /dietcoach/backend/dietician/session-note
 
-> Status: TODO ⚙️
+> Status: DONE ✅
 
 > Priority: MEDIUM
 
@@ -374,7 +399,6 @@ Participant-Id: string
 
 ```
 Authentication: string
-Participant-Id: string
 Session-Id: number
 ```
 
@@ -389,9 +413,9 @@ Session-Id: number
 }
 ```
 
-## UPDATE /dietcoach/backend/dietician/recommendation
+## PUT /dietcoach/backend/dietician/recommendation
 
-> Status: TODO ⚙️
+> Status: DONE ✅
 
 > Priority: LOW
 
@@ -401,8 +425,6 @@ Session-Id: number
 
 ```
 Authentication: string
-Participant-Id: string
-Session-Id: number
 Recommendation-Id: number
 ```
 
@@ -437,114 +459,6 @@ Recommendation-Id: number
 }
 ```
 
-## GET /dietcoach/backend/dietician/product
-
-> Status: TODO ⚙️
-
-> Priority: HIGH
-
-> Reuse:
-
-> Comment: DB API endpoint (different URL)
-
-### Header
-
-```
-Product-Id: number
-```
-
-### Response (Example)
-
-```
-{
-    productId: 1,
-    name: "Bio Vollkornbrot 350g",
-    quantity: 10,
-    nutrients: {
-        nutriScore: "A",
-        fsaScore: 3,
-        kcal: 250,
-        proteins: 8,
-        fats: 2,
-        carbohydrates: 60,
-        fibers: 5,
-        salt: 1,
-    }
-    dietCoachCategoryL1: {
-        de: "Getreideprodukte & Kartoffeln",
-        en: "Grain products & potatoes"
-    },
-    dietCoachCategoryL2: {
-        de: "Brot",
-        en: "Bread"
-    },
-    imageUrl: "https://www.image.com/image.jpg"
-}
-```
-
-## GET /dietcoach/backend/dietician/products
-
-> Status: TODO ⚙️
-
-> Priority: HIGH
-
-> Reuse:
-
-> Comment: DB API endpoint (different URL)
-
-### Headers
-
-```
-Page: number (optional, default: 1)
-Limit: number (optional, default: 100)
-Search: string (optional, for filtering products by name)
-DietCoach-Category-L1: string (optional, for filtering products by major category)
-DietCoach-Category-L2: string (optional, for filtering products by minor category)
-NutriScore-Cutoff: string (optional, default: "C", includes C)
-```
-
-### Response (Example)
-
-```
-{
-  products: [
-    {
-      productId: 1,
-      de: {
-       name: "Bio Vollkornbrot 350g",
-      },
-      productSize: 10,
-      nutrients: {
-        kcal: 250,
-        proteins: 8,
-        fats: 2,
-        carbohydrates: 60,
-        fibers: 5,
-        salt: 1,
-      },
-      nutriScoreV2023Detail: {
-        nutriScoreCalculated: "C",
-        nsPoints: 10,
-      }
-      dietCoachCategoryL1: {
-        de: "Getreideprodukte & Kartoffeln",
-        en: "Grain products & potatoes"
-      },
-      dietCoachCategoryL2: {
-        de: "Brot",
-        en: "Bread"
-      },
-      imageUrl: "https://www.image.com/image.jpg"
-    },
-    ...
-  ],
-  meta: {
-    totalPages: 20, // à 100 products
-    totalProducts: 500
-  }
-}
-```
-
 ## GET /dietcoach/backend/dietician/table
 
 > Status: TODO ⚙️
@@ -558,8 +472,18 @@ NutriScore-Cutoff: string (optional, default: "C", includes C)
 ```
 Authentication: string
 Participant-Id: string
-Start-Timestamp: number
-End-Timestamp: number
+```
+
+### Body
+
+```
+{
+    basketIds: [
+        "basketId1",
+        "basketId2",
+        "basketId3"
+    ]
+}
 ```
 
 ### Response Types
@@ -643,4 +567,118 @@ protein: number,
     },
     ...
 ];
+```
+
+## GET nutristorage.ch/products/product-by-id/:id OR GET nutristorage.ch/products/:gtin
+
+> Status: DONE ✅
+
+> Priority: HIGH
+
+> Reuse:
+
+> Comment: DB API endpoint (different URL)
+
+### Header
+
+```
+Product-Id: number
+```
+
+### Response (Example)
+
+```
+{
+    productId: 1,
+    name: "Bio Vollkornbrot 350g",
+    quantity: 10,
+    nutrients: {
+        nutriScore: "A",
+        fsaScore: 3,
+        kcal: 250,
+        proteins: 8,
+        fats: 2,
+        saturatedFats: 1,
+        carbohydrates: 60,
+        sugar: 40,
+        fibers: 5,
+        salt: 1,
+        sodium: 1,
+    }
+    dietCoachCategoryL1: {
+        de: "Getreideprodukte & Kartoffeln",
+        en: "Grain products & potatoes"
+    },
+    dietCoachCategoryL2: {
+        de: "Brot",
+        en: "Bread"
+    },
+    imageUrl: "https://www.image.com/image.jpg"
+}
+```
+
+## GET nutristorage.ch/products/
+
+> Status: DONE ✅
+
+> Priority: HIGH
+
+> Reuse:
+
+> Comment: DB API endpoint (different URL)
+
+### Query params
+
+```
+page: number (optional, default: 1)
+limit: number (optional, default: 100)
+search: string (optional, for filtering products by name)
+dietcoach-category-l1: string (optional, for filtering products by major category)
+dietcoach-category-l2: string (optional, for filtering products by minor category)
+nutriscore-cutoff: string (optional, default: "C", includes C)
+```
+
+### Response (Example)
+
+```
+{
+  products: [
+    {
+      productId: 1,
+      de: {
+       name: "Bio Vollkornbrot 350g",
+      },
+      productSize: 10,
+      nutrients: {
+        kcal: 250,
+        proteins: 8,
+        fats: 2,
+        saturatedFats: 1,
+        carbohydrates: 60,
+        sugar: 40,
+        fibers: 5,
+        salt: 1,
+        sodium: 1,
+      },
+      nutriScoreV2023Detail: {
+        nutriScoreCalculated: "C",
+        nsPoints: 10,
+      }
+      dietCoachCategoryL1: {
+        de: "Getreideprodukte & Kartoffeln",
+        en: "Grain products & potatoes"
+      },
+      dietCoachCategoryL2: {
+        de: "Brot",
+        en: "Bread"
+      },
+      imageUrl: "https://www.image.com/image.jpg"
+    },
+    ...
+  ],
+  meta: {
+    totalPages: 20, // à 100 products
+    totalProducts: 500
+  }
+}
 ```
