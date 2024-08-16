@@ -27,10 +27,7 @@ export const renderCustomizedChartLabel = (props: any) => {
         textAnchor={textAnchor}
         fill="#333"
       >
-        {`${value} ${payload.metric} `}
-        <tspan fill="#999" fontSize="12" fontWeight="300">
-          ({(percent * 100).toFixed(0)}%)
-        </tspan>
+        {(percent * 100).toFixed(0)}%
       </text>
     </>
   );

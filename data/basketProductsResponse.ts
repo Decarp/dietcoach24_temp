@@ -19,6 +19,9 @@ export const basketProductsResponse = [
           carbohydrates: 40,
           fibers: 5,
           salt: 1,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "D",
@@ -47,6 +50,9 @@ export const basketProductsResponse = [
           carbohydrates: 3,
           fibers: 2,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -84,6 +90,9 @@ export const basketProductsResponse = [
           carbohydrates: 10,
           fibers: 0,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "C",
@@ -112,6 +121,9 @@ export const basketProductsResponse = [
           carbohydrates: 0,
           fibers: 0,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -149,6 +161,9 @@ export const basketProductsResponse = [
           carbohydrates: 20,
           fibers: 5,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -177,6 +192,9 @@ export const basketProductsResponse = [
           carbohydrates: 70,
           fibers: 8,
           salt: 0.1,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -214,6 +232,9 @@ export const basketProductsResponse = [
           carbohydrates: 0,
           fibers: 0,
           salt: 1,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "C",
@@ -242,6 +263,9 @@ export const basketProductsResponse = [
           carbohydrates: 40,
           fibers: 5,
           salt: 1,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -270,6 +294,9 @@ export const basketProductsResponse = [
           carbohydrates: 10,
           fibers: 0,
           salt: 0.1,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -307,6 +334,9 @@ export const basketProductsResponse = [
           carbohydrates: 13,
           fibers: 2,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -335,6 +365,9 @@ export const basketProductsResponse = [
           carbohydrates: 10,
           fibers: 0,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "C",
@@ -372,6 +405,9 @@ export const basketProductsResponse = [
           carbohydrates: 4,
           fibers: 1,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -400,6 +436,9 @@ export const basketProductsResponse = [
           carbohydrates: 60,
           fibers: 5,
           salt: 1,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -437,6 +476,9 @@ export const basketProductsResponse = [
           carbohydrates: 60,
           fibers: 7,
           salt: 0.1,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -465,6 +507,9 @@ export const basketProductsResponse = [
           carbohydrates: 23,
           fibers: 2,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -502,6 +547,9 @@ export const basketProductsResponse = [
           carbohydrates: 15,
           fibers: 3,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -530,6 +578,9 @@ export const basketProductsResponse = [
           carbohydrates: 22,
           fibers: 12,
           salt: 0.02,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -567,6 +618,9 @@ export const basketProductsResponse = [
           carbohydrates: 10,
           fibers: 3,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -595,6 +649,9 @@ export const basketProductsResponse = [
           carbohydrates: 14,
           fibers: 6,
           salt: 0.9,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -632,6 +689,9 @@ export const basketProductsResponse = [
           carbohydrates: 10,
           fibers: 0,
           salt: 0.1,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -660,6 +720,9 @@ export const basketProductsResponse = [
           carbohydrates: 1,
           fibers: 0,
           salt: 1.8,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "C",
@@ -697,6 +760,9 @@ export const basketProductsResponse = [
           carbohydrates: 17,
           fibers: 1,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -725,6 +791,9 @@ export const basketProductsResponse = [
           carbohydrates: 8,
           fibers: 0,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -762,6 +831,9 @@ export const basketProductsResponse = [
           carbohydrates: 4,
           fibers: 2,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -790,6 +862,9 @@ export const basketProductsResponse = [
           carbohydrates: 5,
           fibers: 3,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -827,6 +902,9 @@ export const basketProductsResponse = [
           carbohydrates: 0,
           fibers: 0,
           salt: 0.5,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -855,6 +933,9 @@ export const basketProductsResponse = [
           carbohydrates: 0,
           fibers: 0,
           salt: 0.1,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -892,6 +973,9 @@ export const basketProductsResponse = [
           carbohydrates: 23,
           fibers: 2,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -920,6 +1004,9 @@ export const basketProductsResponse = [
           carbohydrates: 20,
           fibers: 6,
           salt: 1.2,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "C",
@@ -957,6 +1044,9 @@ export const basketProductsResponse = [
           carbohydrates: 7,
           fibers: 2,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -985,6 +1075,9 @@ export const basketProductsResponse = [
           carbohydrates: 27,
           fibers: 8,
           salt: 0.6,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -1022,6 +1115,9 @@ export const basketProductsResponse = [
           carbohydrates: 4,
           fibers: 0,
           salt: 0.1,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -1050,6 +1146,9 @@ export const basketProductsResponse = [
           carbohydrates: 1,
           fibers: 0,
           salt: 0.4,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -1087,6 +1186,9 @@ export const basketProductsResponse = [
           carbohydrates: 11,
           fibers: 0,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "C",
@@ -1115,6 +1217,9 @@ export const basketProductsResponse = [
           carbohydrates: 7,
           fibers: 2,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -1143,6 +1248,9 @@ export const basketProductsResponse = [
           carbohydrates: 5,
           fibers: 1,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -1180,6 +1288,9 @@ export const basketProductsResponse = [
           carbohydrates: 3,
           fibers: 2,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -1208,6 +1319,9 @@ export const basketProductsResponse = [
           carbohydrates: 22,
           fibers: 6,
           salt: 0.4,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -1236,6 +1350,9 @@ export const basketProductsResponse = [
           carbohydrates: 30,
           fibers: 2,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "B",
@@ -1273,6 +1390,9 @@ export const basketProductsResponse = [
           carbohydrates: 15,
           fibers: 3,
           salt: 0,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",
@@ -1301,6 +1421,9 @@ export const basketProductsResponse = [
           carbohydrates: 25,
           fibers: 5,
           salt: 0.8,
+          saturatedFats: 2,
+          sugar: 5,
+          sodium: 0.4,
         },
         nutriScoreV2023Detail: {
           nutriScoreCalculated: "A",

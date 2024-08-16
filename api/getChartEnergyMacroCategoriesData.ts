@@ -3,7 +3,6 @@ import {
   ChartEnergyCategoriesResponse,
   LanguageOptions,
   MacroCategory,
-  MetricOptions,
   Product,
   SelectedBasketIds,
 } from "@/types/types";
@@ -11,8 +10,7 @@ import { getBasketProducts } from "./getBasketProducts";
 
 const aggregateMacroCategories = (
   products: Product[],
-  selectedMacro: MacroCategory,
-  selectedMetric: MetricOptions
+  selectedMacro: MacroCategory
 ): ChartEnergyCategoriesResponse[] => {
   const categories: { [key: string]: ChartEnergyCategoriesResponse } = {};
 
@@ -24,50 +22,48 @@ const aggregateMacroCategories = (
     if (!categories[categoryName]) {
       categories[categoryName] = {
         name: dietCoachCategoryL1,
-        values: { kcal: 0, g: 0 },
+        values: { g: 0 },
       };
     }
 
     let value = 0;
     switch (selectedMacro) {
       case "Kohlenhydrate":
-        value = selectedMetric === "kcal" ? carbohydrates * 4 : carbohydrates;
+        value = carbohydrates;
         break;
       case "Fette":
-        value = selectedMetric === "kcal" ? fats * 9 : fats;
+        value = fats;
         break;
       case "Proteine":
-        value = selectedMetric === "kcal" ? proteins * 4 : proteins;
+        value = proteins;
         break;
       case "Nahrungsfasern":
-        value = selectedMetric === "kcal" ? fibers * 2 : fibers;
+        value = fibers;
         break;
     }
 
-    categories[categoryName].values[selectedMetric] += value;
+    categories[categoryName].values["g"] += value;
   });
 
   return Object.values(categories).sort(
-    (a, b) => b.values[selectedMetric] - a.values[selectedMetric]
+    (a, b) => b.values["g"] - a.values["g"]
   );
 };
 
 const mapChartEnergyMacroCategoriesResponse = (
   chartMacroCategoriesResponse: ChartEnergyCategoriesResponse[],
-  selectedMetric: MetricOptions,
   language: LanguageOptions = "de"
 ): ChartEnergyCategoriesData[] => {
   return chartMacroCategoriesResponse.map((item) => ({
     name: item.name[language],
-    value: item.values[selectedMetric],
-    metric: selectedMetric,
+    value: item.values["g"],
+    metric: "g", // Hardcoded as "g" since we're no longer using `selectedMetric`
   }));
 };
 
 export const getChartEnergyMacroCategoriesData = (
   selectedBasketIds: SelectedBasketIds, // API body parameter
-  selectedMacro: MacroCategory, // Client side selection
-  selectedMetric: MetricOptions // Client side selection
+  selectedMacro: MacroCategory // Client side selection
 ): ChartEnergyCategoriesData[] => {
   const basketProductsResponse = getBasketProducts(selectedBasketIds);
 
@@ -75,12 +71,10 @@ export const getChartEnergyMacroCategoriesData = (
 
   const dynamicChartEnergyMacroCategoriesResponse = aggregateMacroCategories(
     products,
-    selectedMacro,
-    selectedMetric
+    selectedMacro
   );
 
   return mapChartEnergyMacroCategoriesResponse(
-    dynamicChartEnergyMacroCategoriesResponse,
-    selectedMetric
+    dynamicChartEnergyMacroCategoriesResponse
   );
 };

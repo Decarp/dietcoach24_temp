@@ -5,7 +5,7 @@ import { useCounterStore } from "@/providers/useStoreProvider";
 const tabs = [
   { name: "Energiegehalt", path: "energy" },
   { name: "Makronährstoffe", path: "macro" },
-  { name: "Mikronährstoffe", path: "micro" },
+  { name: "Weitere Nährstoffe", path: "micro" },
   { name: "Nutri-Score", path: "nutri" },
 ];
 
@@ -23,7 +23,9 @@ const AnalysisHeader = () => {
   return (
     <div>
       <h2 className="text-xl font-semibold">Analyse</h2>
-      <h3 className="text-sm font-light mb-4 text-gray-500">Filtere Artikel</h3>
+      <h3 className="text-xs font-light mb-5 text-gray-500">
+        Filtere Lebensmittel
+      </h3>
       <div>
         <div className="sm:hidden">
           <label htmlFor="current-tab" className="sr-only">

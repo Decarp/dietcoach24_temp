@@ -11,7 +11,7 @@ export default function Profile() {
     householdSize: 1,
     shoppingFrequency: ">80%",
     loyaltyCardUsage: ">80%",
-    groceryData: "269 Artikel (IS) + 285 Artikel (FS)",
+    groceryData: "269 Lebensmittel (IS) + 285 Lebensmittel (FS)",
     ffqDate: "11. April 2024",
     bmi: 50.9,
     diagnosis: "Dyslipidämie",

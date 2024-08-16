@@ -38,12 +38,12 @@ const Analysis = () => {
                 <>
                   <br />
                   <h4 className="text-lg font-medium mb-2">
-                    Energiegehalt aus Makronährstoffen
+                    Nährstoffverteilung
                   </h4>
                   <ChartEnergyMacro />
                   <br />
                   <h4 className="text-lg font-medium mb-2">
-                    Energiegehalt aus Lebensmittelkategorien
+                    Energieverteilung aus Lebensmittelkategorien
                   </h4>
                   <ChartEnergyCategories />
                 </>
@@ -58,7 +58,9 @@ const Analysis = () => {
               {currentTab === "micro" && (
                 <>
                   <br />
-                  <h4 className="text-lg font-medium mb-2">Mikronährstoffe</h4>
+                  <h4 className="text-lg font-medium mb-2">
+                    Weitere Nährstoffe
+                  </h4>
                   <div className="border rounded-lg p-4 bg-white h-96 bg-white" />
                 </>
               )}

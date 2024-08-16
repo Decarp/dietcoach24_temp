@@ -179,7 +179,7 @@ const Products = () => {
                 </h3>
                 <p className="mt-1 text-sm text-gray-500">
                   Bitte wählen Sie mindestens eine Lebensmittelkategorie aus, um
-                  die Artikel anzuzeigen.
+                  die Lebensmittel anzuzeigen.
                 </p>
               </div>
             </div>

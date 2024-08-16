@@ -6,9 +6,12 @@ export type Nutrients = {
   kcal: number;
   proteins: number;
   fats: number;
+  saturatedFats: number;
   carbohydrates: number;
+  sugar: number;
   fibers: number;
   salt: number;
+  sodium: number;
 };
 
 export type NutriScoreV2023Detail = {
@@ -102,6 +105,8 @@ export type MacroCategory =
   | "Proteine"
   | "Nahrungsfasern";
 
+export type MicroCategory = "Salz" | "Zucker" | "Gesättigte Fettsäuren";
+
 export type ChartEnergyMacroResponse = {
   name: {
     de: string;
@@ -125,7 +130,6 @@ export type ChartEnergyCategoriesResponse = {
     en: string;
   };
   values: {
-    kcal: number;
     g: number;
   };
 };
