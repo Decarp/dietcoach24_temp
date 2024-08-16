@@ -2,7 +2,6 @@ import {
   ChartEnergyCategoriesData,
   ChartEnergyCategoriesResponse,
   LanguageOptions,
-  MetricOptions,
   Product,
   SelectedBasketIds,
 } from "@/types/types";
@@ -15,22 +14,21 @@ const aggregateCategories = (
 
   products.forEach((product) => {
     const { dietCoachCategoryL1, nutrients } = product;
-    const { kcal, proteins, fats, carbohydrates, fibers } = nutrients;
+    const { proteins, fats, carbohydrates, fibers } = nutrients;
     const categoryName = dietCoachCategoryL1.en;
 
     if (!categories[categoryName]) {
       categories[categoryName] = {
         name: dietCoachCategoryL1,
-        values: { kcal: 0, g: 0 },
+        values: { percentage: 0 }, // Updated to `percentage`
       };
     }
 
-    categories[categoryName].values.kcal += kcal;
-    categories[categoryName].values.g +=
+    categories[categoryName].values.percentage +=
       proteins + fats + carbohydrates + fibers;
   });
 
-  // sort categories ascending alphabetically
+  // Sort categories ascending alphabetically
   return Object.values(categories).sort((a, b) =>
     a.name.en.localeCompare(b.name.en)
   );
@@ -38,19 +36,23 @@ const aggregateCategories = (
 
 const mapChartEnergyCategoriesResponse = (
   chartMacroCategoriesResponse: ChartEnergyCategoriesResponse[],
-  selectedMetric: MetricOptions,
   language: LanguageOptions = "de"
 ): ChartEnergyCategoriesData[] => {
+  // Calculate the total grams across all categories
+  const totalGrams = chartMacroCategoriesResponse.reduce(
+    (sum, item) => sum + item.values.percentage, // Now calculating based on `percentage`
+    0
+  );
+
+  // Map the response to include percentage instead of grams
   return chartMacroCategoriesResponse.map((item) => ({
     name: item.name[language],
-    value: item.values[selectedMetric],
-    metric: selectedMetric,
+    value: totalGrams > 0 ? (item.values.percentage / totalGrams) * 100 : 0, // Calculate the percentage
   }));
 };
 
 export const getChartEnergyCategoriesData = (
-  selectedBasketIds: SelectedBasketIds, // API body parameter
-  selectedMetric: MetricOptions // Client side selection
+  selectedBasketIds: SelectedBasketIds // API body parameter
 ): ChartEnergyCategoriesData[] => {
   const basketProductsResponse = getBasketProducts(selectedBasketIds);
 
@@ -58,8 +60,5 @@ export const getChartEnergyCategoriesData = (
 
   const dynamicChartEnergyCategoriesResponse = aggregateCategories(products);
 
-  return mapChartEnergyCategoriesResponse(
-    dynamicChartEnergyCategoriesResponse,
-    selectedMetric
-  );
+  return mapChartEnergyCategoriesResponse(dynamicChartEnergyCategoriesResponse);
 };

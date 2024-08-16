@@ -19,16 +19,14 @@ import {
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#FF8042"];
 
 export default function ChartEnergyMacro() {
-  const selectedMetric: MetricOptions = "kcal";
-
   const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
 
   const { selectedBasketIds, selectedSortCriteria, setSelectedSortCriteria } =
     useCounterStore((state) => state);
 
   const data: ChartEnergyMacroData[] = useMemo(() => {
-    return getChartEnergyMacroData(selectedBasketIds, selectedMetric);
-  }, [selectedBasketIds, selectedMetric]);
+    return getChartEnergyMacroData(selectedBasketIds);
+  }, [selectedBasketIds]);
 
   useEffect(() => {
     const updatedIndex = data.findIndex(

@@ -8,7 +8,7 @@ import {
 } from "@/types/types";
 import { getBasketProducts } from "./getBasketProducts";
 
-const aggregateMacroCategories = (
+const aggregateMicroCategories = (
   products: Product[],
   selectedMicro: MicroCategory
 ): ChartEnergyCategoriesResponse[] => {
@@ -22,7 +22,7 @@ const aggregateMacroCategories = (
     if (!categories[categoryName]) {
       categories[categoryName] = {
         name: dietCoachCategoryL1,
-        values: { g: 0 },
+        values: { percentage: 0 },
       };
     }
 
@@ -39,22 +39,28 @@ const aggregateMacroCategories = (
         break;
     }
 
-    categories[categoryName].values["g"] += value;
+    categories[categoryName].values.percentage += value;
   });
 
   return Object.values(categories).sort(
-    (a, b) => b.values["g"] - a.values["g"]
+    (a, b) => b.values.percentage - a.values.percentage
   );
 };
 
-const mapChartEnergyMacroCategoriesResponse = (
-  chartMacroCategoriesResponse: ChartEnergyCategoriesResponse[],
+const mapChartEnergyMicroCategoriesResponse = (
+  chartMicroCategoriesResponse: ChartEnergyCategoriesResponse[],
   language: LanguageOptions = "de"
 ): ChartEnergyCategoriesData[] => {
-  return chartMacroCategoriesResponse.map((item) => ({
+  // Calculate the total grams for the selected micro across all categories
+  const totalGrams = chartMicroCategoriesResponse.reduce(
+    (sum, item) => sum + item.values.percentage,
+    0
+  );
+
+  // Map the response to include percentage instead of grams
+  return chartMicroCategoriesResponse.map((item) => ({
     name: item.name[language],
-    value: item.values["g"],
-    metric: "g", // Hardcoded as "g" since we're no longer using `selectedMetric`
+    value: totalGrams > 0 ? (item.values.percentage / totalGrams) * 100 : 0, // Calculate the percentage
   }));
 };
 
@@ -66,12 +72,12 @@ export const getChartEnergyMicroCategoriesData = (
 
   const products = basketProductsResponse.flatMap((basket) => basket.products);
 
-  const dynamicChartEnergyMacroCategoriesResponse = aggregateMacroCategories(
+  const dynamicChartEnergyMicroCategoriesResponse = aggregateMicroCategories(
     products,
     selectedMicro
   );
 
-  return mapChartEnergyMacroCategoriesResponse(
-    dynamicChartEnergyMacroCategoriesResponse
+  return mapChartEnergyMicroCategoriesResponse(
+    dynamicChartEnergyMicroCategoriesResponse
   );
 };

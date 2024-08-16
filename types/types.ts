@@ -95,7 +95,7 @@ export type SelectedBasketProductId = {
 // Charts
 // -------------------
 
-export type MetricOptions = "kcal" | "g";
+export type MetricOptions = "g";
 
 export type LanguageOptions = "en" | "de";
 
@@ -113,15 +113,13 @@ export type ChartEnergyMacroResponse = {
     en: string;
   };
   values: {
-    kcal: number;
-    g: number;
+    percentage: number;
   };
 };
 
 export type ChartEnergyMacroData = {
   name: string;
   value: number;
-  metric: string;
 };
 
 export type ChartEnergyCategoriesResponse = {
@@ -130,14 +128,13 @@ export type ChartEnergyCategoriesResponse = {
     en: string;
   };
   values: {
-    g: number;
+    percentage: number;
   };
 };
 
 export type ChartEnergyCategoriesData = {
   name: string;
   value: number;
-  metric: string;
 };
 
 export type NutriScoreTableResponse = {

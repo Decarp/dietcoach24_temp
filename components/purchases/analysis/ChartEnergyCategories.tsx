@@ -3,7 +3,7 @@
 import { getChartEnergyCategoriesData } from "@/api/getChartEnergyCategoriesData";
 import { CustomTooltip } from "@/components/CustomTooltip";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { ChartEnergyCategoriesData, MetricOptions } from "@/types/types";
+import { ChartEnergyCategoriesData } from "@/types/types";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
 import { renderCustomizedChartLabel } from "@/utils/renderCustomizedChartLabel";
 import React, { useEffect, useMemo, useState } from "react";
@@ -28,22 +28,17 @@ const COLORS = [
 ];
 
 export default function ChartEnergyCategories() {
-  const selectedMetric: MetricOptions = "kcal";
-
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
   const { selectedBasketIds, selectedCategories, updateCategories } =
     useCounterStore((state) => state);
 
   const data: ChartEnergyCategoriesData[] = useMemo(() => {
-    const chartData = getChartEnergyCategoriesData(
-      selectedBasketIds,
-      selectedMetric
-    );
+    const chartData = getChartEnergyCategoriesData(selectedBasketIds);
 
     // Sort the data alphabetically by name
     return chartData.sort((a, b) => a.name.localeCompare(b.name));
-  }, [selectedBasketIds, selectedMetric]);
+  }, [selectedBasketIds]);
 
   useEffect(() => {
     const updatedIndices = data

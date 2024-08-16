@@ -22,7 +22,7 @@ const aggregateMacroCategories = (
     if (!categories[categoryName]) {
       categories[categoryName] = {
         name: dietCoachCategoryL1,
-        values: { g: 0 },
+        values: { percentage: 0 },
       };
     }
 
@@ -42,11 +42,11 @@ const aggregateMacroCategories = (
         break;
     }
 
-    categories[categoryName].values["g"] += value;
+    categories[categoryName].values.percentage += value;
   });
 
   return Object.values(categories).sort(
-    (a, b) => b.values["g"] - a.values["g"]
+    (a, b) => b.values.percentage - a.values.percentage
   );
 };
 
@@ -54,10 +54,16 @@ const mapChartEnergyMacroCategoriesResponse = (
   chartMacroCategoriesResponse: ChartEnergyCategoriesResponse[],
   language: LanguageOptions = "de"
 ): ChartEnergyCategoriesData[] => {
+  // Calculate the total grams for the selected macro across all categories
+  const totalGrams = chartMacroCategoriesResponse.reduce(
+    (sum, item) => sum + item.values.percentage,
+    0
+  );
+
+  // Map the response to include percentage instead of grams
   return chartMacroCategoriesResponse.map((item) => ({
     name: item.name[language],
-    value: item.values["g"],
-    metric: "g", // Hardcoded as "g" since we're no longer using `selectedMetric`
+    value: totalGrams > 0 ? (item.values.percentage / totalGrams) * 100 : 0, // Calculate the percentage
   }));
 };
 
