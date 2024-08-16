@@ -1,4 +1,4 @@
-import { getSessions } from "@/api/getSessions";
+import { getSessions } from "@/getData/getSessions";
 import { format } from "date-fns";
 import { useState } from "react";
 import toast from "react-hot-toast";

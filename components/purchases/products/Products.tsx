@@ -1,4 +1,4 @@
-import { getBasketProducts } from "@/api/getBasketProducts";
+import { getBasketProducts } from "@/getData/getBasketProducts";
 import ProductsHeader from "@/components/purchases/products/ProductsHeader";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import {

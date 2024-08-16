@@ -1,6 +1,6 @@
 "use client";
 
-import { getChartEnergyMacroCategoriesData } from "@/api/getChartEnergyMacroCategoriesData";
+import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";
 import { CustomTooltip } from "@/components/CustomTooltip";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { MacroCategory } from "@/types/types";

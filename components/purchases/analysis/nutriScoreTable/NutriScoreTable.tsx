@@ -10,7 +10,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 
 import { CheckboxCellRenderer } from "./cellRenderers/CheckboxCellRenderer";
 import { CategoryCellRenderer } from "./cellRenderers/CategoryCellRenderer";
-import { getNutriScoreTableData } from "@/api/getNutriScoreTableData";
+import { getNutriScoreTableData } from "@/getData/getNutriScoreTableData";
 
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,

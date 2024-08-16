@@ -1,4 +1,4 @@
-import { getBaskets } from "@/api/getBaskets";
+import { getBaskets } from "@/getData/getBaskets";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { classNames } from "@/utils/classNames";
 import { formatDate } from "@/utils/formatDate";
@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import SessionsHeader from "./SessionsHeader";
 import { useState } from "react";
-import { getSessions } from "@/api/getSessions";
+import { getSessions } from "@/getData/getSessions";
 
 const Sessions = () => {
   const sessionsResponse = getSessions();

@@ -1,5 +1,5 @@
-import { getBasketProducts } from "@/api/getBasketProducts";
-import { getSession } from "@/api/getSession";
+import { getBasketProducts } from "@/getData/getBasketProducts";
+import { getSession } from "@/getData/getSession";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { BasketProductFlat, SelectedBasketProductId } from "@/types/types";
 import {

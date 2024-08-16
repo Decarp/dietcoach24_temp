@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { getBaskets } from "@/api/getBaskets";
+import { getBaskets } from "@/getData/getBaskets";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { classNames } from "@/utils/classNames";
 import { formatDate } from "@/utils/formatDate";
