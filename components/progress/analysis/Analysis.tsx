@@ -9,6 +9,7 @@ import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacro
 import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicroCategoriesData";
 import { NutriScoreTable } from "@/components/charts/nutriScoreTable/NutriScoreTable";
 import SVGLine from "@/components/SVGLine";
+import DiffDot from "./DiffDot";
 
 const ChartEnergyMacro = dynamic(
   () => import("@/components/charts/ChartEnergyMacro"),
@@ -134,16 +135,64 @@ const Analysis = () => {
   ]);
 
   useEffect(() => {
+    // TODO: Auto set a category
+    // TODO: Restrict to only select one category
     if (currentTab === "energy") {
       if (chartEnergyCategoriesData.length > 0) {
-        // TODO: Auto set a category
-        // TODO: Restrict to only select one category
         if (selectedCategories.major.length == 1) {
           const selectedItem = chartEnergyCategoriesData.find(
             (item) => item.name === selectedCategories.major[0]
           );
 
           const comparisonItem = chartComparisonEnergyCategoriesData.find(
+            (item) => item.name === selectedCategories.major[0]
+          );
+
+          if (selectedItem && comparisonItem) {
+            const difference =
+              ((selectedItem.value - comparisonItem.value) /
+                comparisonItem.value) *
+              100;
+            setPercentageDifferenceSecondary(parseInt(difference.toFixed(0)));
+          } else {
+            setPercentageDifferenceSecondary(null);
+          }
+        } else {
+          setPercentageDifferenceSecondary(null);
+        }
+      }
+    } else if (currentTab === "macro") {
+      if (chartEnergyMacroCategoriesData.length > 0) {
+        if (selectedCategories.major.length == 1) {
+          const selectedItem = chartEnergyMacroCategoriesData.find(
+            (item) => item.name === selectedCategories.major[0]
+          );
+
+          const comparisonItem = chartComparisonEnergyMacroCategoriesData.find(
+            (item) => item.name === selectedCategories.major[0]
+          );
+
+          if (selectedItem && comparisonItem) {
+            const difference =
+              ((selectedItem.value - comparisonItem.value) /
+                comparisonItem.value) *
+              100;
+            setPercentageDifferenceSecondary(parseInt(difference.toFixed(0)));
+          } else {
+            setPercentageDifferenceSecondary(null);
+          }
+        } else {
+          setPercentageDifferenceSecondary(null);
+        }
+      }
+    } else if (currentTab === "micro") {
+      if (chartEnergyMicroCategoriesData.length > 0) {
+        if (selectedCategories.major.length == 1) {
+          const selectedItem = chartEnergyMicroCategoriesData.find(
+            (item) => item.name === selectedCategories.major[0]
+          );
+
+          const comparisonItem = chartComparisonEnergyMicroCategoriesData.find(
             (item) => item.name === selectedCategories.major[0]
           );
 
@@ -190,20 +239,9 @@ const Analysis = () => {
                       data={chartComparisonEnergyMacroData}
                       className="border-secondary border-4"
                     />
-
-                    <SVGLine />
-                    <div className="flex-shrink-0 mx-4 mx-auto h-16 w-16 bg-white flex items-center justify-center border border-gray-300 rounded-full">
-                      {percentageDifferencePrimary !== null ? (
-                        <p className="text-center font-medium">
-                          {percentageDifferencePrimary > 0 ? "+" : ""}
-                          {percentageDifferencePrimary}%
-                        </p>
-                      ) : (
-                        <p className="text-center">N/A</p>
-                      )}
-                    </div>
-                    <SVGLine />
-
+                    <DiffDot
+                      percentageDifference={percentageDifferencePrimary}
+                    />
                     <ChartEnergyMacro
                       data={chartEnergyMacroData}
                       className="border-primary border-4"
@@ -219,20 +257,9 @@ const Analysis = () => {
                       data={chartComparisonEnergyCategoriesData}
                       className="border-secondary border-4"
                     />
-
-                    <SVGLine />
-                    <div className="flex-shrink-0 mx-4 mx-auto h-16 w-16 bg-white flex items-center justify-center border border-gray-300 rounded-full">
-                      {percentageDifferenceSecondary !== null ? (
-                        <p className="text-center font-medium">
-                          {percentageDifferenceSecondary > 0 ? "+" : ""}
-                          {percentageDifferenceSecondary}%
-                        </p>
-                      ) : (
-                        <p className="text-center">N/A</p>
-                      )}
-                    </div>
-                    <SVGLine />
-
+                    <DiffDot
+                      percentageDifference={percentageDifferenceSecondary}
+                    />
                     <ChartEnergyCategories
                       data={chartEnergyCategoriesData}
                       className="border-primary border-4"
@@ -244,10 +271,13 @@ const Analysis = () => {
                 <>
                   <br />
                   <h4 className="text-lg font-medium mb-2">Makronährstoffe</h4>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center justify-between">
                     <ChartEnergyMacroCategories
                       data={chartComparisonEnergyMacroCategoriesData}
                       className="border-secondary border-4"
+                    />
+                    <DiffDot
+                      percentageDifference={percentageDifferenceSecondary}
                     />
                     <ChartEnergyMacroCategories
                       data={chartEnergyMacroCategoriesData}
@@ -262,10 +292,13 @@ const Analysis = () => {
                   <h4 className="text-lg font-medium mb-2">
                     Weitere Nährstoffe
                   </h4>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center justify-between">
                     <ChartEnergyMicroCategories
                       data={chartComparisonEnergyMicroCategoriesData}
                       className="border-secondary border-4"
+                    />
+                    <DiffDot
+                      percentageDifference={percentageDifferenceSecondary}
                     />
                     <ChartEnergyMicroCategories
                       data={chartEnergyMicroCategoriesData}
@@ -278,8 +311,11 @@ const Analysis = () => {
                 <>
                   <br />
                   <h4 className="text-lg font-medium mb-2">Nutri-Score</h4>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center justify-between">
                     <NutriScoreTable />
+                    <DiffDot
+                      percentageDifference={percentageDifferenceSecondary}
+                    />
                     <NutriScoreTable />
                   </div>
                 </>
