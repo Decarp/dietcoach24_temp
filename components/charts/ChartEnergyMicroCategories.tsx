@@ -1,9 +1,9 @@
 "use client";
 
-import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";
+import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicroCategoriesData";
 import { CustomTooltip } from "@/components/CustomTooltip";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { MacroCategory } from "@/types/types";
+import { ChartEnergyCategoriesData, MicroCategory } from "@/types/types";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Bar,
@@ -43,17 +43,19 @@ const CustomLabel = ({
   );
 };
 
-const ChartEnergyMacroCategories: React.FC = () => {
-  const [selectedMacro, setSelectedMacro] =
-    useState<MacroCategory>("Kohlenhydrate");
+export default function ChartEnergyMicroCategories({
+  data,
+  className,
+}: {
+  data: ChartEnergyCategoriesData[];
+  className?: string;
+}) {
+  const { selectedMicro, setSelectedMicro } = useCounterStore((state) => state);
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
-  const { selectedBasketIds, selectedCategories, updateCategories } =
-    useCounterStore((state) => state);
-
-  const data = useMemo(() => {
-    return getChartEnergyMacroCategoriesData(selectedBasketIds, selectedMacro);
-  }, [selectedBasketIds, selectedMacro]);
+  const { selectedCategories, updateCategories } = useCounterStore(
+    (state) => state
+  );
 
   const totalValue = useMemo(() => {
     return data.reduce((sum, item) => sum + item.value, 0);
@@ -68,42 +70,39 @@ const ChartEnergyMacroCategories: React.FC = () => {
     setActiveIndices(updatedIndices);
   }, [selectedCategories, data]);
 
-  const handleMacroChange = (macro: MacroCategory) => {
-    setSelectedMacro(macro);
+  const handleMicroChange = (micro: MicroCategory) => {
+    setSelectedMicro(micro);
     setActiveIndices([]); // Clear active indices when macro changes
   };
 
-  const handleClick = (index: number | undefined) => {
-    if (index !== undefined && index >= 0 && index < data.length) {
-      const category = data[index].name;
-      updateCategories(category, "major");
+  const handleClick = (index: number) => {
+    const category = data[index].name;
+    updateCategories(category, "major");
 
-      setActiveIndices((prevIndices) =>
-        prevIndices.includes(index)
-          ? prevIndices.filter((i) => i !== index)
-          : [...prevIndices, index]
-      );
-    }
+    setActiveIndices((prevIndices) =>
+      prevIndices.includes(index)
+        ? prevIndices.filter((i) => i !== index)
+        : [...prevIndices, index]
+    );
   };
 
   return (
-    <div className="bg-white p-4 border rounded-lg" style={{ height: "550px" }}>
+    <div
+      className={`bg-white rounded-lg p-4 border border-gray-300 w-full ${className}`}
+      style={{ height: "550px" }}
+    >
       <div className="flex items-center justify-between space-x-4">
-        {["Kohlenhydrate", "Fette", "Proteine", "Nahrungsfasern"].map(
-          (macro) => (
-            <button
-              key={macro}
-              onClick={() => handleMacroChange(macro as MacroCategory)}
-              className={`w-full rounded-md px-3 py-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
-                selectedMacro === macro
-                  ? "bg-primary text-white"
-                  : "bg-gray-200"
-              }`}
-            >
-              {macro}
-            </button>
-          )
-        )}
+        {["Salz", "Zucker", "Gesättigte Fettsäuren"].map((micro) => (
+          <button
+            key={micro}
+            onClick={() => handleMicroChange(micro as MicroCategory)}
+            className={`w-full rounded-md px-3 py-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
+              selectedMicro === micro ? "bg-primary text-white" : "bg-gray-200"
+            }`}
+          >
+            {micro}
+          </button>
+        ))}
       </div>
 
       <ResponsiveContainer width="100%" height="100%">
@@ -143,6 +142,4 @@ const ChartEnergyMacroCategories: React.FC = () => {
       </ResponsiveContainer>
     </div>
   );
-};
-
-export default ChartEnergyMacroCategories;
+}

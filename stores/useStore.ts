@@ -3,6 +3,8 @@ import {
   CategorySelection,
   Product,
   SelectedBasketProductId,
+  MacroCategory,
+  MicroCategory,
 } from "@/types/types";
 import { createStore } from "zustand/vanilla";
 
@@ -11,6 +13,7 @@ export type CounterState = {
   selectedCategories: CategorySelection;
   selectedSortCriteria: string;
   selectedBasketIds: string[];
+  selectedComparisonBasketIds: string[];
   selectedBasketProductIds: SelectedBasketProductId[];
   selectedBasketProductsFlat: BasketProductFlat[];
   selectedAlternativeProducts: Product[];
@@ -18,6 +21,8 @@ export type CounterState = {
   currentTab: string;
   patientId: string | null;
   basketProductsFlat: BasketProductFlat[];
+  selectedMacro: MacroCategory;
+  selectedMicro: MicroCategory;
 };
 
 export type CounterActions = {
@@ -26,6 +31,7 @@ export type CounterActions = {
   setSelectedCategories: (cats: CategorySelection) => void;
   setSelectedSortCriteria: (criteria: string) => void;
   setSelectedBasketIds: (ids: string[]) => void;
+  setSelectedComparisonBasketIds: (ids: string[]) => void;
   setSelectedBasketProductIds: (ids: SelectedBasketProductId[]) => void;
   setSelectedBasketProductsFlat: (products: BasketProductFlat[]) => void;
   setSelectedAlternativeProducts: (products: Product[]) => void;
@@ -34,6 +40,8 @@ export type CounterActions = {
   setPatientId: (id: string | null) => void;
   setBasketProductsFlat: (products: BasketProductFlat[]) => void;
   updateCategories: (category: string, level: "major" | "sub") => void;
+  setSelectedMacro: (macro: MacroCategory) => void;
+  setSelectedMicro: (micro: MicroCategory) => void;
 };
 
 export type CounterStore = CounterState & CounterActions;
@@ -44,6 +52,7 @@ export const initCounterStore = (): CounterState => {
     selectedCategories: { major: [], sub: [] },
     selectedSortCriteria: "Einkaufsdatum",
     selectedBasketIds: [],
+    selectedComparisonBasketIds: [],
     selectedBasketProductIds: [],
     selectedBasketProductsFlat: [],
     selectedAlternativeProducts: [],
@@ -51,6 +60,8 @@ export const initCounterStore = (): CounterState => {
     currentTab: "energy",
     patientId: null,
     basketProductsFlat: [],
+    selectedMacro: "Kohlenhydrate",
+    selectedMicro: "Salz",
   };
 };
 
@@ -59,6 +70,7 @@ export const defaultInitState: CounterState = {
   selectedCategories: { major: [], sub: [] },
   selectedSortCriteria: "Einkaufsdatum",
   selectedBasketIds: [],
+  selectedComparisonBasketIds: [],
   selectedBasketProductIds: [],
   selectedBasketProductsFlat: [],
   selectedAlternativeProducts: [],
@@ -66,6 +78,8 @@ export const defaultInitState: CounterState = {
   currentTab: "energy",
   patientId: null,
   basketProductsFlat: [],
+  selectedMacro: "Kohlenhydrate",
+  selectedMicro: "Salz",
 };
 
 export const createCounterStore = (
@@ -107,6 +121,8 @@ export const createCounterStore = (
       set(() => ({ selectedSortCriteria: criteria })),
     setSelectedBasketIds: (ids: string[]) =>
       set(() => ({ selectedBasketIds: ids })),
+    setSelectedComparisonBasketIds: (ids: string[]) =>
+      set(() => ({ selectedComparisonBasketIds: ids })),
     setSelectedBasketProductIds: (ids: SelectedBasketProductId[]) =>
       set((state) => {
         const newSelectedBasketProductsFlat = state.basketProductsFlat.filter(
@@ -314,5 +330,9 @@ export const createCounterStore = (
           }
         }
       }),
+    setSelectedMacro: (macro: MacroCategory) =>
+      set(() => ({ selectedMacro: macro })),
+    setSelectedMicro: (micro: MicroCategory) =>
+      set(() => ({ selectedMicro: micro })),
   }));
 };

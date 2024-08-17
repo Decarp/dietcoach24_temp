@@ -18,15 +18,18 @@ import {
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#FF8042"];
 
-export default function ChartEnergyMacro() {
+export default function ChartEnergyMacro({
+  data,
+  className,
+}: {
+  data: ChartEnergyMacroData[];
+  className?: string;
+}) {
   const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
 
-  const { selectedBasketIds, selectedSortCriteria, setSelectedSortCriteria } =
-    useCounterStore((state) => state);
-
-  const data: ChartEnergyMacroData[] = useMemo(() => {
-    return getChartEnergyMacroData(selectedBasketIds);
-  }, [selectedBasketIds]);
+  const { selectedSortCriteria, setSelectedSortCriteria } = useCounterStore(
+    (state) => state
+  );
 
   useEffect(() => {
     const updatedIndex = data.findIndex(
@@ -46,7 +49,10 @@ export default function ChartEnergyMacro() {
   };
 
   return (
-    <div className="bg-white border p-4 rounded-lg" style={{ height: "350px" }}>
+    <div
+      className={`bg-white rounded-lg p-4 border border-gray-300 w-full ${className}`}
+      style={{ height: "350px" }}
+    >
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie

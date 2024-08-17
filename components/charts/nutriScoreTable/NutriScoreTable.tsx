@@ -92,7 +92,7 @@ export const NutriScoreTable = () => {
   }, []);
 
   return (
-    <div className="max-w-screen-lg mx-auto border border-gray-200">
+    <div className="max-w-screen-lg mx-auto border border-gray-300">
       <div
         className="ag-theme-quartz"
         style={{

@@ -35,11 +35,9 @@ const Baskets = () => {
       });
 
       const latestMonth = sortedMonths[0];
-      console.log("Latest month:", latestMonth); // Debugging log
       const latestMonthBasketIds = baskets[latestMonth].map(
         (basket: any) => basket.basketId
       );
-      console.log("Latest month basket IDs:", latestMonthBasketIds); // Debugging log
       setSelectedBasketIds(latestMonthBasketIds);
       initialized.current = true;
     }

@@ -1,37 +1,59 @@
-import React from "react";
-import dynamic from "next/dynamic";
 import AnalysisHeader from "@/components/purchases/analysis/AnalysisHeader";
+import { getChartEnergyCategoriesData } from "@/getData/getChartEnergyCategoriesData";
+import { getChartEnergyMacroData } from "@/getData/getChartEnergyMacroData";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
-import { NutriScoreTable } from "./nutriScoreTable/NutriScoreTable";
+import dynamic from "next/dynamic";
+import { useMemo } from "react";
+import { NutriScoreTable } from "../../charts/nutriScoreTable/NutriScoreTable";
+import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";
+import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicroCategoriesData";
 
 const ChartEnergyMacro = dynamic(
-  () => import("@/components/purchases/analysis/ChartEnergyMacro"),
+  () => import("@/components/charts/ChartEnergyMacro"),
   {
     ssr: false,
   }
 );
 const ChartEnergyCategories = dynamic(
-  () => import("@/components/purchases/analysis/ChartEnergyCategories"),
+  () => import("@/components/charts/ChartEnergyCategories"),
   {
     ssr: false,
   }
 );
 const ChartEnergyMacroCategories = dynamic(
-  () => import("@/components/purchases/analysis/ChartEnergyMacroCategories"),
+  () => import("@/components/charts/ChartEnergyMacroCategories"),
   {
     ssr: false,
   }
 );
 const ChartEnergyMicroCategories = dynamic(
-  () => import("@/components/purchases/analysis/ChartEnergyMicroCategories"),
+  () => import("@/components/charts/ChartEnergyMicroCategories"),
   {
     ssr: false,
   }
 );
 
 const Analysis = () => {
-  const { selectedBasketIds, currentTab } = useCounterStore((state) => state);
+  const { selectedBasketIds, currentTab, selectedMacro, selectedMicro } =
+    useCounterStore((state) => state);
+
+  const chartEnergyMacroData = useMemo(() => {
+    return getChartEnergyMacroData(selectedBasketIds);
+  }, [selectedBasketIds]);
+
+  const chartEnergyCategoriesData = useMemo(() => {
+    const data = getChartEnergyCategoriesData(selectedBasketIds);
+    return data.sort((a, b) => a.name.localeCompare(b.name));
+  }, [selectedBasketIds]);
+
+  const chartEnergyMacroCategoriesData = useMemo(() => {
+    return getChartEnergyMacroCategoriesData(selectedBasketIds, selectedMacro);
+  }, [selectedBasketIds, selectedMacro]);
+
+  const chartEnergyMicroCategoriesData = useMemo(() => {
+    return getChartEnergyMicroCategoriesData(selectedBasketIds, selectedMicro);
+  }, [selectedBasketIds, selectedMicro]);
 
   return (
     <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
@@ -46,19 +68,21 @@ const Analysis = () => {
                   <h4 className="text-lg font-medium mb-2">
                     Nährstoffverteilung
                   </h4>
-                  <ChartEnergyMacro />
+                  <ChartEnergyMacro data={chartEnergyMacroData} />
                   <br />
                   <h4 className="text-lg font-medium mb-2">
                     Energieverteilung aus Lebensmittelkategorien
                   </h4>
-                  <ChartEnergyCategories />
+                  <ChartEnergyCategories data={chartEnergyCategoriesData} />
                 </>
               )}
               {currentTab === "macro" && (
                 <>
                   <br />
                   <h4 className="text-lg font-medium mb-2">Makronährstoffe</h4>
-                  <ChartEnergyMacroCategories />
+                  <ChartEnergyMacroCategories
+                    data={chartEnergyMacroCategoriesData}
+                  />
                 </>
               )}
               {currentTab === "micro" && (
@@ -67,7 +91,9 @@ const Analysis = () => {
                   <h4 className="text-lg font-medium mb-2">
                     Weitere Nährstoffe
                   </h4>
-                  <ChartEnergyMicroCategories />
+                  <ChartEnergyMicroCategories
+                    data={chartEnergyMicroCategoriesData}
+                  />
                 </>
               )}
               {currentTab === "nutri" && (

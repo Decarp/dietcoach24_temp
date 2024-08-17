@@ -27,18 +27,18 @@ const COLORS = [
   "#FFD700",
 ];
 
-export default function ChartEnergyCategories() {
+export default function ChartEnergyCategories({
+  data,
+  className,
+}: {
+  data: ChartEnergyCategoriesData[];
+  className?: string;
+}) {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
-  const { selectedBasketIds, selectedCategories, updateCategories } =
-    useCounterStore((state) => state);
-
-  const data: ChartEnergyCategoriesData[] = useMemo(() => {
-    const chartData = getChartEnergyCategoriesData(selectedBasketIds);
-
-    // Sort the data alphabetically by name
-    return chartData.sort((a, b) => a.name.localeCompare(b.name));
-  }, [selectedBasketIds]);
+  const { selectedCategories, updateCategories } = useCounterStore(
+    (state) => state
+  );
 
   useEffect(() => {
     const updatedIndices = data
@@ -55,7 +55,10 @@ export default function ChartEnergyCategories() {
   };
 
   return (
-    <div className="bg-white p-4 border rounded-lg" style={{ height: "380px" }}>
+    <div
+      className={`bg-white rounded-lg p-4 border border-gray-300 w-full ${className}`}
+      style={{ height: "380px" }}
+    >
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
