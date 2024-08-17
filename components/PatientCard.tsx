@@ -8,6 +8,7 @@ const tabs = [
   { name: "Profil", path: "profile" },
   { name: "Einkäufe", path: "purchases" },
   { name: "Empfehlungen", path: "recommendations" },
+  { name: "Fortschritt", path: "progress" },
   // { name: "Vergleich", path: "comparison" },
   // { name: "Modifikation", path: "modification" },
 ];
