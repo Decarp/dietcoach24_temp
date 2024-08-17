@@ -94,6 +94,39 @@ const Analysis = () => {
     );
   }, [selectedComparisonBasketIds, selectedMicro]);
 
+  // Auto-set default category based on current tab
+  useEffect(() => {
+    if (currentTab === "energy" && selectedCategories.major.length === 0) {
+      if (chartEnergyCategoriesData.length > 0) {
+        const defaultCategory = chartEnergyCategoriesData[0].name;
+        setSelectedCategories({ major: [defaultCategory], sub: [] });
+      }
+    } else if (
+      currentTab === "macro" &&
+      selectedCategories.major.length === 0
+    ) {
+      if (chartEnergyMacroCategoriesData.length > 0) {
+        const defaultCategory = chartEnergyMacroCategoriesData[0].name;
+        setSelectedCategories({ major: [defaultCategory], sub: [] });
+      }
+    } else if (
+      currentTab === "micro" &&
+      selectedCategories.major.length === 0
+    ) {
+      if (chartEnergyMicroCategoriesData.length > 0) {
+        const defaultCategory = chartEnergyMicroCategoriesData[0].name;
+        setSelectedCategories({ major: [defaultCategory], sub: [] });
+      }
+    }
+  }, [
+    chartEnergyCategoriesData,
+    chartEnergyMacroCategoriesData,
+    chartEnergyMicroCategoriesData,
+    currentTab,
+    selectedCategories,
+    setSelectedCategories,
+  ]);
+
   useEffect(() => {
     if (currentTab === "energy" && selectedSortCriteria) {
       // Check if the selected sort criteria is still available
@@ -134,8 +167,6 @@ const Analysis = () => {
   ]);
 
   useEffect(() => {
-    // TODO: Auto set a category
-    // TODO: Restrict to only select one category
     if (currentTab === "energy") {
       if (chartEnergyCategoriesData.length > 0) {
         if (selectedCategories.major.length == 1) {
