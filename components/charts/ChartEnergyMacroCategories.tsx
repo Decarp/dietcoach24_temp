@@ -45,9 +45,11 @@ const CustomLabel = ({
 
 export default function ChartEnergyMacroCategories({
   data,
+  replace = false,
   className,
 }: {
   data: ChartEnergyCategoriesData[];
+  replace?: boolean;
   className?: string;
 }) {
   const { selectedMacro, setSelectedMacro } = useCounterStore((state) => state);
@@ -78,7 +80,7 @@ export default function ChartEnergyMacroCategories({
   const handleClick = (index: number | undefined) => {
     if (index !== undefined && index >= 0 && index < data.length) {
       const category = data[index].name;
-      updateCategories(category, "major");
+      updateCategories(category, "major", replace);
 
       setActiveIndices((prevIndices) =>
         prevIndices.includes(index)

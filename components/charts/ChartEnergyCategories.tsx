@@ -29,9 +29,11 @@ const COLORS = [
 
 export default function ChartEnergyCategories({
   data,
+  replace = false,
   className,
 }: {
   data: ChartEnergyCategoriesData[];
+  replace?: boolean;
   className?: string;
 }) {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
@@ -51,7 +53,7 @@ export default function ChartEnergyCategories({
 
   const handleClick = (index: number) => {
     const majorCategory = data[index].name;
-    updateCategories(majorCategory, "major");
+    updateCategories(majorCategory, "major", replace);
   };
 
   return (

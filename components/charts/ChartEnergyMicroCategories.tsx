@@ -45,9 +45,11 @@ const CustomLabel = ({
 
 export default function ChartEnergyMicroCategories({
   data,
+  replace = false,
   className,
 }: {
   data: ChartEnergyCategoriesData[];
+  replace?: boolean;
   className?: string;
 }) {
   const { selectedMicro, setSelectedMicro } = useCounterStore((state) => state);
@@ -77,7 +79,7 @@ export default function ChartEnergyMicroCategories({
 
   const handleClick = (index: number) => {
     const category = data[index].name;
-    updateCategories(category, "major");
+    updateCategories(category, "major", replace);
 
     setActiveIndices((prevIndices) =>
       prevIndices.includes(index)

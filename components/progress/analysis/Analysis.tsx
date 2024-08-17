@@ -1,14 +1,13 @@
+import { NutriScoreTable } from "@/components/charts/nutriScoreTable/NutriScoreTable";
 import AnalysisHeader from "@/components/purchases/analysis/AnalysisHeader";
 import { getChartEnergyCategoriesData } from "@/getData/getChartEnergyCategoriesData";
+import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";
 import { getChartEnergyMacroData } from "@/getData/getChartEnergyMacroData";
+import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicroCategoriesData";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
-import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";
-import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicroCategoriesData";
-import { NutriScoreTable } from "@/components/charts/nutriScoreTable/NutriScoreTable";
-import SVGLine from "@/components/SVGLine";
 import DiffDot from "./DiffDot";
 
 const ChartEnergyMacro = dynamic(
@@ -255,6 +254,7 @@ const Analysis = () => {
                   <div className="flex items-center justify-between">
                     <ChartEnergyCategories
                       data={chartComparisonEnergyCategoriesData}
+                      replace={true}
                       className="border-secondary border-4"
                     />
                     <DiffDot
@@ -262,6 +262,7 @@ const Analysis = () => {
                     />
                     <ChartEnergyCategories
                       data={chartEnergyCategoriesData}
+                      replace={true}
                       className="border-primary border-4"
                     />
                   </div>
@@ -274,6 +275,7 @@ const Analysis = () => {
                   <div className="flex items-center justify-between">
                     <ChartEnergyMacroCategories
                       data={chartComparisonEnergyMacroCategoriesData}
+                      replace={true}
                       className="border-secondary border-4"
                     />
                     <DiffDot
@@ -281,6 +283,7 @@ const Analysis = () => {
                     />
                     <ChartEnergyMacroCategories
                       data={chartEnergyMacroCategoriesData}
+                      replace={true}
                       className="border-primary border-4"
                     />
                   </div>
@@ -295,6 +298,7 @@ const Analysis = () => {
                   <div className="flex items-center justify-between">
                     <ChartEnergyMicroCategories
                       data={chartComparisonEnergyMicroCategoriesData}
+                      replace={true}
                       className="border-secondary border-4"
                     />
                     <DiffDot
@@ -302,6 +306,7 @@ const Analysis = () => {
                     />
                     <ChartEnergyMicroCategories
                       data={chartEnergyMicroCategoriesData}
+                      replace={true}
                       className="border-primary border-4"
                     />
                   </div>
