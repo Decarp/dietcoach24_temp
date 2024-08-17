@@ -3,7 +3,7 @@ import { classNames } from "@/utils/classNames";
 import { useCounterStore } from "@/providers/useStoreProvider";
 
 const tabs = [
-  { name: "Energiegehalt", path: "energy" },
+  { name: "Energieverteilung", path: "energy" },
   { name: "Makronährstoffe", path: "macro" },
   { name: "Weitere Nährstoffe", path: "micro" },
   { name: "Nutri-Score", path: "nutri" },

@@ -66,7 +66,7 @@ const Analysis = () => {
                 <>
                   <br />
                   <h4 className="text-lg font-medium mb-2">
-                    Nährstoffverteilung
+                    Energieverteilung aus Makronährstoffen
                   </h4>
                   <ChartEnergyMacro data={chartEnergyMacroData} />
                   <br />
