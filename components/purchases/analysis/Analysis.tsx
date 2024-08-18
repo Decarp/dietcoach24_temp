@@ -1,13 +1,13 @@
+import { NutriScoreTable } from "@/components/charts/NutriScoreTable";
 import AnalysisHeader from "@/components/purchases/analysis/AnalysisHeader";
 import { getChartEnergyCategoriesData } from "@/getData/getChartEnergyCategoriesData";
+import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";
 import { getChartEnergyMacroData } from "@/getData/getChartEnergyMacroData";
+import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicroCategoriesData";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
-import { NutriScoreTable } from "../../charts/nutriScoreTable/NutriScoreTable";
-import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";
-import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicroCategoriesData";
 
 const ChartEnergyMacro = dynamic(
   () => import("@/components/charts/ChartEnergyMacro"),

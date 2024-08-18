@@ -1,7 +1,10 @@
 export const nutriScoreTableResponse = [
   // Getränke
   {
-    category: ["Getränke"],
+    category: {
+      de: ["Getränke"],
+      en: ["Drinks"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -13,7 +16,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Getränke", "Saft"],
+    category: {
+      de: ["Getränke", "Saft"],
+      en: ["Drinks", "Juice"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -25,7 +31,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Getränke", "Milchgetränke"],
+    category: {
+      de: ["Getränke", "Milchgetränke"],
+      en: ["Drinks", "Milk Drinks"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -37,7 +46,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Getränke", "Süssgetränke"],
+    category: {
+      de: ["Getränke", "Süssgetränke"],
+      en: ["Drinks", "Sweet Drinks"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -49,7 +61,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Getränke", "Wasser, Kaffee & Tee"],
+    category: {
+      de: ["Getränke", "Wasser, Kaffee & Tee"],
+      en: ["Drinks", "Water, Coffee & Tea"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -63,7 +78,10 @@ export const nutriScoreTableResponse = [
 
   // Milchprodukte & Alternativen
   {
-    category: ["Milchprodukte & Alternativen"],
+    category: {
+      de: ["Milchprodukte & Alternativen"],
+      en: ["Dairy Products & Alternatives"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -75,7 +93,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Milchprodukte & Alternativen", "Käse & Käseprodukte"],
+    category: {
+      de: ["Milchprodukte & Alternativen", "Käse & Käseprodukte"],
+      en: ["Dairy Products & Alternatives", "Cheese & Cheese Products"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -87,7 +108,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Milchprodukte & Alternativen", "Frisch- & Streichkäse"],
+    category: {
+      de: ["Milchprodukte & Alternativen", "Frisch- & Streichkäse"],
+      en: ["Dairy Products & Alternatives", "Fresh & Soft Cheese"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -99,7 +123,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Milchprodukte & Alternativen", "Milch & Milchalternativen"],
+    category: {
+      de: ["Milchprodukte & Alternativen", "Milch & Milchalternativen"],
+      en: ["Dairy Products & Alternatives", "Milk & Milk Alternatives"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -111,7 +138,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Milchprodukte & Alternativen", "Joghurt & Quark"],
+    category: {
+      de: ["Milchprodukte & Alternativen", "Joghurt & Quark"],
+      en: ["Dairy Products & Alternatives", "Yogurt & Quark"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -125,7 +155,10 @@ export const nutriScoreTableResponse = [
 
   // Fett, Öle & Nüsse
   {
-    category: ["Fett, Öle & Nüsse"],
+    category: {
+      de: ["Fett, Öle & Nüsse"],
+      en: ["Fats, Oils & Nuts"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -137,7 +170,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Fett, Öle & Nüsse", "Rahm"],
+    category: {
+      de: ["Fett, Öle & Nüsse", "Rahm"],
+      en: ["Fats, Oils & Nuts", "Cream"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -149,7 +185,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Fett, Öle & Nüsse", "Fette & Öle"],
+    category: {
+      de: ["Fett, Öle & Nüsse", "Fette & Öle"],
+      en: ["Fats, Oils & Nuts", "Fats & Oils"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -161,7 +200,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Fett, Öle & Nüsse", "Nüsse, Samen & Ölfrüchte"],
+    category: {
+      de: ["Fett, Öle & Nüsse", "Nüsse, Samen & Ölfrüchte"],
+      en: ["Fats, Oils & Nuts", "Nuts, Seeds & Oil Fruits"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -175,7 +217,10 @@ export const nutriScoreTableResponse = [
 
   // Getreideprodukte & Kartoffeln
   {
-    category: ["Getreideprodukte & Kartoffeln"],
+    category: {
+      de: ["Getreideprodukte & Kartoffeln"],
+      en: ["Cereal Products & Potatoes"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -187,7 +232,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Getreideprodukte & Kartoffeln", "Brot"],
+    category: {
+      de: ["Getreideprodukte & Kartoffeln", "Brot"],
+      en: ["Cereal Products & Potatoes", "Bread"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -199,7 +247,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Getreideprodukte & Kartoffeln", "Frühstückscerealien"],
+    category: {
+      de: ["Getreideprodukte & Kartoffeln", "Frühstückscerealien"],
+      en: ["Cereal Products & Potatoes", "Breakfast Cereals"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -211,7 +262,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Getreideprodukte & Kartoffeln", "Teige & Mehl"],
+    category: {
+      de: ["Getreideprodukte & Kartoffeln", "Teige & Mehl"],
+      en: ["Cereal Products & Potatoes", "Doughs & Flour"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -223,7 +277,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Getreideprodukte & Kartoffeln", "Pasta"],
+    category: {
+      de: ["Getreideprodukte & Kartoffeln", "Pasta"],
+      en: ["Cereal Products & Potatoes", "Pasta"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -235,7 +292,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Getreideprodukte & Kartoffeln", "Kartoffeln & Knollen"],
+    category: {
+      de: ["Getreideprodukte & Kartoffeln", "Kartoffeln & Knollen"],
+      en: ["Cereal Products & Potatoes", "Potatoes & Tubers"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -247,7 +307,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Getreideprodukte & Kartoffeln", "Reis & Getreide"],
+    category: {
+      de: ["Getreideprodukte & Kartoffeln", "Reis & Getreide"],
+      en: ["Cereal Products & Potatoes", "Rice & Grains"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -261,7 +324,10 @@ export const nutriScoreTableResponse = [
 
   // Fleisch, Fisch & Eier
   {
-    category: ["Fleisch, Fisch & Eier"],
+    category: {
+      de: ["Fleisch, Fisch & Eier"],
+      en: ["Meat, Fish & Eggs"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -273,7 +339,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Fleisch, Fisch & Eier", "Eier"],
+    category: {
+      de: ["Fleisch, Fisch & Eier", "Eier"],
+      en: ["Meat, Fish & Eggs", "Eggs"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -285,7 +354,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Fleisch, Fisch & Eier", "Fisch & Meeresfrüchte"],
+    category: {
+      de: ["Fleisch, Fisch & Eier", "Fisch & Meeresfrüchte"],
+      en: ["Meat, Fish & Eggs", "Fish & Seafood"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -297,7 +369,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Fleisch, Fisch & Eier", "Fleisch & Geflügel"],
+    category: {
+      de: ["Fleisch, Fisch & Eier", "Fleisch & Geflügel"],
+      en: ["Meat, Fish & Eggs", "Meat & Poultry"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -309,7 +384,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Fleisch, Fisch & Eier", "Fleischprodukte & Wurst"],
+    category: {
+      de: ["Fleisch, Fisch & Eier", "Fleischprodukte & Wurst"],
+      en: ["Meat, Fish & Eggs", "Meat Products & Sausages"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -323,7 +401,10 @@ export const nutriScoreTableResponse = [
 
   // Fertiggerichte
   {
-    category: ["Fertiggerichte"],
+    category: {
+      de: ["Fertiggerichte"],
+      en: ["Ready Meals"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -335,7 +416,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Fertiggerichte", "Add-ons"],
+    category: {
+      de: ["Fertiggerichte", "Add-ons"],
+      en: ["Ready Meals", "Add-ons"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -347,7 +431,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Fertiggerichte", "Herzhafte Gerichte"],
+    category: {
+      de: ["Fertiggerichte", "Herzhafte Gerichte"],
+      en: ["Ready Meals", "Savory Dishes"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -359,7 +446,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Fertiggerichte", "Desserts"],
+    category: {
+      de: ["Fertiggerichte", "Desserts"],
+      en: ["Ready Meals", "Desserts"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -371,7 +461,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Fertiggerichte", "Süsse Gerichte"],
+    category: {
+      de: ["Fertiggerichte", "Süsse Gerichte"],
+      en: ["Ready Meals", "Sweet Dishes"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -385,7 +478,10 @@ export const nutriScoreTableResponse = [
 
   // Snacks
   {
-    category: ["Snacks"],
+    category: {
+      de: ["Snacks"],
+      en: ["Snacks"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -397,7 +493,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Snacks", "Salzige Snacks"],
+    category: {
+      de: ["Snacks", "Salzige Snacks"],
+      en: ["Snacks", "Salty Snacks"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -409,7 +508,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Snacks", "Süsse Snacks"],
+    category: {
+      de: ["Snacks", "Süsse Snacks"],
+      en: ["Snacks", "Sweet Snacks"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -423,7 +525,10 @@ export const nutriScoreTableResponse = [
 
   // Früchte
   {
-    category: ["Früchte"],
+    category: {
+      de: ["Früchte"],
+      en: ["Fruits"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -435,7 +540,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Früchte", "Unverarbeitete Früchte"],
+    category: {
+      de: ["Früchte", "Unverarbeitete Früchte"],
+      en: ["Fruits", "Unprocessed Fruits"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -447,7 +555,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Früchte", "Verarbeitete Früchte"],
+    category: {
+      de: ["Früchte", "Verarbeitete Früchte"],
+      en: ["Fruits", "Processed Fruits"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -461,7 +572,10 @@ export const nutriScoreTableResponse = [
 
   // Gemüse
   {
-    category: ["Gemüse"],
+    category: {
+      de: ["Gemüse"],
+      en: ["Vegetables"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -473,7 +587,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Gemüse", "Unverarbeitetes Gemüse"],
+    category: {
+      de: ["Gemüse", "Unverarbeitetes Gemüse"],
+      en: ["Vegetables", "Unprocessed Vegetables"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -485,7 +602,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Gemüse", "Verarbeitetes Gemüse"],
+    category: {
+      de: ["Gemüse", "Verarbeitetes Gemüse"],
+      en: ["Vegetables", "Processed Vegetables"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -499,7 +619,10 @@ export const nutriScoreTableResponse = [
 
   // Pflanzliche Proteinquellen
   {
-    category: ["Pflanzliche Proteinquellen"],
+    category: {
+      de: ["Pflanzliche Proteinquellen"],
+      en: ["Plant-based Protein Sources"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -511,7 +634,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Pflanzliche Proteinquellen", "Fleisch- & Fischalternativen"],
+    category: {
+      de: ["Pflanzliche Proteinquellen", "Fleisch- & Fischalternativen"],
+      en: ["Plant-based Protein Sources", "Meat & Fish Alternatives"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -523,7 +649,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Pflanzliche Proteinquellen", "Hülsenfrüchte"],
+    category: {
+      de: ["Pflanzliche Proteinquellen", "Hülsenfrüchte"],
+      en: ["Plant-based Protein Sources", "Legumes"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -537,7 +666,10 @@ export const nutriScoreTableResponse = [
 
   // Ausgeschlossen
   {
-    category: ["Ausgeschlossen"],
+    category: {
+      de: ["Ausgeschlossen"],
+      en: ["Excluded"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -549,7 +681,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Ausgeschlossen", "Alkoholische Getränke"],
+    category: {
+      de: ["Ausgeschlossen", "Alkoholische Getränke"],
+      en: ["Excluded", "Alcoholic Drinks"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -561,7 +696,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Ausgeschlossen", "Zutaten"],
+    category: {
+      de: ["Ausgeschlossen", "Zutaten"],
+      en: ["Excluded", "Ingredients"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,
@@ -573,7 +711,10 @@ export const nutriScoreTableResponse = [
     protein: 9,
   },
   {
-    category: ["Ausgeschlossen", "Supplemente & Spezialnahrungsmittel"],
+    category: {
+      de: ["Ausgeschlossen", "Supplemente & Spezialnahrungsmittel"],
+      en: ["Excluded", "Supplements & Specialty Foods"],
+    },
     quantity: 1,
     energyKj: 2,
     energy: 3,

@@ -138,6 +138,22 @@ export type ChartEnergyCategoriesData = {
 };
 
 export type NutriScoreTableResponse = {
+  category: {
+    de: string[];
+    en: string[];
+  };
+  quantity: number;
+  energyKj: number;
+  energy: number;
+  sugar: number;
+  saturatedFat: number;
+  sodium: number;
+  fruitVegetables: number;
+  fiber: number;
+  protein: number;
+};
+
+export type NutriScoreTableData = {
   category: string[];
   quantity: number;
   energyKj: number;

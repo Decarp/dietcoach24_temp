@@ -1,4 +1,5 @@
-import { NutriScoreTable } from "@/components/charts/nutriScoreTable/NutriScoreTable";
+import DiffDot from "@/components/charts/DiffDot";
+import { NutriScoreTable } from "@/components/charts/NutriScoreTable";
 import AnalysisHeader from "@/components/purchases/analysis/AnalysisHeader";
 import { getChartEnergyCategoriesData } from "@/getData/getChartEnergyCategoriesData";
 import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";
@@ -8,7 +9,6 @@ import { useCounterStore } from "@/providers/useStoreProvider";
 import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
-import DiffDot from "./DiffDot";
 
 const ChartEnergyMacro = dynamic(
   () => import("@/components/charts/ChartEnergyMacro"),

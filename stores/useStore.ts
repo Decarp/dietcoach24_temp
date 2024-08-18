@@ -195,12 +195,15 @@ export const createCounterStore = (
             } else {
               // Select major category and all its sub-categories
               newCategories.major.push(category);
-              newCategories.sub.push(
-                ...state.basketProductsFlat
-                  .filter(
-                    (product) => product.dietCoachCategoryL1.de === category
-                  )
-                  .map((product) => product.dietCoachCategoryL2.de)
+              const newSubCategories = state.basketProductsFlat
+                .filter(
+                  (product) => product.dietCoachCategoryL1.de === category
+                )
+                .map((product) => product.dietCoachCategoryL2.de);
+
+              // Use Set to ensure sub-categories are unique
+              newCategories.sub = Array.from(
+                new Set([...newCategories.sub, ...newSubCategories])
               );
             }
           } else {
@@ -244,6 +247,9 @@ export const createCounterStore = (
                 newCategories.major.push(majorCategory);
               }
             }
+
+            // Ensure sub-categories are unique
+            newCategories.sub = Array.from(new Set(newCategories.sub));
           }
         }
 

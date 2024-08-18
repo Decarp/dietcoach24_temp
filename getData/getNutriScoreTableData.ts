@@ -1,25 +1,65 @@
 import { nutriScoreTableResponse } from "@/data/nutriScoreTableResponse";
-import { NutriScoreTableResponse } from "@/types/types";
 
-const fetchData = (
-  startTimestamp: number = 1000000, // default: 1970
-  endTimestamp: number = 10000000 // default: right now
-): NutriScoreTableResponse[] => {
+export type NutriScoreTableResponse = {
+  category: {
+    de: string[];
+    en: string[];
+  };
+  quantity: number;
+  energyKj: number;
+  energy: number;
+  sugar: number;
+  saturatedFat: number;
+  sodium: number;
+  fruitVegetables: number;
+  fiber: number;
+  protein: number;
+};
+
+export type NutriScoreTableData = {
+  category: string[];
+  quantity: number;
+  energyKj: number;
+  energy: number;
+  sugar: number;
+  saturatedFat: number;
+  sodium: number;
+  fruitVegetables: number;
+  fiber: number;
+  protein: number;
+};
+
+const fetchData = (selectedBasketIds: string[]): NutriScoreTableResponse[] => {
   const authentication = ""; // via local storage
   const participantId = ""; // via url param
   return nutriScoreTableResponse;
 };
 
 export const getNutriScoreTableData = (
-  startTimestamp: number = 1000000, // default: 1970
-  endTimestamp: number = 10000000 // default: right now
-): NutriScoreTableResponse[] => {
-  // TODO: Update to fetch with API body containting list of selectedBasketIds
-  const data = fetchData(startTimestamp, endTimestamp);
+  selectedBasketIds: string[] = [],
+  language: string = "de"
+): NutriScoreTableData[] => {
+  const data = fetchData(selectedBasketIds);
+
+  // Only keep the language specified in the function parameter, and ensure NutriScoreTableData is returned
+  let filteredData = data.map((item) => {
+    return {
+      category: item.category[language as "de" | "en"],
+      quantity: item.quantity,
+      energyKj: item.energyKj,
+      energy: item.energy,
+      sugar: item.sugar,
+      saturatedFat: item.saturatedFat,
+      sodium: item.sodium,
+      fruitVegetables: item.fruitVegetables,
+      fiber: item.fiber,
+      protein: item.protein,
+    };
+  });
 
   // Filter out rows where "Ausgeschlossen" appears in the category
-  const filteredData = data.filter(
-    (item) => !item.category.some((cat) => cat.includes("Ausgeschlossen"))
+  filteredData = filteredData.filter(
+    (item) => !item.category.some((cat: string) => cat === "Ausgeschlossen")
   );
 
   return filteredData;
