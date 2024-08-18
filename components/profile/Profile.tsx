@@ -9,8 +9,14 @@ export default function Profile() {
   const patientDetails = {
     id: "2o4mgm92",
     householdSize: 1,
-    shoppingFrequency: ">80%",
-    loyaltyCardUsage: ">80%",
+    shoppingFrequency: {
+      migros: ">80%",
+      coop: ">80%",
+    },
+    loyaltyCardUsage: {
+      migros: ">80%",
+      coop: ">80%",
+    },
     groceryData: "269 Lebensmittel (IS) + 285 Lebensmittel (FS)",
     ffqDate: "11. April 2024",
     bmi: 50.9,
@@ -20,7 +26,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="bg-white h-screen -m-8 p-8 border-x border-b h-[calc(100vh-176px)]">
+    <div className="bg-white h-screen -m-8 p-8 border-x border-b border-gray-300 h-[calc(100vh-177px)]">
       <h2 className="text-xl font-semibold">Profil</h2>
       <h3 className="text-sm font-light mb-4 text-gray-500">
         Persönliche Daten und Gesundheitsinformationen
@@ -28,9 +34,9 @@ export default function Profile() {
 
       <hr className="border-gray-300 -mx-8" />
 
-      <div className="">
+      <div className="py-2">
         <dl className="grid grid-cols-1 sm:grid-cols-2">
-          <div className="px-4 py-6 sm:col-span-1 sm:px-0">
+          <div className="px-4 py-4 sm:col-span-1 sm:px-0">
             <dt className="text-sm font-normal leading-6 text-gray-500">
               Alter
             </dt>
@@ -38,7 +44,7 @@ export default function Profile() {
               {patientDetails.age}
             </dd>
           </div>
-          <div className="px-4 py-6 sm:col-span-1 sm:px-0">
+          <div className="px-4 py-4 sm:col-span-1 sm:px-0">
             <dt className="text-sm font-normal leading-6 text-gray-500">
               Geschlecht
             </dt>
@@ -47,7 +53,7 @@ export default function Profile() {
             </dd>
           </div>
 
-          <div className="px-4 py-6 sm:col-span-1 sm:px-0">
+          <div className="px-4 py-4 sm:col-span-1 sm:px-0">
             <dt className="text-sm font-normal leading-6 text-gray-500">
               Diagnose
             </dt>
@@ -55,7 +61,7 @@ export default function Profile() {
               {patientDetails.diagnosis}
             </dd>
           </div>
-          <div className="px-4 py-6 sm:col-span-1 sm:px-0">
+          <div className="px-4 py-4 sm:col-span-1 sm:px-0">
             <dt className="text-sm font-normal leading-6 text-gray-500">BMI</dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
               {patientDetails.bmi}
@@ -64,9 +70,7 @@ export default function Profile() {
         </dl>
       </div>
 
-      <hr className="border-gray-300 -mx-8" />
-
-      <div className="my-6 mt-6 mt-2 text-sm text-gray-900 border border-gray-300 rounded-md flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+      <div className="my-6 mt-2 text-sm text-gray-900 border border-gray-300 rounded-md flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
         <div className="flex w-0 flex-1 items-center">
           <PaperClipIcon
             aria-hidden="true"
@@ -85,8 +89,6 @@ export default function Profile() {
           </a>
         </div>
       </div>
-
-      <hr className="border-gray-300 -mx-8" />
 
       <div className="mt-6">
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -118,13 +120,26 @@ export default function Profile() {
                 />
               </div>
               <p className="ml-16 truncate text-sm font-medium text-gray-500">
-                Einkaufsfrequenz (Migros / Coop)
+                Einkaufsfrequenz
               </p>
             </dt>
-            <dd className="ml-16 flex items-baseline">
-              <p className="text-2xl font-semibold text-gray-900">
-                {patientDetails.shoppingFrequency}{" "}
-              </p>
+            <dd className="ml-16 flex items-baseline space-x-4">
+              <div className="flex items-baseline">
+                <p className="text-2xl font-semibold text-gray-900">
+                  {patientDetails.shoppingFrequency.coop}{" "}
+                </p>
+                <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
+                  Coop
+                </p>
+              </div>
+              <div className="flex items-baseline">
+                <p className="text-2xl font-semibold text-gray-900">
+                  {patientDetails.shoppingFrequency.migros}{" "}
+                </p>
+                <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
+                  Migros
+                </p>
+              </div>
             </dd>
           </div>
 
@@ -137,13 +152,26 @@ export default function Profile() {
                 />
               </div>
               <p className="ml-16 truncate text-sm font-medium text-gray-500">
-                Nutzung der Treuekarte (Migros / Coop)
+                Nutzung der Treuekarte
               </p>
             </dt>
-            <dd className="ml-16 flex items-baseline">
-              <p className="text-2xl font-semibold text-gray-900">
-                {patientDetails.loyaltyCardUsage}{" "}
-              </p>
+            <dd className="ml-16 flex items-baseline space-x-4">
+              <div className="flex items-baseline">
+                <p className="text-2xl font-semibold text-gray-900">
+                  {patientDetails.loyaltyCardUsage.coop}{" "}
+                </p>
+                <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
+                  Coop
+                </p>
+              </div>
+              <div className="flex items-baseline">
+                <p className="text-2xl font-semibold text-gray-900">
+                  {patientDetails.loyaltyCardUsage.migros}{" "}
+                </p>
+                <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
+                  Migros
+                </p>
+              </div>
             </dd>
           </div>
         </dl>
