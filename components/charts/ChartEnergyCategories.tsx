@@ -16,16 +16,19 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#A28DFE",
-  "#FEA28D",
-  "#8DFFF4",
-  "#FFD700",
-];
+const categoryColors = {
+  Getränke: "#0088FE",
+  Gemüse: "#00C49F",
+  "Fett, Öle & Nüsse": "#FFBB28",
+  "Milchprodukte & Alternativen": "#FF8042",
+  Snacks: "#A28DFE",
+  Ausgeschlossen: "#FEA28D",
+  "Getreideprodukte & Kartoffeln": "#8DFFF4",
+  "Fleisch, Fisch & Eier": "#FFD700",
+  Fertiggerichte: "#FF6347",
+  "Pflanzliche Proteinquellen": "#8D68A0",
+  Früchte: "#FF69B4",
+};
 
 export default function ChartEnergyCategories({
   data,
@@ -81,7 +84,10 @@ export default function ChartEnergyCategories({
             {data.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
+                fill={
+                  categoryColors[entry.name as keyof typeof categoryColors] ||
+                  "#CCCCCC"
+                }
                 opacity={activeIndices.includes(index) ? 1 : 1}
               />
             ))}

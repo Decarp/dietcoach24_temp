@@ -5,39 +5,42 @@ import {
   SelectedBasketProductId,
   MacroCategory,
   MicroCategory,
+  BasketProduct,
+  DatabaseProduct,
 } from "@/types/types";
 import { createStore } from "zustand/vanilla";
 
 export type CounterState = {
-  count: number;
   selectedCategories: CategorySelection;
+  availableCategories: CategorySelection;
   selectedSortCriteria: string;
   selectedBasketIds: string[];
   selectedComparisonBasketIds: string[];
   selectedBasketProductIds: SelectedBasketProductId[];
   selectedBasketProductsFlat: BasketProductFlat[];
-  selectedAlternativeProducts: Product[];
+  selectedAlternativeProducts: DatabaseProduct[];
   selectedSessionId: number | null;
   currentTab: string;
   patientId: string | null;
+  basketProducts: BasketProduct[];
   basketProductsFlat: BasketProductFlat[];
   selectedMacro: MacroCategory;
   selectedMicro: MicroCategory;
 };
 
 export type CounterActions = {
-  decrementCount: () => void;
-  incrementCount: () => void;
   setSelectedCategories: (cats: CategorySelection) => void;
+  setAvailableCategories: (cats: CategorySelection) => void;
   setSelectedSortCriteria: (criteria: string) => void;
   setSelectedBasketIds: (ids: string[]) => void;
   setSelectedComparisonBasketIds: (ids: string[]) => void;
   setSelectedBasketProductIds: (ids: SelectedBasketProductId[]) => void;
   setSelectedBasketProductsFlat: (products: BasketProductFlat[]) => void;
-  setSelectedAlternativeProducts: (products: Product[]) => void;
+  setSelectedAlternativeProducts: (products: DatabaseProduct[]) => void;
   setSelectedSessionId: (id: number | null) => void;
   setCurrentTab: (tab: string) => void;
   setPatientId: (id: string | null) => void;
+  setBasketProducts: (products: BasketProduct[]) => void;
   setBasketProductsFlat: (products: BasketProductFlat[]) => void;
   updateCategories: (
     category: string,
@@ -52,8 +55,8 @@ export type CounterStore = CounterState & CounterActions;
 
 export const initCounterStore = (): CounterState => {
   return {
-    count: new Date().getFullYear(),
     selectedCategories: { major: [], sub: [] },
+    availableCategories: { major: [], sub: [] },
     selectedSortCriteria: "Einkaufsdatum",
     selectedBasketIds: [],
     selectedComparisonBasketIds: [],
@@ -63,6 +66,7 @@ export const initCounterStore = (): CounterState => {
     selectedSessionId: null,
     currentTab: "energy",
     patientId: null,
+    basketProducts: [],
     basketProductsFlat: [],
     selectedMacro: "Kohlenhydrate",
     selectedMicro: "Salz",
@@ -70,8 +74,8 @@ export const initCounterStore = (): CounterState => {
 };
 
 export const defaultInitState: CounterState = {
-  count: 0,
   selectedCategories: { major: [], sub: [] },
+  availableCategories: { major: [], sub: [] },
   selectedSortCriteria: "Einkaufsdatum",
   selectedBasketIds: [],
   selectedComparisonBasketIds: [],
@@ -81,6 +85,7 @@ export const defaultInitState: CounterState = {
   selectedSessionId: null,
   currentTab: "energy",
   patientId: null,
+  basketProducts: [],
   basketProductsFlat: [],
   selectedMacro: "Kohlenhydrate",
   selectedMicro: "Salz",
@@ -91,8 +96,6 @@ export const createCounterStore = (
 ) => {
   return createStore<CounterStore>()((set) => ({
     ...initState,
-    decrementCount: () => set((state) => ({ count: state.count - 1 })),
-    incrementCount: () => set((state) => ({ count: state.count + 1 })),
     setSelectedCategories: (cats: CategorySelection) =>
       set((state) => {
         const newSelectedBasketProductIds =
@@ -100,7 +103,7 @@ export const createCounterStore = (
             state.basketProductsFlat.some(
               (product) =>
                 product.basketId === id.basketId &&
-                product.productId === id.productId &&
+                product.gtin === id.gtin &&
                 (cats.major.includes(product.dietCoachCategoryL1.de) ||
                   cats.sub.includes(product.dietCoachCategoryL2.de))
             )
@@ -110,8 +113,7 @@ export const createCounterStore = (
           (product) =>
             newSelectedBasketProductIds.some(
               (id) =>
-                product.basketId === id.basketId &&
-                product.productId === id.productId
+                product.basketId === id.basketId && product.gtin === id.gtin
             )
         );
 
@@ -121,6 +123,10 @@ export const createCounterStore = (
           selectedBasketProductsFlat: newSelectedBasketProductsFlat,
         };
       }),
+    setAvailableCategories: (cats: CategorySelection) =>
+      set(() => ({
+        availableCategories: cats,
+      })),
     setSelectedSortCriteria: (criteria: string) =>
       set(() => ({ selectedSortCriteria: criteria })),
     setSelectedBasketIds: (ids: string[]) =>
@@ -133,8 +139,7 @@ export const createCounterStore = (
           (product) =>
             ids.some(
               (id) =>
-                product.basketId === id.basketId &&
-                product.productId === id.productId
+                product.basketId === id.basketId && product.gtin === id.gtin
             )
         );
 
@@ -145,11 +150,13 @@ export const createCounterStore = (
       }),
     setCurrentTab: (tab: string) => set(() => ({ currentTab: tab })),
     setPatientId: (id: string | null) => set(() => ({ patientId: id })),
+    setBasketProducts: (products: BasketProduct[]) =>
+      set(() => ({ basketProducts: products })),
     setBasketProductsFlat: (products: BasketProductFlat[]) =>
       set(() => ({ basketProductsFlat: products })),
     setSelectedBasketProductsFlat: (products: BasketProductFlat[]) =>
       set(() => ({ selectedBasketProductsFlat: products })),
-    setSelectedAlternativeProducts: (products: Product[]) =>
+    setSelectedAlternativeProducts: (products: DatabaseProduct[]) =>
       set(() => ({ selectedAlternativeProducts: products })),
     setSelectedSessionId: (id: number | null) =>
       set(() => ({ selectedSessionId: id })),
@@ -259,7 +266,7 @@ export const createCounterStore = (
             state.basketProductsFlat.some(
               (product) =>
                 product.basketId === id.basketId &&
-                product.productId === id.productId &&
+                product.gtin === id.gtin &&
                 (newCategories.major.includes(product.dietCoachCategoryL1.de) ||
                   newCategories.sub.includes(product.dietCoachCategoryL2.de))
             )
@@ -269,8 +276,7 @@ export const createCounterStore = (
           (product) =>
             newSelectedBasketProductIds.some(
               (id) =>
-                product.basketId === id.basketId &&
-                product.productId === id.productId
+                product.basketId === id.basketId && product.gtin === id.gtin
             )
         );
 

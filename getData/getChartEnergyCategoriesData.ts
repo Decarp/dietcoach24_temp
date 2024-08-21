@@ -1,11 +1,10 @@
 import {
+  BasketProduct,
   ChartEnergyCategoriesData,
   ChartEnergyCategoriesResponse,
   LanguageOptions,
   Product,
-  SelectedBasketIds,
 } from "@/types/types";
-import { getBasketProducts } from "./getBasketProducts";
 
 const aggregateCategories = (
   products: Product[]
@@ -14,21 +13,27 @@ const aggregateCategories = (
 
   products.forEach((product) => {
     const { dietCoachCategoryL1, nutrients } = product;
-    const { proteins, fats, carbohydrates, fibers } = nutrients;
+
+    // Ensure each nutrient value is defined and use 0 as a fallback
+    const proteins = nutrients?.proteins || 0;
+    const fats = nutrients?.fats || 0;
+    const carbohydrates = nutrients?.carbohydrates || 0;
+    const fibers = nutrients?.fibres || 0;
+
     const categoryName = dietCoachCategoryL1.en;
 
     if (!categories[categoryName]) {
       categories[categoryName] = {
         name: dietCoachCategoryL1,
-        values: { percentage: 0 }, // Updated to `percentage`
+        grams: 0,
       };
     }
 
-    categories[categoryName].values.percentage +=
-      proteins + fats + carbohydrates + fibers;
+    // Accumulate grams for each category
+    categories[categoryName].grams += proteins + fats + carbohydrates + fibers;
   });
 
-  // Sort categories ascending alphabetically
+  // Sort categories alphabetically
   return Object.values(categories).sort((a, b) =>
     a.name.en.localeCompare(b.name.en)
   );
@@ -40,25 +45,24 @@ const mapChartEnergyCategoriesResponse = (
 ): ChartEnergyCategoriesData[] => {
   // Calculate the total grams across all categories
   const totalGrams = chartMacroCategoriesResponse.reduce(
-    (sum, item) => sum + item.values.percentage, // Now calculating based on `percentage`
+    (sum, item) => sum + (item.grams || 0),
     0
   );
 
   // Map the response to include percentage instead of grams
   return chartMacroCategoriesResponse.map((item) => ({
     name: item.name[language],
-    value: totalGrams > 0 ? (item.values.percentage / totalGrams) * 100 : 0, // Calculate the percentage
+    value: totalGrams > 0 ? (item.grams / totalGrams) * 100 : 0, // Calculate the percentage
   }));
 };
 
 export const getChartEnergyCategoriesData = (
-  selectedBasketIds: SelectedBasketIds // API body parameter
+  products: BasketProduct[]
 ): ChartEnergyCategoriesData[] => {
-  const basketProductsResponse = getBasketProducts(selectedBasketIds);
+  const productsFlattened = products.flatMap((basket) => basket.products || []);
 
-  const products = basketProductsResponse.flatMap((basket) => basket.products);
-
-  const dynamicChartEnergyCategoriesResponse = aggregateCategories(products);
+  const dynamicChartEnergyCategoriesResponse =
+    aggregateCategories(productsFlattened);
 
   return mapChartEnergyCategoriesResponse(dynamicChartEnergyCategoriesResponse);
 };

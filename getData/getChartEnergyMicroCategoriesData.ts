@@ -1,12 +1,11 @@
 import {
+  BasketProduct,
   ChartEnergyCategoriesData,
   ChartEnergyCategoriesResponse,
   LanguageOptions,
   MicroCategory,
   Product,
-  SelectedBasketIds,
 } from "@/types/types";
-import { getBasketProducts } from "./getBasketProducts";
 
 const aggregateMicroCategories = (
   products: Product[],
@@ -16,13 +15,13 @@ const aggregateMicroCategories = (
 
   products.forEach((product) => {
     const { dietCoachCategoryL1, nutrients } = product;
-    const { salt, sugar, saturatedFats } = nutrients;
+    const { salt, sugars: sugar, saturatedFats } = nutrients;
     const categoryName = dietCoachCategoryL1.de;
 
     if (!categories[categoryName]) {
       categories[categoryName] = {
         name: dietCoachCategoryL1,
-        values: { percentage: 0 },
+        grams: 0,
       };
     }
 
@@ -39,12 +38,10 @@ const aggregateMicroCategories = (
         break;
     }
 
-    categories[categoryName].values.percentage += value;
+    categories[categoryName].grams += value;
   });
 
-  return Object.values(categories).sort(
-    (a, b) => b.values.percentage - a.values.percentage
-  );
+  return Object.values(categories).sort((a, b) => b.grams - a.grams);
 };
 
 const mapChartEnergyMicroCategoriesResponse = (
@@ -53,27 +50,25 @@ const mapChartEnergyMicroCategoriesResponse = (
 ): ChartEnergyCategoriesData[] => {
   // Calculate the total grams for the selected micro across all categories
   const totalGrams = chartMicroCategoriesResponse.reduce(
-    (sum, item) => sum + item.values.percentage,
+    (sum, item) => sum + (item.grams || 0),
     0
   );
 
   // Map the response to include percentage instead of grams
   return chartMicroCategoriesResponse.map((item) => ({
     name: item.name[language],
-    value: totalGrams > 0 ? (item.values.percentage / totalGrams) * 100 : 0, // Calculate the percentage
+    value: totalGrams > 0 ? (item.grams / totalGrams) * 100 : 0, // Calculate the percentage
   }));
 };
 
 export const getChartEnergyMicroCategoriesData = (
-  selectedBasketIds: SelectedBasketIds, // API body parameter
+  products: BasketProduct[],
   selectedMicro: MicroCategory // Client side selection
 ): ChartEnergyCategoriesData[] => {
-  const basketProductsResponse = getBasketProducts(selectedBasketIds);
-
-  const products = basketProductsResponse.flatMap((basket) => basket.products);
+  const productsFlattened = products.flatMap((basket) => basket.products);
 
   const dynamicChartEnergyMicroCategoriesResponse = aggregateMicroCategories(
-    products,
+    productsFlattened,
     selectedMicro
   );
 

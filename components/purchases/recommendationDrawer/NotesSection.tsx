@@ -3,7 +3,7 @@ export default function NotesSection({
   notes,
   setNotes,
 }: {
-  notes: string;
+  notes: string | null;
   setNotes: (notes: string) => void;
 }) {
   return (
@@ -16,7 +16,7 @@ export default function NotesSection({
           id="comment"
           name="comment"
           rows={4}
-          value={notes}
+          value={notes || ""}
           onChange={(e) => setNotes(e.target.value)}
           className="block w-full rounded-md py-1.5 text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:ring-primary focus:border-primary sm:text-sm"
         />

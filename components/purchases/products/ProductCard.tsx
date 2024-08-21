@@ -7,7 +7,7 @@ import { CakeIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
 const ProductCard = ({ product }: { product: BasketProductFlat }) => {
-  const uniqueId = `${product.basketId},${product.productId}`;
+  const uniqueId = `${product.basketId},${product.gtin}`;
 
   const {
     selectedBasketProductIds,
@@ -16,9 +16,9 @@ const ProductCard = ({ product }: { product: BasketProductFlat }) => {
     setSelectedBasketProductsFlat,
   } = useCounterStore((state) => state);
 
-  const isProductSelected = (productId: number, basketId: string) =>
+  const isProductSelected = (gtin: number, basketId: string) =>
     selectedBasketProductIds.some(
-      (item) => item.productId === productId && item.basketId === basketId
+      (item) => item.gtin === gtin && item.basketId === basketId
     );
 
   const handleProductCheckboxChange = (
@@ -26,13 +26,13 @@ const ProductCard = ({ product }: { product: BasketProductFlat }) => {
   ) => {
     if (
       isProductSelected(
-        selectedBasketProductId.productId,
+        selectedBasketProductId.gtin,
         selectedBasketProductId.basketId
       )
     ) {
       const newSelectedBasketProductIds = selectedBasketProductIds.filter(
         (product) =>
-          product.productId !== selectedBasketProductId.productId &&
+          product.gtin !== selectedBasketProductId.gtin &&
           product.basketId !== selectedBasketProductId.basketId
       );
 
@@ -40,7 +40,7 @@ const ProductCard = ({ product }: { product: BasketProductFlat }) => {
 
       const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
         (product) =>
-          product.productId !== selectedBasketProductId.productId &&
+          product.gtin !== selectedBasketProductId.gtin &&
           product.basketId !== selectedBasketProductId.basketId
       );
 
@@ -62,7 +62,7 @@ const ProductCard = ({ product }: { product: BasketProductFlat }) => {
     }
   };
 
-  const selected = isProductSelected(product.productId, product.basketId);
+  const selected = isProductSelected(product.gtin, product.basketId);
 
   return (
     <li
@@ -85,7 +85,7 @@ const ProductCard = ({ product }: { product: BasketProductFlat }) => {
             selected ? "text-white" : "text-gray-900"
           )}
         >
-          {product.de.name}
+          {product.name}
         </p>
         <p
           className={classNames(
@@ -93,7 +93,7 @@ const ProductCard = ({ product }: { product: BasketProductFlat }) => {
             selected ? "text-white" : "text-gray-500"
           )}
         >
-          {product.nutriScoreV2023Detail.nutriScoreCalculated}
+          {product.nutrients.nutriScore}
         </p>
       </div>
       <input
@@ -103,7 +103,7 @@ const ProductCard = ({ product }: { product: BasketProductFlat }) => {
         onChange={() =>
           handleProductCheckboxChange({
             basketId: product.basketId,
-            productId: product.productId,
+            gtin: product.gtin,
           })
         }
       />

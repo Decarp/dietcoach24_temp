@@ -1,13 +1,20 @@
+"use client";
+
 import DiffDot from "@/components/charts/DiffDot";
 import { NutriScoreTable } from "@/components/charts/NutriScoreTable";
-import AnalysisHeader from "@/components/purchases/analysis/AnalysisHeader";
+import AnalysisHeader from "@/components/progress/analysis/AnalysisHeader";
+import { Spinner } from "@/components/Spinner";
 import { getChartEnergyCategoriesData } from "@/getData/getChartEnergyCategoriesData";
 import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";
 import { getChartEnergyMacroData } from "@/getData/getChartEnergyMacroData";
 import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicroCategoriesData";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { BasketProduct } from "@/types/types";
+import { fetchBasketProducts } from "@/utils/fetchBasketProducts";
 import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { useQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 const ChartEnergyMacro = dynamic(
@@ -36,6 +43,9 @@ const ChartEnergyMicroCategories = dynamic(
 );
 
 const Analysis = () => {
+  const pathname = usePathname();
+  const patientId = pathname.split("/")[2];
+
   const {
     selectedBasketIds,
     selectedComparisonBasketIds,
@@ -48,6 +58,26 @@ const Analysis = () => {
     setSelectedCategories,
   } = useCounterStore((state) => state);
 
+  console.log(selectedBasketIds);
+
+  const {
+    isLoading: isLoadingBasketProductsComparisonNew,
+    data: basketProductsComparisonNew,
+  } = useQuery<BasketProduct[]>({
+    queryKey: ["basketProductsComparisonNew", selectedBasketIds],
+    queryFn: () => fetchBasketProducts(patientId, selectedBasketIds),
+    enabled: selectedBasketIds.length > 0,
+  });
+
+  const {
+    isLoading: isLoadingBasketProductsComparisonOld,
+    data: basketProductsComparisonOld,
+  } = useQuery<BasketProduct[]>({
+    queryKey: ["basketProductsComparisonOld", selectedBasketIds],
+    queryFn: () => fetchBasketProducts(patientId, selectedComparisonBasketIds),
+    enabled: selectedComparisonBasketIds.length > 0,
+  });
+
   const [percentageDifferencePrimary, setPercentageDifferencePrimary] =
     useState<number | null>(null);
 
@@ -55,44 +85,62 @@ const Analysis = () => {
     useState<number | null>(null);
 
   const chartEnergyMacroData = useMemo(() => {
-    return getChartEnergyMacroData(selectedBasketIds);
-  }, [selectedBasketIds]);
+    return getChartEnergyMacroData(basketProductsComparisonNew || []);
+  }, [basketProductsComparisonNew]);
 
   const chartComparisonEnergyMacroData = useMemo(() => {
-    return getChartEnergyMacroData(selectedComparisonBasketIds);
-  }, [selectedComparisonBasketIds]);
+    return getChartEnergyMacroData(basketProductsComparisonOld || []);
+  }, [basketProductsComparisonOld]);
 
   const chartEnergyCategoriesData = useMemo(() => {
-    const data = getChartEnergyCategoriesData(selectedBasketIds);
+    const data = getChartEnergyCategoriesData(
+      basketProductsComparisonNew || []
+    );
     return data.sort((a, b) => a.name.localeCompare(b.name));
-  }, [selectedBasketIds]);
+  }, [basketProductsComparisonNew]);
 
   const chartComparisonEnergyCategoriesData = useMemo(() => {
-    const data = getChartEnergyCategoriesData(selectedComparisonBasketIds);
+    const data = getChartEnergyCategoriesData(
+      basketProductsComparisonOld || []
+    );
     return data.sort((a, b) => a.name.localeCompare(b.name));
-  }, [selectedComparisonBasketIds]);
+  }, [basketProductsComparisonOld]);
 
   const chartEnergyMacroCategoriesData = useMemo(() => {
-    return getChartEnergyMacroCategoriesData(selectedBasketIds, selectedMacro);
-  }, [selectedBasketIds, selectedMacro]);
+    return getChartEnergyMacroCategoriesData(
+      basketProductsComparisonNew || [],
+      selectedMacro
+    );
+  }, [basketProductsComparisonNew, selectedMacro]);
 
   const chartComparisonEnergyMacroCategoriesData = useMemo(() => {
     return getChartEnergyMacroCategoriesData(
-      selectedComparisonBasketIds,
+      basketProductsComparisonOld || [],
       selectedMacro
     );
-  }, [selectedComparisonBasketIds, selectedMacro]);
+  }, [basketProductsComparisonOld, selectedMacro]);
 
   const chartEnergyMicroCategoriesData = useMemo(() => {
-    return getChartEnergyMicroCategoriesData(selectedBasketIds, selectedMicro);
-  }, [selectedBasketIds, selectedMicro]);
+    return getChartEnergyMicroCategoriesData(
+      basketProductsComparisonNew || [],
+      selectedMicro
+    );
+  }, [basketProductsComparisonNew, selectedMicro]);
 
   const chartComparisonEnergyMicroCategoriesData = useMemo(() => {
     return getChartEnergyMicroCategoriesData(
-      selectedComparisonBasketIds,
+      basketProductsComparisonOld || [],
       selectedMicro
     );
-  }, [selectedComparisonBasketIds, selectedMicro]);
+  }, [basketProductsComparisonOld, selectedMicro]);
+
+  // const nutriScoreDataNew = useMemo(() => {
+  //   return getNutriScoreData(basketProductsComparisonNew || []);
+  // }, [basketProductsComparisonNew]);
+
+  // const nutriScoreTableDataOld = useMemo(() => {
+  //   return getNutriScoreData(basketProductsComparisonOld || []);
+  // }, [basketProductsComparisonOld]);
 
   // Auto-set default category based on current tab
   useEffect(() => {
@@ -254,8 +302,24 @@ const Analysis = () => {
     <div className="-mr-8 border-x border-gray-300 pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
       <AnalysisHeader />
       <div className="shadow-inner -mx-6">
-        <div className="flex-1 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
-          {selectedBasketIds.length > 0 ? (
+        {/* TODO: Add color legend for "Woche -16 bis -8" in secondary and "Woche -8 bis heute" in primary */}
+        <div className="flex justify-end px-10 pt-6 -mb-2">
+          <div className="flex items-center">
+            <div className="rounded-sm w-4 h-4 bg-secondary border-secondary border-4 mr-2"></div>
+            <span className="text-sm text-gray-700">Woche -16 bis -8</span>
+          </div>
+          <div className="flex items-center ml-6">
+            <div className="rounded-sm w-4 h-4 bg-primary border-primary border-4 mr-2"></div>
+            <span className="text-sm text-gray-700">Woche -8 bis heute</span>
+          </div>
+        </div>
+
+        <div className="flex-1 max-h-[calc(100vh-348px)] overflow-y-auto pb-6 px-6">
+          {isLoadingBasketProductsComparisonNew &&
+            isLoadingBasketProductsComparisonOld && <Spinner />}
+          {!isLoadingBasketProductsComparisonNew &&
+          !isLoadingBasketProductsComparisonOld &&
+          selectedBasketIds.length > 0 ? (
             <>
               {currentTab === "energy" && (
                 <>
@@ -343,34 +407,37 @@ const Analysis = () => {
                   </div>
                 </>
               )}
-              {currentTab === "nutri" && (
+              {/* {currentTab === "nutri" && (
                 <>
                   <br />
                   <h4 className="text-lg font-medium mb-2">Nutri-Score</h4>
                   <div className="flex items-center justify-between">
-                    <NutriScoreTable />
+                    <NutriScoreTable data={nutriScoreDataOld} />
                     <DiffDot
                       percentageDifference={percentageDifferenceSecondary}
                     />
-                    <NutriScoreTable />
+                    <NutriScoreTable data={nutriScoreDataNew} />
                   </div>
                 </>
-              )}
+              )} */}
             </>
           ) : (
-            <div className="flex mt-6 px-4">
-              <ArrowLeftIcon className="ml-3 h-12 w-12 text-gray-400 mr-6 flex-shrink-0" />
-              <div className="text-center">
-                <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
-                <h3 className="mt-2 text-sm font-semibold text-gray-900">
-                  Keine Einkäufe ausgewählt
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Bitte wählen Sie mindestens einen Einkauf aus, um Analysen
-                  anzuzeigen.
-                </p>
+            !isLoadingBasketProductsComparisonNew &&
+            !isLoadingBasketProductsComparisonOld && (
+              <div className="flex mt-6 px-4">
+                <ArrowLeftIcon className="ml-3 h-12 w-12 text-gray-400 mr-6 flex-shrink-0" />
+                <div className="text-center">
+                  <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
+                  <h3 className="mt-2 text-sm font-semibold text-gray-900">
+                    Keine Einkäufe ausgewählt
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Bitte wählen Sie mindestens einen Einkauf aus, um Analysen
+                    anzuzeigen.
+                  </p>
+                </div>
               </div>
-            </div>
+            )
           )}
         </div>
       </div>

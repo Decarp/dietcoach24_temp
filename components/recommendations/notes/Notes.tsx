@@ -16,7 +16,7 @@ const Notes = () => {
   };
 
   return (
-    <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-300 lg:w-64 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-183px)]">
+    <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-300 lg:w-64 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-185px)]">
       <NotesHeader />
       <div className="ml-6">
         <div className="sm:hidden">
@@ -65,7 +65,7 @@ const Notes = () => {
             name="comment"
             rows={4}
             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-            defaultValue={""}
+            defaultValue={"[ Not yet implemented ]"}
           />
         </div>
       </div>

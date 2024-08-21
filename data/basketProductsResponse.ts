@@ -7,7 +7,7 @@ export const basketProductsResponse = [
     avgFsaScore: 3,
     products: [
       {
-        productId: 1,
+        gtin: 1,
         de: {
           name: "Tiefkühlpizza",
         },
@@ -38,7 +38,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 26,
+        gtin: 26,
         de: {
           name: "Salat",
         },
@@ -78,7 +78,7 @@ export const basketProductsResponse = [
     avgFsaScore: 4,
     products: [
       {
-        productId: 2,
+        gtin: 2,
         de: {
           name: "Orangensaft",
         },
@@ -109,7 +109,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 27,
+        gtin: 27,
         de: {
           name: "Mineralwasser",
         },
@@ -149,7 +149,7 @@ export const basketProductsResponse = [
     avgFsaScore: 2,
     products: [
       {
-        productId: 3,
+        gtin: 3,
         de: {
           name: "Kartoffeln",
         },
@@ -180,7 +180,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 28,
+        gtin: 28,
         de: {
           name: "Vollkornnudeln",
         },
@@ -220,7 +220,7 @@ export const basketProductsResponse = [
     avgFsaScore: 3,
     products: [
       {
-        productId: 4,
+        gtin: 4,
         de: {
           name: "Käse",
         },
@@ -251,7 +251,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 5,
+        gtin: 5,
         de: {
           name: "Brot",
         },
@@ -282,7 +282,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 29,
+        gtin: 29,
         de: {
           name: "Joghurt",
         },
@@ -322,7 +322,7 @@ export const basketProductsResponse = [
     avgFsaScore: 1,
     products: [
       {
-        productId: 6,
+        gtin: 6,
         de: {
           name: "Äpfel",
         },
@@ -353,7 +353,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 30,
+        gtin: 30,
         de: {
           name: "Orangensaft",
         },
@@ -393,7 +393,7 @@ export const basketProductsResponse = [
     avgFsaScore: 2,
     products: [
       {
-        productId: 7,
+        gtin: 7,
         de: {
           name: "Tomaten",
         },
@@ -424,7 +424,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 31,
+        gtin: 31,
         de: {
           name: "Vollkornbrot",
         },
@@ -464,7 +464,7 @@ export const basketProductsResponse = [
     avgFsaScore: 3,
     products: [
       {
-        productId: 8,
+        gtin: 8,
         de: {
           name: "Müsli",
         },
@@ -495,7 +495,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 32,
+        gtin: 32,
         de: {
           name: "Banane",
         },
@@ -535,7 +535,7 @@ export const basketProductsResponse = [
     avgFsaScore: 1,
     products: [
       {
-        productId: 9,
+        gtin: 9,
         de: {
           name: "Kiwis",
         },
@@ -566,7 +566,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 33,
+        gtin: 33,
         de: {
           name: "Mandeln",
         },
@@ -606,7 +606,7 @@ export const basketProductsResponse = [
     avgFsaScore: 2,
     products: [
       {
-        productId: 10,
+        gtin: 10,
         de: {
           name: "Karotten",
         },
@@ -637,7 +637,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 34,
+        gtin: 34,
         de: {
           name: "Hummus",
         },
@@ -677,7 +677,7 @@ export const basketProductsResponse = [
     avgFsaScore: 3,
     products: [
       {
-        productId: 11,
+        gtin: 11,
         de: {
           name: "Joghurt",
         },
@@ -708,7 +708,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 35,
+        gtin: 35,
         de: {
           name: "Cheddar Käse",
         },
@@ -748,7 +748,7 @@ export const basketProductsResponse = [
     avgFsaScore: 2,
     products: [
       {
-        productId: 12,
+        gtin: 12,
         de: {
           name: "Trauben",
         },
@@ -779,7 +779,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 36,
+        gtin: 36,
         de: {
           name: "Wassermelone",
         },
@@ -819,7 +819,7 @@ export const basketProductsResponse = [
     avgFsaScore: 2,
     products: [
       {
-        productId: 13,
+        gtin: 13,
         de: {
           name: "Zucchini",
         },
@@ -850,7 +850,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 37,
+        gtin: 37,
         de: {
           name: "Aubergine",
         },
@@ -890,7 +890,7 @@ export const basketProductsResponse = [
     avgFsaScore: 2,
     products: [
       {
-        productId: 14,
+        gtin: 14,
         de: {
           name: "Hähnchenbrust",
         },
@@ -921,7 +921,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 38,
+        gtin: 38,
         de: {
           name: "Lachsfilet",
         },
@@ -961,7 +961,7 @@ export const basketProductsResponse = [
     avgFsaScore: 1,
     products: [
       {
-        productId: 15,
+        gtin: 15,
         de: {
           name: "Bananen",
         },
@@ -992,7 +992,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 39,
+        gtin: 39,
         de: {
           name: "Erdnussbutter",
         },
@@ -1032,7 +1032,7 @@ export const basketProductsResponse = [
     avgFsaScore: 2,
     products: [
       {
-        productId: 16,
+        gtin: 16,
         de: {
           name: "Paprika",
         },
@@ -1063,7 +1063,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 40,
+        gtin: 40,
         de: {
           name: "Kichererbsen",
         },
@@ -1103,7 +1103,7 @@ export const basketProductsResponse = [
     avgFsaScore: 3,
     products: [
       {
-        productId: 17,
+        gtin: 17,
         de: {
           name: "Quark",
         },
@@ -1134,7 +1134,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 41,
+        gtin: 41,
         de: {
           name: "Eier",
         },
@@ -1174,7 +1174,7 @@ export const basketProductsResponse = [
     avgFsaScore: 3,
     products: [
       {
-        productId: 18,
+        gtin: 18,
         de: {
           name: "Apfelsaft",
         },
@@ -1205,7 +1205,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 19,
+        gtin: 19,
         de: {
           name: "Erdbeeren",
         },
@@ -1236,7 +1236,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 20,
+        gtin: 20,
         de: {
           name: "Kürbis",
         },
@@ -1276,7 +1276,7 @@ export const basketProductsResponse = [
     avgFsaScore: 2,
     products: [
       {
-        productId: 21,
+        gtin: 21,
         de: {
           name: "Spinat",
         },
@@ -1307,7 +1307,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 22,
+        gtin: 22,
         de: {
           name: "Bohnen",
         },
@@ -1338,7 +1338,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 23,
+        gtin: 23,
         de: {
           name: "Hirse",
         },
@@ -1378,7 +1378,7 @@ export const basketProductsResponse = [
     avgFsaScore: 2,
     products: [
       {
-        productId: 24,
+        gtin: 24,
         de: {
           name: "Kiwis",
         },
@@ -1409,7 +1409,7 @@ export const basketProductsResponse = [
         imageUrl: "",
       },
       {
-        productId: 25,
+        gtin: 25,
         de: {
           name: "Linsensuppe",
         },

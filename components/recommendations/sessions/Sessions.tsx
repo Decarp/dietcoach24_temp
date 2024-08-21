@@ -1,18 +1,22 @@
-import { getBaskets } from "@/getData/getBaskets";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { Sessions } from "@/types/types";
 import { classNames } from "@/utils/classNames";
+import { fetchSessions } from "@/utils/fetchSessions";
 import { formatDate } from "@/utils/formatDate";
-import { mapBasketsResponse } from "@/utils/mapBasketsResponse";
-import {
-  PencilSquareIcon,
-  ShoppingCartIcon,
-} from "@heroicons/react/24/outline";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
 import SessionsHeader from "./SessionsHeader";
-import { useState } from "react";
-import { getSessions } from "@/getData/getSessions";
 
-const Sessions = () => {
-  const sessionsResponse = getSessions();
+const SessionsComp = () => {
+  const pathname = usePathname();
+  const patientId = pathname.split("/")[2];
+
+  // Fetch existing sessions
+  const { data: sessions, refetch } = useQuery<Sessions>({
+    queryKey: ["sessions", patientId],
+    queryFn: () => fetchSessions(patientId),
+  });
 
   const { selectedSessionId, setSelectedSessionId } = useCounterStore(
     (state) => state
@@ -23,12 +27,12 @@ const Sessions = () => {
   };
 
   return (
-    <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-300 xl:w-64 xl:shrink-0 h-[calc(100vh-183px)]">
+    <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-300 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)]">
       <SessionsHeader />
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
         <ul aria-label="Sessions List" className="overflow-y-auto">
-          {sessionsResponse.map((session) => (
+          {sessions?.map((session) => (
             <li
               key={session.sessionId}
               className={classNames(
@@ -82,4 +86,4 @@ const Sessions = () => {
   );
 };
 
-export default Sessions;
+export default SessionsComp;

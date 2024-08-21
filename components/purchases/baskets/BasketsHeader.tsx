@@ -1,8 +1,17 @@
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { classNames } from "@/utils/classNames";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
-const BasketsHeader = ({ baskets }: { baskets: any }) => {
+const BasketsHeader = ({
+  baskets,
+  areLastNWeeksSelected,
+  selectLastNWeeks,
+}: {
+  baskets: any;
+  areLastNWeeksSelected: () => boolean;
+  selectLastNWeeks: () => void;
+}) => {
   const { selectedBasketIds } = useCounterStore((state) => state);
 
   const calculateStats = () => {
@@ -32,7 +41,7 @@ const BasketsHeader = ({ baskets }: { baskets: any }) => {
   const { numBaskets, numProducts, avgNutriScore } = calculateStats();
 
   return (
-    <div className="mb-4">
+    <div className="border-b border-gray-300 pb-[17px]">
       <h2 className="pl-8 text-xl font-semibold">Einkäufe</h2>
       <div className="flex items-center pl-8 relative">
         <h3 className="text-xs font-light text-gray-500">
@@ -46,6 +55,17 @@ const BasketsHeader = ({ baskets }: { baskets: any }) => {
           </div>
         </div>
       </div>
+      <button
+        className={classNames(
+          "mt-1.5 ml-8 text-sm px-2 py-1 rounded-md border border-gray-300",
+          areLastNWeeksSelected()
+            ? "bg-primary text-white"
+            : "bg-gray-100 text-gray-500"
+        )}
+        onClick={selectLastNWeeks}
+      >
+        Neueste {8} Wochen wählen
+      </button>
     </div>
   );
 };

@@ -1,62 +1,70 @@
 import {
+  BasketProduct,
   ChartEnergyMacroData,
   ChartEnergyMacroResponse,
   LanguageOptions,
   Product,
-  SelectedBasketIds,
 } from "@/types/types";
-import { getBasketProducts } from "./getBasketProducts";
 
 const aggregateMacros = (products: Product[]): ChartEnergyMacroResponse[] => {
   const macros = {
-    Carbohydrates: { de: "Kohlenhydrate", en: "Carbohydrates", percentage: 0 },
-    Fats: { de: "Fette", en: "Fats", percentage: 0 },
-    Proteins: { de: "Proteine", en: "Proteins", percentage: 0 },
-    Other: { de: "Weitere Nährstoffe", en: "Other Nutrients", percentage: 0 },
+    Carbohydrates: { de: "Kohlenhydrate", en: "Carbohydrates", grams: 0 },
+    Fats: { de: "Fette", en: "Fats", grams: 0 },
+    Proteins: { de: "Proteine", en: "Proteins", grams: 0 },
+    Other: { de: "Weitere Nährstoffe", en: "Other Nutrients", grams: 0 },
   };
 
   products.forEach((product) => {
     const { nutrients } = product;
-    const { carbohydrates, fats, proteins, fibers } = nutrients;
+
+    // Default to 0 if nutrients or any of the values are undefined or null
+    const carbohydrates = nutrients?.carbohydrates || 0;
+    const fats = nutrients?.fats || 0;
+    const proteins = nutrients?.proteins || 0;
+    const fibers = nutrients?.fibres || 0;
 
     // Accumulate grams for each macro nutrient
-    macros.Carbohydrates.percentage += carbohydrates;
-    macros.Fats.percentage += fats;
-    macros.Proteins.percentage += proteins;
-    macros.Other.percentage += fibers; // assuming fibers contribute to "Other" in grams
+    macros.Carbohydrates.grams += carbohydrates;
+    macros.Fats.grams += fats;
+    macros.Proteins.grams += proteins;
+    macros.Other.grams += fibers; // assuming fibers contribute to "Other" in grams
   });
 
-  return Object.values(macros).map(({ de, en, percentage }) => ({
+  const toReturn = Object.values(macros).map(({ de, en, grams }) => ({
     name: { de, en },
-    values: { percentage },
+    grams,
   }));
+
+  return toReturn;
 };
 
 const mapChartEnergyMacroResponse = (
   chartMacroResponse: ChartEnergyMacroResponse[],
   language: LanguageOptions = "de"
 ): ChartEnergyMacroData[] => {
-  // Calculate the total grams across all macros
+  // Calculate the total grams across all macros, ensure it's a valid number
   const totalGrams = chartMacroResponse.reduce(
-    (sum, item) => sum + item.values.percentage,
+    (sum, item) => sum + (item.grams || 0),
     0
   );
 
   // Map the response to include percentage instead of grams
-  return chartMacroResponse.map((item) => ({
+  const toReturn = chartMacroResponse.map((item) => ({
     name: item.name[language],
-    value: totalGrams > 0 ? (item.values.percentage / totalGrams) * 100 : 0, // Calculate the percentage
+    value: totalGrams > 0 ? (item.grams / totalGrams) * 100 : 0, // Calculate the percentage
   }));
+
+  return toReturn;
 };
 
 export const getChartEnergyMacroData = (
-  selectedBasketIds: SelectedBasketIds // API body parameter
+  products: BasketProduct[]
 ): ChartEnergyMacroData[] => {
-  const basketProductsResponse = getBasketProducts(selectedBasketIds);
+  const productsFlattened = products.flatMap((basket) => basket.products);
 
-  const products = basketProductsResponse.flatMap((basket) => basket.products);
+  const dynamicChartEnergyMacroResponse = aggregateMacros(productsFlattened);
 
-  const dynamicChartEnergyMacroResponse = aggregateMacros(products);
+  const toReturn = mapChartEnergyMacroResponse(dynamicChartEnergyMacroResponse);
 
-  return mapChartEnergyMacroResponse(dynamicChartEnergyMacroResponse);
+  return toReturn;
 };

@@ -6,7 +6,6 @@ const tabs = [
   { name: "Energieverteilung", path: "energy" },
   { name: "Makronährstoffe", path: "macro" },
   { name: "Weitere Nährstoffe", path: "micro" },
-  { name: "Nutri-Score", path: "nutri" },
 ];
 
 const AnalysisHeader = () => {

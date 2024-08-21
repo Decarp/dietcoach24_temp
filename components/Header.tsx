@@ -44,7 +44,7 @@ export default function Header({ children }: { children: ReactNode }) {
     <>
       <div className="min-h-full">
         <Disclosure as="nav">
-          <div className="bg-white border-x border-b border-gray-300 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="bg-white border-x border-b border-t border-gray-300 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <Link className="flex flex-shrink-0 items-center" href="/">

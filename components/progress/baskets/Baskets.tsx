@@ -1,54 +1,111 @@
-import { useEffect, useRef } from "react";
-import { getBaskets } from "@/getData/getBaskets";
+"use client";
+
+import { Error } from "@/components/Error";
+import { Spinner } from "@/components/Spinner";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { Basket, Patient, Sessions } from "@/types/types";
 import { classNames } from "@/utils/classNames";
+import { fetchBaskets } from "@/utils/fetchBaskets";
+import { fetchPatient } from "@/utils/fetchPatient";
+import { fetchSessions } from "@/utils/fetchSessions";
 import { formatDate } from "@/utils/formatDate";
+import { getBasketTimestamps } from "@/utils/getBasketTimestamps";
 import { mapBasketsResponse } from "@/utils/mapBasketsResponse";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { useQuery } from "@tanstack/react-query";
+import { fromUnixTime, isAfter, max, subWeeks } from "date-fns";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef } from "react";
 import BasketsHeader from "./BasketsHeader";
-import { parse } from "date-fns";
-import { de } from "date-fns/locale";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 
 const Baskets = () => {
-  const basketsResponse = getBaskets();
-  const baskets = mapBasketsResponse(basketsResponse);
+  const pathname = usePathname();
+  const patientId = pathname.split("/")[2];
+  const initialized = useRef(false);
+  const weeksToSelect = 8;
 
   const {
     selectedBasketIds,
     setSelectedBasketIds,
-    selectedComparisonBasketIds,
-    setSelectedComparisonBasketIds,
     selectedBasketProductIds,
     setSelectedBasketProductIds,
+    selectedComparisonBasketIds,
+    setSelectedComparisonBasketIds,
   } = useCounterStore((state) => state);
 
-  const initialized = useRef(false);
+  const { data: patient } = useQuery<Patient>({
+    queryKey: ["participant", patientId],
+    queryFn: () => fetchPatient(patientId),
+  });
+
+  const { data: sessions } = useQuery<Sessions>({
+    queryKey: ["sessions", patientId],
+    queryFn: () => fetchSessions(patientId),
+  });
+
+  const { startTimestamp, endTimestamp } = getBasketTimestamps(
+    patient,
+    sessions
+  );
+
+  const { isLoading, error, data } = useQuery<Basket[]>({
+    queryKey: ["baskets", patientId, startTimestamp, endTimestamp],
+    queryFn: () => fetchBaskets(patientId, startTimestamp, endTimestamp || ""),
+  });
+
+  const baskets = data ? mapBasketsResponse(data) : {};
+
+  const selectLastNWeeks = useCallback(() => {
+    if (Object.keys(baskets).length > 0) {
+      const allDates = Object.values(baskets)
+        .flat()
+        .map((basket: Basket) => fromUnixTime(basket.timestamp));
+
+      const latestDate = max(allDates);
+      const dateMinus8Weeks = subWeeks(latestDate, weeksToSelect);
+      const dateMinus16Weeks = subWeeks(latestDate, weeksToSelect * 2);
+
+      const selectedBaskets = Object.values(baskets)
+        .flat()
+        .filter((basket: Basket) =>
+          isAfter(fromUnixTime(basket.timestamp), dateMinus8Weeks)
+        )
+        .map((basket: Basket) => basket.basketId);
+
+      const comparisonBaskets = Object.values(baskets)
+        .flat()
+        .filter(
+          (basket: Basket) =>
+            isAfter(fromUnixTime(basket.timestamp), dateMinus16Weeks) &&
+            !isAfter(fromUnixTime(basket.timestamp), dateMinus8Weeks)
+        )
+        .map((basket: Basket) => basket.basketId);
+
+      if (
+        selectedBaskets.length === selectedBasketIds.length &&
+        selectedBaskets.every((id) => selectedBasketIds.includes(id))
+      ) {
+        setSelectedBasketIds([]);
+      } else {
+        setSelectedBasketIds(selectedBaskets);
+      }
+
+      setSelectedComparisonBasketIds(comparisonBaskets);
+    }
+  }, [
+    baskets,
+    selectedBasketIds,
+    setSelectedBasketIds,
+    setSelectedComparisonBasketIds,
+    weeksToSelect,
+  ]);
 
   useEffect(() => {
-    if (!initialized.current) {
-      const sortedMonths = Object.keys(baskets).sort((a, b) => {
-        const dateA = parse(a, "MMMM yyyy", new Date(), {
-          locale: de,
-        }).getTime();
-        const dateB = parse(b, "MMMM yyyy", new Date(), {
-          locale: de,
-        }).getTime();
-        return dateB - dateA;
-      });
-
-      const latestMonth = sortedMonths[0];
-      const secondLatestMonth = sortedMonths[1];
-      const latestMonthBasketIds = baskets[latestMonth].map(
-        (basket: any) => basket.basketId
-      );
-      const secondLatestMonthBasketIds = baskets[secondLatestMonth].map(
-        (basket: any) => basket.basketId
-      );
-      setSelectedBasketIds(latestMonthBasketIds);
-      setSelectedComparisonBasketIds(secondLatestMonthBasketIds);
+    if (!initialized.current && Object.keys(baskets).length > 0) {
+      selectLastNWeeks();
       initialized.current = true;
     }
-  }, [baskets, setSelectedBasketIds]);
+  }, [baskets, selectLastNWeeks]);
 
   const handleBasketCheckboxChange = (basketId: string) => {
     if (selectedBasketIds.includes(basketId)) {
@@ -136,7 +193,7 @@ const Baskets = () => {
   };
 
   return (
-    <div className="pt-6 -ml-8 bg-white border-l flex flex-col border-b border-gray-300 xl:w-64 xl:shrink-0 h-[calc(100vh-183px)]">
+    <div className="pt-6 -ml-8 bg-white border-l flex flex-col border-b border-gray-300 xl:w-64 xl:shrink-0 h-[calc(100vh-184px)]">
       <BasketsHeader baskets={baskets} />
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
@@ -157,22 +214,22 @@ const Baskets = () => {
                     <h3>{letter}</h3>
                     <div className="flex flex-row gap-x-2">
                       <input
-                        type="checkbox"
-                        className=" h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                        checked={allSelected}
-                        onChange={(e) =>
-                          handleSelectAllChange(letter, e.target.checked)
-                        }
-                      />
-                      <input
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-secondary focus:ring-primary"
+                        type="radio"
+                        className="h-4 w-4 rounded-full border-secondary border-2 text-secondary focus:ring-primary"
                         checked={allSelectedForComparison}
                         onChange={(e) =>
                           handleSelectAllForComparisonChange(
                             letter,
                             e.target.checked
                           )
+                        }
+                      />
+                      <input
+                        type="radio"
+                        className="h-4 w-4 rounded-full border-primary border-2 text-primary focus:ring-primary"
+                        checked={allSelected}
+                        onChange={(e) =>
+                          handleSelectAllChange(letter, e.target.checked)
                         }
                       />
                     </div>
@@ -231,19 +288,19 @@ const Baskets = () => {
                         </div>
                         <div className="flex flex-row gap-x-2">
                           <input
-                            type="checkbox"
-                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                            checked={isSelected}
-                            onChange={() =>
-                              handleBasketCheckboxChange(person.basketId)
-                            }
-                          />
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 rounded border-gray-300 text-secondary focus:ring-secondary"
+                            type="radio"
+                            className="h-4 w-4 rounded-full border-secondary border-2 text-secondary focus:ring-secondary"
                             checked={isSelectedForComparison}
                             onChange={() =>
                               handleComparisonCheckboxChange(person.basketId)
+                            }
+                          />
+                          <input
+                            type="radio"
+                            className="h-4 w-4 rounded-full border-primary border-2 text-primary focus:ring-primary"
+                            checked={isSelected}
+                            onChange={() =>
+                              handleBasketCheckboxChange(person.basketId)
                             }
                           />
                         </div>

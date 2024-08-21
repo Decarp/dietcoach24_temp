@@ -13,15 +13,14 @@ export default function SelectedProductsSection() {
     selectedBasketProductIds,
   } = useCounterStore((state) => state);
 
-  const handleRemoveProduct = (productId: number, basketId: string) => {
+  const handleRemoveProduct = (gtin: number, basketId: string) => {
     const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
-      (product) =>
-        !(product.productId === productId && product.basketId === basketId)
+      (product) => !(product.gtin === gtin && product.basketId === basketId)
     );
     setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
 
     const newSelectedBasketProductIds = selectedBasketProductIds.filter(
-      (id) => !(id.productId === productId && id.basketId === basketId)
+      (id) => !(id.gtin === gtin && id.basketId === basketId)
     );
     setSelectedBasketProductIds(newSelectedBasketProductIds);
   };
@@ -58,18 +57,14 @@ export default function SelectedProductsSection() {
         )}
         {selectedBasketProductsFlat.map((product) => (
           <div
-            key={product.productId}
+            key={product.gtin}
             className="flex items-center space-x-4 justify-between"
           >
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 rounded-md bg-gray-200 flex-shrink-0" />
               <div>
-                <h4 className="text-gray-900 font-semibold">
-                  {product.de.name}
-                </h4>
-                <p className="text-gray-500">
-                  {product.nutriScoreV2023Detail.nutriScoreCalculated}
-                </p>
+                <h4 className="text-gray-900 font-semibold">{product.name}</h4>
+                <p className="text-gray-500">{product.nutrients.nutriScore}</p>
                 <p className="text-gray-500">
                   {product.dietCoachCategoryL1.de}
                 </p>
@@ -78,7 +73,7 @@ export default function SelectedProductsSection() {
             <TrashIcon
               className="h-6 w-6 text-gray-500 hover:text-red-500 cursor-pointer flex-shrink-0"
               onClick={() =>
-                handleRemoveProduct(product.productId, product.basketId)
+                handleRemoveProduct(product.gtin, product.basketId)
               }
             />
           </div>

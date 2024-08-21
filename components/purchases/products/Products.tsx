@@ -1,16 +1,19 @@
-import { getBasketProducts } from "@/getData/getBasketProducts";
 import ProductsHeader from "@/components/purchases/products/ProductsHeader";
+import { Spinner } from "@/components/Spinner";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { BasketProduct, BasketProductFlat } from "@/types/types";
+import { fetchBasketProducts } from "@/utils/fetchBasketProducts";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
+import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import ProductCard from "./ProductCard";
 import RecommendationDrawer from "../recommendationDrawer/RecommendationDrawer";
-import { BasketProductFlat } from "@/types/types";
 import FilterPopover from "./FilterPopover";
+import ProductCard from "./ProductCard";
 import SortMenu from "./SortMenu";
 
 const sortCriteria = [
@@ -38,7 +41,7 @@ const sortProducts = (
       case "Kohlenhydrate":
         return product.nutrients.carbohydrates;
       case "Nahrungsfasern":
-        return product.nutrients.fibers;
+        return product.nutrients.fibres;
       default:
         return product.basketIndex;
     }
@@ -52,30 +55,40 @@ const sortProducts = (
 };
 
 const Products = () => {
-  const [ascending, setAscending] = useState(true);
+  const pathname = usePathname();
+  const patientId = pathname.split("/")[2];
+
+  const [ascending, setAscending] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const {
     selectedBasketIds,
+    availableCategories,
     selectedCategories,
     selectedSortCriteria,
     setSelectedSortCriteria,
+    basketProducts,
     basketProductsFlat,
     setBasketProductsFlat,
     updateCategories,
   } = useCounterStore((state) => state);
 
-  const basketProductsResponse = getBasketProducts(selectedBasketIds);
+  const { isLoading, error, data } = useQuery<BasketProduct[]>({
+    queryKey: ["basketProducts", selectedBasketIds],
+    queryFn: () => fetchBasketProducts(patientId, selectedBasketIds),
+    enabled: selectedBasketIds.length > 0,
+  });
 
-  const newBasketProductsFlat: BasketProductFlat[] =
-    basketProductsResponse.flatMap((basket) => {
+  const newBasketProductsFlat: BasketProductFlat[] = basketProducts.flatMap(
+    (basket) => {
       return basket.products.map((product) => ({
         basketId: basket.basketId,
         basketIndex: basket.index,
         basketTimestamp: basket.timestamp,
         ...product,
       }));
-    });
+    }
+  );
 
   useEffect(() => {
     if (
@@ -105,19 +118,6 @@ const Products = () => {
     ascending
   );
 
-  const availableCategories = {
-    major: Array.from(
-      new Set(
-        basketProductsFlat.map((product) => product.dietCoachCategoryL1.de)
-      )
-    ),
-    sub: Array.from(
-      new Set(
-        basketProductsFlat.map((product) => product.dietCoachCategoryL2.de)
-      )
-    ),
-  };
-
   useEffect(() => {
     if (!sortCriteria.includes(selectedSortCriteria)) {
       setSelectedSortCriteria(selectedSortCriteria);
@@ -137,10 +137,10 @@ const Products = () => {
   }));
 
   return (
-    <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-300 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-183px)]">
+    <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-300 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-185px)]">
       <ProductsHeader products={sortedProducts} />
 
-      <div className="px-6 -mt-2 pb-2 flex gap-x-8 items-center">
+      <div className="border-b border-gray-300 px-6 -mt-[7px] -mr-6 pb-2 flex gap-x-8 items-center">
         <FilterPopover
           categoriesWithSub={categoriesWithSub}
           selectedCategories={selectedCategories}
@@ -167,8 +167,10 @@ const Products = () => {
         </div>
       </div>
 
-      <div className="-mr-6 flex-1 overflow-y-auto min-h-0 min-h-80 shadow-inner">
+      <div className="-mr-6 flex-1 overflow-y-auto min-h-0 min-h-80 shadow-inner border-b border-gray-300">
+        {isLoading && <Spinner />}
         {selectedCategories.major.length === 0 &&
+          !isLoading &&
           selectedCategories.sub.length === 0 && (
             <div className="flex mt-6 px-4">
               <ArrowUpIcon className="ml-3 h-12 w-12 text-gray-400 mr-6 flex-shrink-0" />
@@ -188,25 +190,25 @@ const Products = () => {
           {sortedProducts.map((product) => {
             return (
               <ProductCard
-                key={`${product.basketId},${product.productId}`}
+                key={`${product.basketId},${product.gtin}`}
                 product={product}
               />
             );
           })}
         </ul>
-        {(selectedCategories.major.length !== 0 ||
-          selectedCategories.sub.length !== 0) && (
-          <div className="flex justify-end p-6">
-            <button
-              type="button"
-              onClick={() => handleDrawerOpen(true)}
-              className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-700"
-            >
-              Alternative Produkte empfehlen
-            </button>
-          </div>
-        )}
       </div>
+      {(selectedCategories.major.length !== 0 ||
+        selectedCategories.sub.length !== 0) && (
+        <div className="flex justify-end p-6">
+          <button
+            type="button"
+            onClick={() => handleDrawerOpen(true)}
+            className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-700"
+          >
+            Empfehlung erstellen
+          </button>
+        </div>
+      )}
       <RecommendationDrawer open={drawerOpen} setOpen={handleDrawerOpen} />
     </div>
   );

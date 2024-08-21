@@ -1,8 +1,14 @@
 "use client";
 
+import { Spinner } from "@/components/Spinner";
 import { categories } from "@/data/categories";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { CategorySelection, Product, Products } from "@/types/types";
+import {
+  CategorySelection,
+  DatabaseProduct,
+  DatabaseProducts,
+} from "@/types/types";
+import { fetchProducts } from "@/utils/fetchProducts";
 import {
   Dialog,
   DialogBackdrop,
@@ -18,11 +24,11 @@ import {
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import FilterPopoverProduct from "./FilterPopoverProduct";
-import SortMenu from "../../products/SortMenu";
 import NutriScoreMenu from "../../products/NutriScoreMenu";
-import { Spinner } from "@/components/Spinner";
+import SortMenu from "../../products/SortMenu";
+import FilterPopoverProduct from "./FilterPopoverProduct";
 
 type CategoryKeys = keyof typeof categories.de;
 
@@ -36,11 +42,11 @@ const sortCriteria = [
 ];
 
 const sortProducts = (
-  products: Product[],
+  products: DatabaseProduct[],
   selectedSortCriteria: string,
   ascending: boolean
 ) => {
-  const getSortValue = (product: Product) => {
+  const getSortValue = (product: DatabaseProduct) => {
     switch (selectedSortCriteria) {
       case "Kalorien":
         return product.nutrients.kcal;
@@ -72,8 +78,10 @@ export default function ProductPopup({
   setOpen: (open: boolean) => void;
 }) {
   const [ascending, setAscending] = useState(true);
-  const [availableProducts, setAvailableProducts] = useState<Product[]>([]);
-  const [sortedProducts, setSortedProducts] = useState<Product[]>([]);
+  const [availableProducts, setAvailableProducts] = useState<DatabaseProduct[]>(
+    []
+  );
+  const [sortedProducts, setSortedProducts] = useState<DatabaseProduct[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [nutriScoreCutOff, setNutriScoreCutOff] = useState("E");
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,8 +91,6 @@ export default function ProductPopup({
       major: [],
       sub: [],
     });
-  const [loading, setLoading] = useState(false);
-
   const categoriesWithSub: { major: string; subs: string[] }[] = Object.entries(
     categories.de
   ).map(([major, subs]) => ({
@@ -110,79 +116,60 @@ export default function ProductPopup({
     }
   };
 
+  const queryParams = new URLSearchParams({
+    retailer: "Migros",
+    page: currentPage.toString(),
+    limit: "100",
+    "nutri-score-cutoff": nutriScoreCutOff,
+  });
+
+  if (selectedProductCategories.major.length > 0) {
+    selectedProductCategories.major.forEach((major) =>
+      queryParams.append("dietcoach-category-l1-de", major)
+    );
+  }
+
+  if (selectedProductCategories.sub.length > 0) {
+    selectedProductCategories.sub.forEach((sub) =>
+      queryParams.append("dietcoach-category-l2-de", sub)
+    );
+  }
+
+  if (searchTerm.length > 0) {
+    queryParams.append("search-de", searchTerm);
+  }
+
+  // Use useQuery hook to fetch data
+  const { data, isLoading, error } = useQuery<DatabaseProducts>({
+    queryKey: ["products", queryParams.toString()], // Unique query key
+    queryFn: () => fetchProducts(queryParams), // Fetch function
+  });
+
+  console.log(data);
+
   useEffect(() => {
-    if (
-      selectedProductCategories.major.length === 0 &&
-      selectedProductCategories.sub.length === 0 &&
-      searchTerm.length === 0
-    ) {
-      setTotalPages(1);
-    } else {
-      const fetchAvailableProducts = async () => {
-        const queryParams = new URLSearchParams({
-          retailer: "Migros",
-          page: currentPage.toString(),
-          limit: "100",
-          "nutri-score-cutoff": nutriScoreCutOff,
-        });
-
-        if (selectedProductCategories.major.length > 0) {
-          selectedProductCategories.major.forEach((major) =>
-            queryParams.append("dietcoach-category-l1-de", major)
-          );
-        }
-
-        if (selectedProductCategories.sub.length > 0) {
-          selectedProductCategories.sub.forEach((sub) =>
-            queryParams.append("dietcoach-category-l2-de", sub)
-          );
-        }
-
-        if (searchTerm.length > 0) {
-          queryParams.append("search-de", searchTerm);
-        }
-
-        const queryString = queryParams.toString();
-        setLoading(true); // Set loading state to true before fetching
-        try {
-          const response = await fetch(`/api/products?${queryString}`);
-          const data: Products = await response.json();
-          setAvailableProducts(data.products);
-          setSortedProducts(
-            sortProducts(data.products, selectedSortCriteria, ascending)
-          );
-          setTotalPages(data.meta.totalPages);
-        } catch (error) {
-          console.error("Failed to fetch available products:", error);
-        } finally {
-          setLoading(false); // Set loading state to false after fetching
-        }
-      };
-
-      fetchAvailableProducts();
+    if (data) {
+      setAvailableProducts(data.products);
+      setSortedProducts(
+        sortProducts(data.products, selectedSortCriteria, ascending)
+      );
+      setTotalPages(data.meta.totalPages);
     }
-  }, [
-    selectedProductCategories,
-    searchTerm,
-    nutriScoreCutOff,
-    currentPage,
-    selectedSortCriteria,
-    ascending,
-  ]);
+  }, [data, ascending, selectedSortCriteria]);
 
   const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleAddProduct = (product: Product) => {
+  const handleAddProduct = (product: DatabaseProduct) => {
     setSelectedAlternativeProducts([...selectedAlternativeProducts, product]);
   };
 
-  const handleRemoveProduct = (productId: number) => {
+  const handleRemoveProduct = (gtin: number) => {
     setSelectedAlternativeProducts(
       selectedAlternativeProducts.filter(
-        (product) => product.productId !== productId
+        (product) => product.productId !== gtin
       )
     );
   };
@@ -327,7 +314,7 @@ export default function ProductPopup({
                 ref={scrollableContainerRef}
                 className="bg-white border border-gray-300 rounded-md h-[420px] overflow-y-scroll"
               >
-                {loading ? (
+                {isLoading ? (
                   <Spinner />
                 ) : selectedProductCategories.major.length === 0 &&
                   selectedProductCategories.sub.length === 0 &&

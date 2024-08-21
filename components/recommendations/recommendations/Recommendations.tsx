@@ -1,41 +1,72 @@
-import { getBasketProducts } from "@/getData/getBasketProducts";
-import { getSession } from "@/getData/getSession";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { BasketProductFlat, SelectedBasketProductId } from "@/types/types";
+import {
+  BasketProductFlat,
+  DatabaseProduct,
+  SelectedBasketProductId,
+  Session,
+} from "@/types/types";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   ShoppingCartIcon,
-  TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import RecommendationsHeader from "./RecommendationsHeader";
+import { fetchSession } from "@/utils/fetchSession";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProduct } from "@/utils/fetchProduct";
 
 const Recommendations = () => {
-  const basketProductsResponse = getBasketProducts(["16189", "17200", "18211"]);
-
-  const products: BasketProductFlat[] = basketProductsResponse.flatMap(
-    (basket) => {
-      return basket.products.map((product) => ({
-        basketId: basket.basketId,
-        basketIndex: basket.index,
-        basketTimestamp: basket.timestamp,
-        ...product,
-      }));
-    }
-  );
-
   const { selectedSessionId } = useCounterStore((state) => ({
     selectedSessionId: state.selectedSessionId,
   }));
-  const [selectedBasketProductsFlat, setSelectedBasketProductsFlat] = useState<
-    BasketProductFlat[]
-  >(products.slice(2, 4));
-  const [selectedBasketProductIds, setSelectedBasketProductIds] = useState<
-    SelectedBasketProductId[]
-  >([]);
-  const [selectedAlternativeProducts, setSelectedAlternativeProducts] =
-    useState<BasketProductFlat[]>(products.slice(0, 2));
+
+  // Fetch existing sessions
+  const { data: session, refetch } = useQuery<Session>({
+    queryKey: ["session", selectedSessionId],
+    queryFn: () => fetchSession(selectedSessionId ?? 0),
+    enabled: selectedSessionId !== null,
+  });
+
+  // // Use useQuery hook to fetch data
+  // const { data: currentProduct } = useQuery<DatabaseProduct>({
+  //   queryKey: ["products", session?.recommendations[0].suggestions.current[0]],
+  //   queryFn: () =>
+  //     fetchProduct(session?.recommendations[0].suggestions.current[0]),
+  //   enabled: session?.recommendations[0].suggestions.alternatives.length > 0,
+  // });
+
+  // // Use useQuery hook to fetch data
+  // const { data: alternativeProduct } = useQuery<DatabaseProduct>({
+  //   queryKey: [
+  //     "products",
+  //     session?.recommendations[0].suggestions.alternatives[0],
+  //   ],
+  //   queryFn: () =>
+  //     fetchProduct(session?.recommendations[0].suggestions.alternatives[0]),
+  //   enabled: session?.recommendations[0].suggestions.alternatives.length > 0,
+  // });
+
+  if (!session) {
+    return null;
+  }
+
+  // if (!currentProduct || !alternativeProduct) {
+  //   return null;
+  // }
+
+  // return null;
+
+  // const [selectedBasketProductsFlat, setSelectedBasketProductsFlat] = useState<
+  //   BasketProductFlat[]
+  // >(basketProducts.slice(2, 4));
+  // const [selectedBasketProductIds, setSelectedBasketProductIds] = useState<
+  //   SelectedBasketProductId[]
+  // >([]);
+  // const [selectedAlternativeProducts, setSelectedAlternativeProducts] =
+  //   useState<BasketProductFlat[]>(basketProducts.slice(0, 2));
+
+  // console.log("session", session);
 
   if (selectedSessionId === null) {
     return (
@@ -57,38 +88,33 @@ const Recommendations = () => {
     );
   }
 
-  const session = getSession(selectedSessionId);
+  // const handleRemoveSelectedProduct = (gtin: number, basketId: string) => {
+  //   const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
+  //     (product) => !(product.gtin === gtin && product.basketId === basketId)
+  //   );
+  //   setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
 
-  const handleRemoveSelectedProduct = (productId: number, basketId: string) => {
-    const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
-      (product) =>
-        !(product.productId === productId && product.basketId === basketId)
-    );
-    setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
+  //   const newSelectedBasketProductIds = selectedBasketProductIds.filter(
+  //     (id) => !(id.gtin === gtin && id.basketId === basketId)
+  //   );
+  //   setSelectedBasketProductIds(newSelectedBasketProductIds);
+  // };
 
-    const newSelectedBasketProductIds = selectedBasketProductIds.filter(
-      (id) => !(id.productId === productId && id.basketId === basketId)
-    );
-    setSelectedBasketProductIds(newSelectedBasketProductIds);
-  };
-
-  const handleRemoveAlternativeProduct = (productId: number) => {
-    setSelectedAlternativeProducts(
-      selectedAlternativeProducts.filter(
-        (product) => product.productId !== productId
-      )
-    );
-  };
+  // const handleRemoveAlternativeProduct = (gtin: number) => {
+  //   setSelectedAlternativeProducts(
+  //     selectedAlternativeProducts.filter((product) => product.gtin !== gtin)
+  //   );
+  // };
 
   return (
     <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
       <RecommendationsHeader
-        numRecommendations={session.recommendations.length}
+        numRecommendations={session?.recommendations.length ?? 0}
       />
       <div className="shadow-inner -mx-6">
-        <div className="flex-1 max-h-[calc(100vh-285px)] overflow-y-auto px-6">
+        <div className="flex-1 max-h-[calc(100vh-287px)] overflow-y-auto px-6">
           <ul className="mt-6 text-gray-500">
-            {session.recommendations.map((recommendation) => (
+            {session?.recommendations.map((recommendation) => (
               <li
                 key={recommendation.recommendationId}
                 className="bg-white p-4 border rounded-md mb-4"
@@ -151,7 +177,7 @@ const Recommendations = () => {
                       <ArrowDownIcon className="ml-1 h-4 w-4 text-red-500" />
                     </div>
                     <div className="p-4 h-[400px] overflow-y-scroll space-y-4">
-                      {selectedBasketProductsFlat.length === 0 && (
+                      {/* {[currentProduct].length === 0 && (
                         <div className="text-center">
                           <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
                           <h3 className="mt-2 text-sm font-semibold text-gray-900">
@@ -163,9 +189,10 @@ const Recommendations = () => {
                           </p>
                         </div>
                       )}
-                      {selectedBasketProductsFlat.map((product) => (
+
+                      {[currentProduct].map((product) => (
                         <div
-                          key={product.productId}
+                          key={product.gtins[0]}
                           className="flex items-center space-x-4 justify-between"
                         >
                           <div className="flex items-center space-x-4">
@@ -186,7 +213,7 @@ const Recommendations = () => {
                             </div>
                           </div>
                         </div>
-                      ))}
+                      ))} */}
                     </div>
                   </section>
 
@@ -199,7 +226,7 @@ const Recommendations = () => {
                       <ArrowUpIcon className="ml-1 h-4 w-4 text-primary" />
                     </div>
                     <div className="p-4 h-[400px] overflow-y-scroll space-y-4">
-                      {selectedAlternativeProducts.length === 0 && (
+                      {/* {[alternativeProduct].length === 0 && (
                         <div className="text-center">
                           <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
                           <h3 className="mt-2 text-sm font-semibold text-gray-900">
@@ -211,9 +238,10 @@ const Recommendations = () => {
                           </p>
                         </div>
                       )}
-                      {selectedAlternativeProducts.map((product) => (
+
+                      {[alternativeProduct].map((product) => (
                         <div
-                          key={product.productId}
+                          key={product.gtins[0]}
                           className="flex items-center space-x-4 justify-between"
                         >
                           <div className="flex items-center space-x-4">
@@ -234,7 +262,7 @@ const Recommendations = () => {
                             </div>
                           </div>
                         </div>
-                      ))}
+                      ))} */}
                     </div>
                   </section>
                 </div>

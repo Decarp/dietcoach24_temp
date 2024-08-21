@@ -17,10 +17,10 @@ export default function SelectedAlternativesSection() {
   const { selectedAlternativeProducts, setSelectedAlternativeProducts } =
     useCounterStore((state) => state);
 
-  const handleRemoveProduct = (productId: number) => {
+  const handleRemoveProduct = (gtin: number) => {
     setSelectedAlternativeProducts(
       selectedAlternativeProducts.filter(
-        (product) => product.productId !== productId
+        (product) => product.productId !== gtin
       )
     );
   };

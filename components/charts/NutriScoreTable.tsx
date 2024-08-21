@@ -1,5 +1,10 @@
+"use client";
+
 import { getNutriScoreTableData } from "@/getData/getNutriScoreTableData";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { NutrientTableItem, NutrientTableResponseItem } from "@/types/types";
+import { fetchNutrientTable } from "@/utils/fetchNutrientTable";
+import { mapNutriScoreTableResponse } from "@/utils/mapNutriScoreTableResponse";
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import type {
   ColDef,
@@ -13,6 +18,8 @@ import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-quartz.css";
 import { RichSelectModule } from "@ag-grid-enterprise/rich-select";
 import { RowGroupingModule } from "@ag-grid-enterprise/row-grouping";
+import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
 import {
   useCallback,
   useMemo,
@@ -29,11 +36,19 @@ ModuleRegistry.registerModules([
 ]);
 
 export const NutriScoreTable = () => {
+  const pathname = usePathname();
+  const patientId = pathname.split("/")[2];
+
   const gridRef = useRef<AgGridReact>(null);
 
-  const { selectedCategories, updateCategories } = useCounterStore(
-    (state) => state
-  );
+  const { selectedCategories, selectedBasketIds, updateCategories } =
+    useCounterStore((state) => state);
+
+  const { isLoading, error, data } = useQuery<NutrientTableResponseItem[]>({
+    queryKey: ["nutrientTable", patientId, selectedBasketIds],
+    queryFn: () => fetchNutrientTable(patientId, selectedBasketIds),
+    enabled: selectedBasketIds.length > 0,
+  });
 
   const handleClick = (category: string) => {
     if (category.includes(" > ")) {
@@ -42,53 +57,60 @@ export const NutriScoreTable = () => {
     } else {
       updateCategories(category, "major");
     }
-    console.log("Selected Categories after Click", selectedCategories);
   };
+
+  const [rowData, setRowData] = useState<NutrientTableItem[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setRowData(mapNutriScoreTableResponse(data));
+    }
+  }, [data]);
 
   const [colDefs] = useState<ColDef[]>([
     {
       headerName: "Menge (g)",
-      field: "quantity",
+      field: "Quantity",
       width: 120,
     },
     {
       headerName: "Energie (kJ)",
-      field: "energyKj",
+      field: "EnergyKJ",
       width: 140,
     },
     {
-      headerName: "Energie",
-      field: "energy",
+      headerName: "Energie (%)",
+      field: "EnergyShare",
       width: 120,
     },
     {
       headerName: "Zucker",
-      field: "sugar",
+      field: "Sugars",
+      width: 120,
+    },
+    {
+      headerName: "Salz",
+      field: "Salt",
       width: 120,
     },
     {
       headerName: "Gesättigte Fettsäuren",
-      field: "saturatedFat",
+      field: "Saturates",
       width: 220,
     },
     {
-      headerName: "Salz",
-      field: "sodium",
-      width: 120,
-    },
-    {
-      headerName: "Obst & Gemüse",
-      field: "fruitVegetables",
-      width: 160,
-    },
-    {
       headerName: "Nahrungsfasern",
-      field: "fiber",
+      field: "Fibres",
       width: 180,
     },
     {
+      headerName: "Obst & Gemüse",
+      field: "FVL",
+      width: 160,
+    },
+    {
       headerName: "Protein",
-      field: "protein",
+      field: "Proteins",
       width: 120,
     },
     {
@@ -101,7 +123,6 @@ export const NutriScoreTable = () => {
     },
   ]);
 
-  const [rowData] = useState(getNutriScoreTableData());
   const getDataPath = useCallback<GetDataPath>((data) => data.category, []);
   const autoGroupColumnDef = useMemo<ColDef>(() => {
     return {
@@ -141,10 +162,11 @@ export const NutriScoreTable = () => {
 
 const CategoryCellRenderer: FunctionComponent<CustomCellRendererProps> = ({
   value,
-  data: { category },
+  data: { Category },
 }) => {
-  const isMajorCategory = category.length === 1;
-  const categoryText = isMajorCategory ? category[0] : category[1];
+  // Check if category is defined and is an array
+  const isMajorCategory = Array.isArray(Category) && Category.length === 1;
+  const categoryText = isMajorCategory ? Category[0] : Category?.[1] ?? "";
 
   return (
     <div className="flex flex-row-reverse items-center justify-start gap-2">
@@ -169,7 +191,12 @@ const CheckboxCellRenderer: FunctionComponent<
   }
 > = ({ data, onCheckboxClick }) => {
   const { selectedCategories } = useCounterStore((state) => state);
-  const category = data.category.join(" > ");
+
+  // Check if category exists and is an array before calling join
+  const category = Array.isArray(data?.Category)
+    ? data.Category.join(" > ")
+    : "";
+
   const isChecked = category.includes(" > ")
     ? selectedCategories.sub.includes(category.split(" > ")[1])
     : selectedCategories.major.includes(category);
@@ -179,7 +206,6 @@ const CheckboxCellRenderer: FunctionComponent<
   };
 
   useEffect(() => {
-    // This effect will run whenever selectedCategories change
     const checkboxElement = document.querySelector(
       `input[type="checkbox"][data-category="${category}"]`
     ) as HTMLInputElement;
@@ -194,7 +220,7 @@ const CheckboxCellRenderer: FunctionComponent<
       <div className="flex items-center justify-center">
         <input
           type="checkbox"
-          className=" h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
           data-category={category}
           checked={isChecked}
           onChange={handleClick}
@@ -203,3 +229,5 @@ const CheckboxCellRenderer: FunctionComponent<
     </div>
   );
 };
+
+export default CheckboxCellRenderer;

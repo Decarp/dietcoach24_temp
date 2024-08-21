@@ -1,10 +1,9 @@
 "use client";
 
-import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";
 import { CustomTooltip } from "@/components/CustomTooltip";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { ChartEnergyCategoriesData, MacroCategory } from "@/types/types";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Bar,
   BarChart,

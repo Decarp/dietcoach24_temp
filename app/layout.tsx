@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import { CounterStoreProvider } from "@/providers/useStoreProvider";
 import ClientWrapper from "@/components/ClientWrapper";
 import { Toaster } from "react-hot-toast";
+import Provider from "@/utils/Providers";
 import "dotenv/config";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,12 +25,14 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <body className={inter.className + " h-full"}>
         <Header>
-          <CounterStoreProvider>
-            <ClientWrapper>
-              {children}
-              <Toaster position="bottom-center" />
-            </ClientWrapper>
-          </CounterStoreProvider>
+          <Provider>
+            <CounterStoreProvider>
+              <ClientWrapper>
+                {children}
+                <Toaster position="bottom-center" />
+              </ClientWrapper>
+            </CounterStoreProvider>
+          </Provider>
         </Header>
       </body>
     </html>

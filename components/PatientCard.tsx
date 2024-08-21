@@ -1,14 +1,15 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { patients } from "@/data/patients";
 import { classNames } from "@/utils/classNames";
+import { useQuery } from "@tanstack/react-query";
+import { Patient, Sessions } from "@/types/types";
+import { fetchSessions } from "@/utils/fetchSessions";
 
-const tabs = [
+let tabs = [
   { name: "Profil", path: "profile" },
   { name: "Einkäufe", path: "purchases" },
   { name: "Empfehlungen", path: "recommendations" },
-  { name: "Fortschritt", path: "progress" },
   // { name: "Vergleich", path: "comparison" },
   // { name: "Modifikation", path: "modification" },
 ];
@@ -20,7 +21,71 @@ export default function PatientCard() {
   const patientId = pathSegments[2];
   const currentTab = pathSegments[3] || "profile";
 
-  const patient = patients.find((p) => p.id === patientId);
+  const { data: sessions } = useQuery<Sessions>({
+    queryKey: ["sessions", patientId],
+    queryFn: () => fetchSessions(patientId),
+  });
+
+  if (sessions?.length === 0 || sessions?.length === 1) {
+    tabs = [
+      { name: "Profil", path: "profile" },
+      { name: "Einkäufe", path: "purchases" },
+      { name: "Empfehlungen", path: "recommendations" },
+      // { name: "Vergleich", path: "comparison" },
+      // { name: "Modifikation", path: "modification" },
+    ];
+  } else {
+    tabs = [
+      { name: "Profil", path: "profile" },
+      { name: "Einkäufe", path: "purchases" },
+      { name: "Empfehlungen", path: "recommendations" },
+      { name: "Fortschritt", path: "progress" },
+      // { name: "Vergleich", path: "comparison" },
+      // { name: "Modifikation", path: "modification" },
+    ];
+  }
+
+  const { isLoading, error, data } = useQuery<Patient>({
+    queryKey: ["participant"],
+    queryFn: () =>
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dietician/participant`, {
+        method: "GET",
+        headers: {
+          Authentication: process.env.NEXT_PUBLIC_AUTH_TOKEN!,
+          "Participant-Id": patientId,
+        },
+      }).then((res) => res.json()),
+  });
+
+  const patient = data;
+
+  if (isLoading) {
+    // Pulsing loading skeleton
+    return (
+      <header className="pt-8 bg-white border-x relative -mx-4 sm:-mx-6 lg:-mx-8 border-b border-gray-300 pb-5 sm:pb-0">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="md:flex md:items-center md:justify-between">
+            <div className="w-48 h-8 bg-gray-200 rounded-md animate-pulse"></div>
+          </div>
+          <div className="mt-3 mb-2.5">
+            <div className="sm:hidden">
+              <div className="w-full h-10 bg-gray-200 rounded-md animate-pulse"></div>
+            </div>
+            <div className="hidden sm:block">
+              <nav className="-mb-px flex space-x-8">
+                {tabs.map((tab) => (
+                  <div
+                    key={tab.path}
+                    className="w-20 h-8 bg-gray-200 rounded-md animate-pulse"
+                  ></div>
+                ))}
+              </nav>
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   if (!patient) {
     return <p>Patient not found</p>;
@@ -36,16 +101,8 @@ export default function PatientCard() {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="md:flex md:items-center md:justify-between">
           <h1 className="text-2xl font-semibold">
-            {patient.firstName} {patient.lastName}
+            {patient.profile.firstName} {patient.profile.lastName}
           </h1>
-          {/* <div className="mt-3 flex md:top-3 md:mt-0">
-            <button
-              type="button"
-              className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-700"
-            >
-              FFQ ansehen
-            </button>
-          </div> */}
         </div>
         <div className="mt-4">
           <div className="sm:hidden">

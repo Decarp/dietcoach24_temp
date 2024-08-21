@@ -1,32 +1,44 @@
+"use client";
+
+import { Patient } from "@/types/types";
 import { PaperClipIcon } from "@heroicons/react/24/outline";
 import {
   CreditCardIcon,
   HomeIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/solid";
+import { useQuery } from "@tanstack/react-query";
+import { format, fromUnixTime } from "date-fns";
+import { de } from "date-fns/locale";
+import { usePathname } from "next/navigation";
 
 export default function Profile() {
-  const patientDetails = {
-    id: "2o4mgm92",
-    householdSize: 1,
-    shoppingFrequency: {
-      migros: ">80%",
-      coop: ">80%",
-    },
-    loyaltyCardUsage: {
-      migros: ">80%",
-      coop: ">80%",
-    },
-    groceryData: "269 Lebensmittel (IS) + 285 Lebensmittel (FS)",
-    ffqDate: "11. April 2024",
-    bmi: 50.9,
-    diagnosis: "Dyslipidämie",
-    age: "?",
-    gender: "F",
-  };
+  const pathname = usePathname();
+  const pathSegments = pathname.split("/");
+  const patientId = pathSegments[2];
+
+  const {
+    isLoading,
+    error,
+    data: patient,
+  } = useQuery<Patient>({
+    queryKey: ["participant"],
+    queryFn: () =>
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dietician/participant`, {
+        method: "GET",
+        headers: {
+          Authentication: process.env.NEXT_PUBLIC_AUTH_TOKEN!,
+          "Participant-Id": patientId,
+        },
+      }).then((res) => res.json()),
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="bg-white h-screen -m-8 p-8 border-x border-b border-gray-300 h-[calc(100vh-177px)]">
+    <div className="bg-white h-screen -m-8 p-8 border-x border-b border-gray-300 h-[calc(100vh-179px)]">
       <h2 className="text-xl font-semibold">Profil</h2>
       <h3 className="text-sm font-light mb-4 text-gray-500">
         Persönliche Daten und Gesundheitsinformationen
@@ -41,7 +53,7 @@ export default function Profile() {
               Alter
             </dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-              {patientDetails.age}
+              {patient?.demographics.age}
             </dd>
           </div>
           <div className="px-4 py-4 sm:col-span-1 sm:px-0">
@@ -49,7 +61,7 @@ export default function Profile() {
               Geschlecht
             </dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-              {patientDetails.gender === "M" ? "Männlich" : "Weiblich"}
+              {patient?.demographics.gender === "M" ? "Männlich" : "Weiblich"}
             </dd>
           </div>
 
@@ -58,19 +70,19 @@ export default function Profile() {
               Diagnose
             </dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-              {patientDetails.diagnosis}
+              {patient?.medicalHistory.diagnosis}
             </dd>
           </div>
           <div className="px-4 py-4 sm:col-span-1 sm:px-0">
             <dt className="text-sm font-normal leading-6 text-gray-500">BMI</dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">
-              {patientDetails.bmi}
+              {patient?.medicalHistory.bmi}
             </dd>
           </div>
         </dl>
       </div>
 
-      <div className="my-6 mt-2 text-sm text-gray-900 border border-gray-300 rounded-md flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+      {/* <div className="my-6 mt-2 text-sm text-gray-900 border border-gray-300 rounded-md flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
         <div className="flex w-0 flex-1 items-center">
           <PaperClipIcon
             aria-hidden="true"
@@ -79,16 +91,27 @@ export default function Profile() {
           <div className="ml-4 flex min-w-0 flex-1 gap-2">
             <span className="truncate font-medium">FFQ.pdf</span>
             <span className="flex-shrink-0 text-gray-400">
-              {patientDetails.ffqDate}
+              {patient?.medicalHistory.ffqDate
+                ? format(
+                    fromUnixTime(patient.medicalHistory.ffqDate),
+                    "d. MMMM yyyy",
+                    {
+                      locale: de,
+                    }
+                  )
+                : ""}
             </span>
           </div>
         </div>
         <div className="ml-4 flex-shrink-0">
-          <a href="#" className="font-medium text-primary hover:text-primary">
+          <a
+            href={`${patient?.medicalHistory.ffqUrl}`}
+            className="font-medium text-primary hover:text-primary"
+          >
             Ansehen
           </a>
         </div>
-      </div>
+      </div> */}
 
       <div className="mt-6">
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -103,10 +126,10 @@ export default function Profile() {
             </dt>
             <dd className="ml-16 flex items-baseline">
               <p className="text-2xl font-semibold text-gray-900">
-                {patientDetails.householdSize}{" "}
+                {patient?.householdSize}{" "}
               </p>
               <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
-                {patientDetails.householdSize === 1 ? "Person" : "Personen"}
+                {patient?.householdSize === 1 ? "Person" : "Personen"}
               </p>
             </dd>
           </div>
@@ -123,10 +146,10 @@ export default function Profile() {
                 Einkaufsfrequenz
               </p>
             </dt>
-            <dd className="ml-16 flex items-baseline space-x-4">
+            <dd className="ml-16 items-baseline">
               <div className="flex items-baseline">
                 <p className="text-2xl font-semibold text-gray-900">
-                  {patientDetails.shoppingFrequency.coop}{" "}
+                  {patient?.shoppingFrequency.coop}{" "}
                 </p>
                 <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
                   Coop
@@ -134,10 +157,18 @@ export default function Profile() {
               </div>
               <div className="flex items-baseline">
                 <p className="text-2xl font-semibold text-gray-900">
-                  {patientDetails.shoppingFrequency.migros}{" "}
+                  {patient?.shoppingFrequency.migros}{" "}
                 </p>
                 <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
                   Migros
+                </p>
+              </div>
+              <div className="flex items-baseline">
+                <p className="text-2xl font-semibold text-gray-900">
+                  {patient?.shoppingFrequency.other}{" "}
+                </p>
+                <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
+                  Andere Supermärkte
                 </p>
               </div>
             </dd>
@@ -155,10 +186,10 @@ export default function Profile() {
                 Nutzung der Treuekarte
               </p>
             </dt>
-            <dd className="ml-16 flex items-baseline space-x-4">
+            <dd className="ml-16 items-baseline">
               <div className="flex items-baseline">
                 <p className="text-2xl font-semibold text-gray-900">
-                  {patientDetails.loyaltyCardUsage.coop}{" "}
+                  {patient?.loyaltyCardUsage.coop}{" "}
                 </p>
                 <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
                   Coop
@@ -166,7 +197,7 @@ export default function Profile() {
               </div>
               <div className="flex items-baseline">
                 <p className="text-2xl font-semibold text-gray-900">
-                  {patientDetails.loyaltyCardUsage.migros}{" "}
+                  {patient?.loyaltyCardUsage.migros}{" "}
                 </p>
                 <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
                   Migros

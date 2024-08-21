@@ -1,4 +1,4 @@
-import { Products } from "@/types/types";
+import { DatabaseProducts } from "@/types/types";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -10,9 +10,12 @@ export async function GET(request: Request) {
   const queryString = queryParams.toString();
 
   try {
-    const res = await fetch(`${DB_URL}/products/?${queryString}`, {
-      method: "GET",
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_DB_URL}/products/?${queryString}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!res.ok) {
       return NextResponse.json(
@@ -21,7 +24,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const data: Products = await res.json();
+    const data: DatabaseProducts = await res.json();
     return NextResponse.json(data);
   } catch (error) {
     console.error("Fetch error:", error);

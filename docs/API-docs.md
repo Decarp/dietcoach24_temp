@@ -134,6 +134,7 @@ End-Timestamp: number (EoD)
         index: 4,
         timestamp: 1716336000,
         numProducts: 8,
+        numNonMatchedProducts: 2,
         avgNutriScore: "D",
         avgFsaScore: 9,
     },
@@ -142,6 +143,7 @@ End-Timestamp: number (EoD)
         index: 5,
         timestamp: 1719532800,
         numProducts: 12,
+        numNonMatchedProducts: 2,
         avgNutriScore: "D",
         avgFsaScore: 8,
     },
@@ -150,6 +152,7 @@ End-Timestamp: number (EoD)
         index: 6,
         timestamp: 1720656000,
         numProducts: 3,
+        numNonMatchedProducts: 2,
         avgNutriScore: "A",
         avgFsaScore: 3,
     },
@@ -197,7 +200,7 @@ Participant-Id: string
         numNonMatchedProducts: 2,
         products: [
             {
-                productId: 1, // not yet implemented
+                gtin: 1, // not yet implemented
                 name: "Bio Vollkornbrot 350g",
                 quantity: 10,
                 nutrients: {
@@ -286,13 +289,13 @@ Session-Id: string
     ],
     suggestions: {
         current: [
-            productId1,
-            productId2,
-            productId3,
+            gtin1,
+            gtin2,
+            gtin3,
         ],
         alternatives: [
-            productId1,
-            productId2,
+            gtin1,
+            gtin2,
         ]
     },
     notes: "" | null,
@@ -339,13 +342,13 @@ Session-Id: number
             ],
             suggestions: {
                 current: [
-                    productId1,
-                    productId2,
-                    productId3,
+                    gtin1,
+                    gtin2,
+                    gtin3,
                 ],
                 alternatives: [
-                    productId1,
-                    productId2,
+                    gtin1,
+                    gtin2,
                 ]
             },
             notes: "" | null,
@@ -446,13 +449,13 @@ Recommendation-Id: number
     ],
     suggestions: {
         current: [
-            productId1,
-            productId2,
-            productId3,
+            gtin1,
+            gtin2,
+            gtin3,
         ],
         alternatives: [
-            productId1,
-            productId2,
+            gtin1,
+            gtin2,
         ]
     },
     notes: "" | null
@@ -589,7 +592,7 @@ Product-Id: number
 
 ```
 {
-    productId: 1,
+    gtin: 1,
     name: "Bio Vollkornbrot 350g",
     quantity: 10,
     nutrients: {
@@ -644,7 +647,7 @@ nutriscore-cutoff: string (optional, default: "C", includes C)
 {
   products: [
     {
-      productId: 1,
+      gtin: 1,
       de: {
        name: "Bio Vollkornbrot 350g",
       },
