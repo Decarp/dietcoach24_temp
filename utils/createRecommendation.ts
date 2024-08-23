@@ -3,7 +3,9 @@ import { Omit } from "lodash";
 import { Recommendation } from "@/types/types";
 
 export const createRecommendation = async (
-  data: Omit<Recommendation, "recommendationId" | "index">
+  data: Omit<Recommendation, "recommendationId" | "index">,
+  token: string,
+  sessionId?: string
 ): Promise<Recommendation> => {
   const response = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/recommendation`,
@@ -15,8 +17,8 @@ export const createRecommendation = async (
     },
     {
       headers: {
-        Authentication: process.env.NEXT_PUBLIC_AUTH_TOKEN!,
-        "Session-Id": "1",
+        Authentication: token,
+        "Session-Id": sessionId ? sessionId : "1",
         "Content-Type": "application/json",
       },
     }

@@ -1,24 +1,24 @@
 "use client";
 
-import { Error } from "@/components/Error";
-import { Spinner } from "@/components/Spinner";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { Basket, Patient, Sessions } from "@/types/types";
 import { classNames } from "@/utils/classNames";
 import { fetchBaskets } from "@/utils/fetchBaskets";
-import { fetchPatient } from "@/utils/fetchPatient";
+import { fetchPatientDetails } from "@/utils/fetchPatientDetails";
 import { fetchSessions } from "@/utils/fetchSessions";
 import { formatDate } from "@/utils/formatDate";
 import { getBasketTimestamps } from "@/utils/getBasketTimestamps";
 import { mapBasketsResponse } from "@/utils/mapBasketsResponse";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import { fromUnixTime, isAfter, max, subWeeks } from "date-fns";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import BasketsHeader from "./BasketsHeader";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 
 const Baskets = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const patientId = pathname.split("/")[2];
   const initialized = useRef(false);
@@ -35,7 +35,7 @@ const Baskets = () => {
 
   const { data: patient } = useQuery<Patient>({
     queryKey: ["participant", patientId],
-    queryFn: () => fetchPatient(patientId),
+    queryFn: () => fetchPatientDetails(patientId),
   });
 
   const { data: sessions } = useQuery<Sessions>({
@@ -50,7 +50,14 @@ const Baskets = () => {
 
   const { isLoading, error, data } = useQuery<Basket[]>({
     queryKey: ["baskets", patientId, startTimestamp, endTimestamp],
-    queryFn: () => fetchBaskets(patientId, startTimestamp, endTimestamp || ""),
+    queryFn: () =>
+      fetchBaskets(
+        patientId,
+        startTimestamp,
+        endTimestamp || "",
+        session?.accessToken || ""
+      ),
+    enabled: !!session?.accessToken && !!startTimestamp && !!endTimestamp,
   });
 
   const baskets = data ? mapBasketsResponse(data) : {};
@@ -192,9 +199,61 @@ const Baskets = () => {
     }
   };
 
+  const tabs = ["Woche -16 bis -8", "Woche -8 bis heute"];
+
+  const [currentTab, setCurrentTab] = useState("Persönlich");
+
+  const handleTabChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setCurrentTab(event.target.value);
+  };
+
+  const handleTabClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setCurrentTab(event.currentTarget.value);
+  };
+
   return (
     <div className="pt-6 -ml-8 bg-white border-l flex flex-col border-b border-gray-300 xl:w-64 xl:shrink-0 h-[calc(100vh-184px)]">
       <BasketsHeader baskets={baskets} />
+
+      <div className="ml-6">
+        <div className="sm:hidden">
+          <label htmlFor="current-tab" className="sr-only">
+            Select a tab
+          </label>
+          <select
+            id="current-tab"
+            name="current-tab"
+            defaultValue={currentTab}
+            onChange={handleTabChange}
+            className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary"
+          >
+            {tabs.map((tab) => (
+              <option key={tab} value={tab}>
+                {tab}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="hidden sm:block border-b -mx-4 sm:-mx-6 lg:-mx-6 lg:-ml-8 xl:-ml-6">
+          <nav className="-mb-px flex space-x-8 px-4 sm:px-5 lg:px-7 xl:px-5">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                value={tab}
+                onClick={handleTabClick}
+                className={classNames(
+                  tab === currentTab
+                    ? "border-primary text-primary"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                  "mt-3 whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium"
+                )}
+              >
+                {tab}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
         <nav aria-label="Baskets List" className="overflow-y-auto">
@@ -235,6 +294,7 @@ const Baskets = () => {
                     </div>
                   </div>
                 </div>
+
                 <ul role="list" className="divide-y divide-gray-100">
                   {baskets[letter].map((person: any) => {
                     const isSelected = selectedBasketIds.includes(

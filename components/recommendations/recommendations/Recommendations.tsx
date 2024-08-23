@@ -15,19 +15,21 @@ import RecommendationsHeader from "./RecommendationsHeader";
 import { fetchSession } from "@/utils/fetchSession";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProduct } from "@/utils/fetchProduct";
+import { useSession } from "next-auth/react";
 
 const Recommendations = () => {
+  const { data: session } = useSession();
   const { selectedSessionId } = useCounterStore((state) => ({
     selectedSessionId: state.selectedSessionId,
   }));
 
   // Fetch existing sessions
-  const { data: session, refetch } = useQuery<Session>({
+  const { data: consultationSession, refetch } = useQuery<Session>({
     queryKey: ["session", selectedSessionId],
-    queryFn: () => fetchSession(selectedSessionId ?? 0),
-    enabled: selectedSessionId !== null,
+    queryFn: () =>
+      fetchSession(selectedSessionId ?? 0, session?.accessToken || ""),
+    enabled: selectedSessionId !== null && !!session?.accessToken,
   });
-
   // // Use useQuery hook to fetch data
   // const { data: currentProduct } = useQuery<DatabaseProduct>({
   //   queryKey: ["products", session?.recommendations[0].suggestions.current[0]],
@@ -109,12 +111,12 @@ const Recommendations = () => {
   return (
     <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
       <RecommendationsHeader
-        numRecommendations={session?.recommendations.length ?? 0}
+        numRecommendations={consultationSession?.recommendations.length ?? 0}
       />
       <div className="shadow-inner -mx-6">
         <div className="flex-1 max-h-[calc(100vh-287px)] overflow-y-auto px-6">
           <ul className="mt-6 text-gray-500">
-            {session?.recommendations.map((recommendation) => (
+            {consultationSession?.recommendations.map((recommendation) => (
               <li
                 key={recommendation.recommendationId}
                 className="bg-white p-4 border rounded-md mb-4"

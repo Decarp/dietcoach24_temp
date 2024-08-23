@@ -1,0 +1,100 @@
+import NextAuth, { User } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+
+async function getUser(token: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/dietician/profile`,
+    {
+      method: "GET",
+      headers: {
+        Authentication: token,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch user profile");
+  }
+
+  const user = await res.json();
+  return user;
+}
+
+const handler = NextAuth({
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: {
+          label: "Email",
+          type: "text",
+          placeholder: "email@example.com",
+        },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials, req) {
+        // Step 1: Log in the user and get the token
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/user/login`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: credentials?.email,
+              password: credentials?.password,
+            }),
+          }
+        );
+
+        if (!res.ok) {
+          return null;
+        }
+
+        const loginData = await res.json();
+        const token = loginData.token;
+
+        if (!token) {
+          return null;
+        }
+
+        // Step 2: Fetch the user profile using the token
+        const profile = await getUser(token);
+
+        // Step 3: Return a User object
+        return {
+          id: loginData.email, // Using email as a unique identifier (ID)
+          email: loginData.email,
+          token,
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          type: loginData.type,
+        } as User; // Cast to User type
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        const u = user as User; // Explicitly cast user to your User type
+        token.accessToken = u.token;
+        token.firstName = u.firstName;
+        token.lastName = u.lastName;
+        token.type = u.type;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.accessToken = token.accessToken;
+      session.firstName = token.firstName;
+      session.lastName = token.lastName;
+      session.type = token.type;
+      return session;
+    },
+  },
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+});
+
+export { handler as GET, handler as POST };

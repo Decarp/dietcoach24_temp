@@ -15,6 +15,7 @@ import RecommendationDrawer from "../recommendationDrawer/RecommendationDrawer";
 import FilterPopover from "./FilterPopover";
 import ProductCard from "./ProductCard";
 import SortMenu from "./SortMenu";
+import { useSession } from "next-auth/react";
 
 const sortCriteria = [
   "Einkaufsdatum",
@@ -55,6 +56,7 @@ const sortProducts = (
 };
 
 const Products = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const patientId = pathname.split("/")[2];
 
@@ -75,8 +77,13 @@ const Products = () => {
 
   const { isLoading, error, data } = useQuery<BasketProduct[]>({
     queryKey: ["basketProducts", selectedBasketIds],
-    queryFn: () => fetchBasketProducts(patientId, selectedBasketIds),
-    enabled: selectedBasketIds.length > 0,
+    queryFn: () =>
+      fetchBasketProducts(
+        patientId,
+        selectedBasketIds,
+        session?.accessToken || ""
+      ),
+    enabled: selectedBasketIds.length > 0 && !!session?.accessToken,
   });
 
   const newBasketProductsFlat: BasketProductFlat[] = basketProducts.flatMap(
@@ -167,7 +174,7 @@ const Products = () => {
         </div>
       </div>
 
-      <div className="-mr-6 flex-1 overflow-y-auto min-h-0 min-h-80 shadow-inner border-b border-gray-300">
+      <div className="-mr-6 flex-1 overflow-y-auto min-h-0  shadow-inner border-b border-gray-300">
         {isLoading && <Spinner />}
         {selectedCategories.major.length === 0 &&
           !isLoading &&

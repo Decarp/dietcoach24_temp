@@ -1,12 +1,15 @@
 import { Session } from "@/types/types";
 
-export const createSession = async (patientId: string): Promise<Session> => {
+export const createSession = async (
+  patientId: string,
+  token: string
+): Promise<Session> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/session`,
     {
       method: "POST",
       headers: {
-        Authentication: process.env.NEXT_PUBLIC_AUTH_TOKEN!,
+        Authentication: token,
         "Participant-Id": patientId,
       },
     }

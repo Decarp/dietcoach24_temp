@@ -14,7 +14,11 @@ export const getBasketTimestamps = (patient?: Patient, sessions?: Sessions) => {
 
   const startTimestamp = ffqTimestampMinus8Weeks.toString();
 
-  if (sessions?.length === 0 || sessions?.length === 1) {
+  if (
+    sessions?.length === 0 ||
+    sessions?.length === 1 ||
+    sessions === undefined
+  ) {
     return { startTimestamp, endTimestamp: ffqTimestamp?.toString() };
   } else {
     return { startTimestamp, endTimestamp: ffqTimestampPlus8Weeks.toString() };

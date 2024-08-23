@@ -1,31 +1,34 @@
 "use client";
 
-import { useEffect } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { fetchSessions } from "@/utils/fetchSessions";
 import { Sessions } from "@/types/types";
-import { format } from "date-fns";
-import { usePathname } from "next/navigation";
-import toast from "react-hot-toast";
 import { createSession } from "@/utils/createSession";
+import { fetchSessions } from "@/utils/fetchSessions";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 export default function SessionSelector({
   onSelectSession,
 }: {
   onSelectSession: (sessionId: number | null) => void;
 }) {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const patientId = pathname.split("/")[2];
 
   // Fetch existing sessions
   const { data: sessions, refetch } = useQuery<Sessions>({
     queryKey: ["sessions", patientId],
-    queryFn: () => fetchSessions(patientId),
+    queryFn: () => fetchSessions(patientId, session?.accessToken),
+    enabled: !!session?.accessToken,
   });
 
   // UseMutation for creating a new session
   const mutation = useMutation({
-    mutationFn: () => createSession(patientId),
+    mutationFn: () => createSession(patientId, session?.accessToken || ""),
     onSuccess: (newSession) => {
       toast.success("Neue Sitzung erstellt", { duration: 3000 });
       refetch(); // Refetch sessions to include the newly created session

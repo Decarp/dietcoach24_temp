@@ -4,22 +4,24 @@ import { Patient } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { fetchPatients } from "@/utils/fetchPatients";
 
 export default function Patients() {
+  const { data: session } = useSession();
+
   const {
     isLoading,
     error,
     data: patients,
   } = useQuery<Patient[]>({
     queryKey: ["participants"],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dietician/participants`, {
-        method: "GET",
-        headers: {
-          Authentication: process.env.NEXT_PUBLIC_AUTH_TOKEN!,
-        },
-      }).then((res) => res.json()),
+    queryFn: () => fetchPatients(session?.accessToken),
+    enabled: !!session?.accessToken,
   });
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error loading patients</p>;
 
   return (
     <ul

@@ -19,6 +19,7 @@ import { fetchSessions } from "@/utils/fetchSessions";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Recommendation, Sessions } from "@/types/types";
 import { createRecommendation } from "@/utils/createRecommendation";
+import { useSession } from "next-auth/react";
 
 export default function RecommendationDrawer({
   open,
@@ -27,6 +28,7 @@ export default function RecommendationDrawer({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
+  const { data: sessionData } = useSession();
   const pathname = usePathname();
   const patientId = pathname.split("/")[2];
 
@@ -61,7 +63,12 @@ export default function RecommendationDrawer({
   const mutation = useMutation({
     mutationFn: (
       formData: Omit<Recommendation, "recommendationId" | "index">
-    ) => createRecommendation(formData),
+    ) =>
+      createRecommendation(
+        formData,
+        sessionData?.accessToken || "",
+        selectedSessionId?.toString()
+      ),
     onSuccess: (data) => {
       toast.success("Empfehlung erfolgreich erstellt", { duration: 3000 });
       refetch(); // Optionally refetch or update any necessary data here

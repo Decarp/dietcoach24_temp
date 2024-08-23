@@ -5,16 +5,10 @@ import { classNames } from "@/utils/classNames";
 import { useQuery } from "@tanstack/react-query";
 import { Patient, Sessions } from "@/types/types";
 import { fetchSessions } from "@/utils/fetchSessions";
-
-let tabs = [
-  { name: "Profil", path: "profile" },
-  { name: "Einkäufe", path: "purchases" },
-  { name: "Empfehlungen", path: "recommendations" },
-  // { name: "Vergleich", path: "comparison" },
-  // { name: "Modifikation", path: "modification" },
-];
+import { useSession } from "next-auth/react";
 
 export default function PatientCard() {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const router = useRouter();
   const pathSegments = pathname.split("/");
@@ -23,16 +17,16 @@ export default function PatientCard() {
 
   const { data: sessions } = useQuery<Sessions>({
     queryKey: ["sessions", patientId],
-    queryFn: () => fetchSessions(patientId),
+    queryFn: () => fetchSessions(patientId, session?.accessToken),
+    enabled: !!session?.accessToken,
   });
 
+  let tabs;
   if (sessions?.length === 0 || sessions?.length === 1) {
     tabs = [
       { name: "Profil", path: "profile" },
       { name: "Einkäufe", path: "purchases" },
       { name: "Empfehlungen", path: "recommendations" },
-      // { name: "Vergleich", path: "comparison" },
-      // { name: "Modifikation", path: "modification" },
     ];
   } else {
     tabs = [
@@ -40,21 +34,20 @@ export default function PatientCard() {
       { name: "Einkäufe", path: "purchases" },
       { name: "Empfehlungen", path: "recommendations" },
       { name: "Fortschritt", path: "progress" },
-      // { name: "Vergleich", path: "comparison" },
-      // { name: "Modifikation", path: "modification" },
     ];
   }
 
   const { isLoading, error, data } = useQuery<Patient>({
-    queryKey: ["participant"],
+    queryKey: ["participant", patientId],
     queryFn: () =>
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/dietician/participant`, {
         method: "GET",
         headers: {
-          Authentication: process.env.NEXT_PUBLIC_AUTH_TOKEN!,
+          Authentication: session?.accessToken || "",
           "Participant-Id": patientId,
         },
       }).then((res) => res.json()),
+    enabled: !!session?.accessToken,
   });
 
   const patient = data;

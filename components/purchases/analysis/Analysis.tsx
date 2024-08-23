@@ -10,6 +10,7 @@ import { BasketProduct } from "@/types/types";
 import { fetchBasketProducts } from "@/utils/fetchBasketProducts";
 import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo } from "react";
@@ -40,6 +41,7 @@ const ChartEnergyMicroCategories = dynamic(
 );
 
 const Analysis = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const patientId = pathname.split("/")[2];
 
@@ -61,12 +63,16 @@ const Analysis = () => {
 
   const { isLoading, error, data } = useQuery<BasketProduct[]>({
     queryKey: ["basketProducts", selectedBasketIds],
-    queryFn: () => fetchBasketProducts(patientId, selectedBasketIds),
-    enabled: selectedBasketIds.length > 0,
+    queryFn: () =>
+      fetchBasketProducts(
+        patientId,
+        selectedBasketIds,
+        session?.accessToken || ""
+      ),
+    enabled: selectedBasketIds.length > 0 && !!session?.accessToken,
   });
 
   const basketProducts = data || [];
-  console.log(basketProducts);
 
   useEffect(() => {
     if (

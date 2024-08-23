@@ -6,19 +6,21 @@ import { useCounterStore } from "@/providers/useStoreProvider";
 import { Basket, Patient, Sessions } from "@/types/types";
 import { classNames } from "@/utils/classNames";
 import { fetchBaskets } from "@/utils/fetchBaskets";
-import { fetchPatient } from "@/utils/fetchPatient";
+import { fetchPatientDetails } from "@/utils/fetchPatientDetails";
 import { fetchSessions } from "@/utils/fetchSessions";
 import { formatDate } from "@/utils/formatDate";
 import { getBasketTimestamps } from "@/utils/getBasketTimestamps";
 import { mapBasketsResponse } from "@/utils/mapBasketsResponse";
 import { useQuery } from "@tanstack/react-query";
 import { fromUnixTime, isAfter, max, subWeeks } from "date-fns";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import BasketsHeader from "./BasketsHeader";
 
 const Baskets = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const patientId = pathname.split("/")[2];
   const initialized = useRef(false);
@@ -33,12 +35,14 @@ const Baskets = () => {
 
   const { data: patient } = useQuery<Patient>({
     queryKey: ["participant", patientId],
-    queryFn: () => fetchPatient(patientId),
+    queryFn: () => fetchPatientDetails(patientId, session?.accessToken || ""),
+    enabled: !!session?.accessToken,
   });
 
   const { data: sessions } = useQuery<Sessions>({
     queryKey: ["sessions", patientId],
-    queryFn: () => fetchSessions(patientId),
+    queryFn: () => fetchSessions(patientId, session?.accessToken || ""),
+    enabled: !!session?.accessToken,
   });
 
   const { startTimestamp, endTimestamp } = getBasketTimestamps(
@@ -48,7 +52,14 @@ const Baskets = () => {
 
   const { isLoading, error, data } = useQuery<Basket[]>({
     queryKey: ["baskets", patientId, startTimestamp, endTimestamp],
-    queryFn: () => fetchBaskets(patientId, startTimestamp, endTimestamp || ""),
+    queryFn: () =>
+      fetchBaskets(
+        patientId,
+        startTimestamp,
+        endTimestamp || "",
+        session?.accessToken || ""
+      ),
+    enabled: !!session?.accessToken && !!startTimestamp && !!endTimestamp,
   });
 
   const baskets = data ? mapBasketsResponse(data) : {};

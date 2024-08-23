@@ -1,15 +1,23 @@
 import { Sessions } from "@/types/types";
 
-export const fetchSessions = async (patientId: string): Promise<Sessions> => {
+export const fetchSessions = async (
+  patientId: string,
+  token?: string
+): Promise<Sessions> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/sessions`,
     {
       method: "GET",
       headers: {
-        Authentication: process.env.NEXT_PUBLIC_AUTH_TOKEN!,
+        Authentication: token || "",
         "Participant-Id": patientId,
       },
     }
   );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch sessions");
+  }
+
   return response.json();
 };

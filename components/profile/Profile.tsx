@@ -1,6 +1,7 @@
 "use client";
 
 import { Patient } from "@/types/types";
+import { fetchPatientDetails } from "@/utils/fetchPatientDetails";
 import { PaperClipIcon } from "@heroicons/react/24/outline";
 import {
   CreditCardIcon,
@@ -10,9 +11,11 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { format, fromUnixTime } from "date-fns";
 import { de } from "date-fns/locale";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 export default function Profile() {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const pathSegments = pathname.split("/");
   const patientId = pathSegments[2];
@@ -22,15 +25,9 @@ export default function Profile() {
     error,
     data: patient,
   } = useQuery<Patient>({
-    queryKey: ["participant"],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dietician/participant`, {
-        method: "GET",
-        headers: {
-          Authentication: process.env.NEXT_PUBLIC_AUTH_TOKEN!,
-          "Participant-Id": patientId,
-        },
-      }).then((res) => res.json()),
+    queryKey: ["participant", patientId],
+    queryFn: () => fetchPatientDetails(patientId, session?.accessToken),
+    enabled: !!session?.accessToken,
   });
 
   if (isLoading) return <div>Loading...</div>;

@@ -1,15 +1,23 @@
 import { Patient } from "@/types/types";
 
-export const fetchPatient = async (patientId: string): Promise<Patient> => {
+export const fetchPatientDetails = async (
+  patientId: string,
+  token?: string
+): Promise<Patient> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/participant`,
     {
       method: "GET",
       headers: {
-        Authentication: process.env.NEXT_PUBLIC_AUTH_TOKEN!,
+        Authentication: token || "",
         "Participant-Id": patientId,
       },
     }
   );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch patient");
+  }
+
   return response.json();
 };

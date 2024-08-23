@@ -1,6 +1,5 @@
 "use client";
 
-import { getNutriScoreTableData } from "@/getData/getNutriScoreTableData";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { NutrientTableItem, NutrientTableResponseItem } from "@/types/types";
 import { fetchNutrientTable } from "@/utils/fetchNutrientTable";
@@ -19,13 +18,14 @@ import "@ag-grid-community/styles/ag-theme-quartz.css";
 import { RichSelectModule } from "@ag-grid-enterprise/rich-select";
 import { RowGroupingModule } from "@ag-grid-enterprise/row-grouping";
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
-  useEffect,
   type FunctionComponent,
 } from "react";
 
@@ -36,6 +36,7 @@ ModuleRegistry.registerModules([
 ]);
 
 export const NutriScoreTable = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const patientId = pathname.split("/")[2];
 
@@ -46,8 +47,13 @@ export const NutriScoreTable = () => {
 
   const { isLoading, error, data } = useQuery<NutrientTableResponseItem[]>({
     queryKey: ["nutrientTable", patientId, selectedBasketIds],
-    queryFn: () => fetchNutrientTable(patientId, selectedBasketIds),
-    enabled: selectedBasketIds.length > 0,
+    queryFn: () =>
+      fetchNutrientTable(
+        patientId,
+        selectedBasketIds,
+        session?.accessToken || ""
+      ),
+    enabled: selectedBasketIds.length > 0 && !!session?.accessToken,
   });
 
   const handleClick = (category: string) => {

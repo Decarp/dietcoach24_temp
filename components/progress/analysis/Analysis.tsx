@@ -13,6 +13,7 @@ import { BasketProduct } from "@/types/types";
 import { fetchBasketProducts } from "@/utils/fetchBasketProducts";
 import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -43,6 +44,7 @@ const ChartEnergyMicroCategories = dynamic(
 );
 
 const Analysis = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const patientId = pathname.split("/")[2];
 
@@ -58,24 +60,32 @@ const Analysis = () => {
     setSelectedCategories,
   } = useCounterStore((state) => state);
 
-  console.log(selectedBasketIds);
-
   const {
     isLoading: isLoadingBasketProductsComparisonNew,
     data: basketProductsComparisonNew,
   } = useQuery<BasketProduct[]>({
     queryKey: ["basketProductsComparisonNew", selectedBasketIds],
-    queryFn: () => fetchBasketProducts(patientId, selectedBasketIds),
-    enabled: selectedBasketIds.length > 0,
+    queryFn: () =>
+      fetchBasketProducts(
+        patientId,
+        selectedBasketIds,
+        session?.accessToken || ""
+      ),
+    enabled: selectedBasketIds.length > 0 && !!session?.accessToken,
   });
 
   const {
     isLoading: isLoadingBasketProductsComparisonOld,
     data: basketProductsComparisonOld,
   } = useQuery<BasketProduct[]>({
-    queryKey: ["basketProductsComparisonOld", selectedBasketIds],
-    queryFn: () => fetchBasketProducts(patientId, selectedComparisonBasketIds),
-    enabled: selectedComparisonBasketIds.length > 0,
+    queryKey: ["basketProductsComparisonOld", selectedComparisonBasketIds],
+    queryFn: () =>
+      fetchBasketProducts(
+        patientId,
+        selectedComparisonBasketIds,
+        session?.accessToken || ""
+      ),
+    enabled: selectedComparisonBasketIds.length > 0 && !!session?.accessToken,
   });
 
   const [percentageDifferencePrimary, setPercentageDifferencePrimary] =
@@ -307,6 +317,7 @@ const Analysis = () => {
           <div className="flex items-center">
             <div className="rounded-sm w-4 h-4 bg-secondary border-secondary border-4 mr-2"></div>
             <span className="text-sm text-gray-700">Woche -16 bis -8</span>
+            {/* Auto fix this based on timestamps? */}
           </div>
           <div className="flex items-center ml-6">
             <div className="rounded-sm w-4 h-4 bg-primary border-primary border-4 mr-2"></div>

@@ -9,7 +9,7 @@ export default function NotesSection({
   return (
     <section className="mt-8">
       <h2 className="block text-xl font-medium leading-6 text-gray-900">
-        Weitere Notizen hinzufügen (optional)
+        Weitere Erklärungen für den Patienten (optional)
       </h2>
       <div className="mt-4">
         <textarea

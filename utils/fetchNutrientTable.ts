@@ -2,14 +2,15 @@ import { NutrientTableResponseItem } from "@/types/types";
 
 export const fetchNutrientTable = async (
   patientId: string,
-  selectedBasketIds: string[]
+  selectedBasketIds: string[],
+  token: string
 ): Promise<NutrientTableResponseItem[]> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/nutrient-table`,
     {
       method: "POST",
       headers: {
-        Authentication: process.env.NEXT_PUBLIC_AUTH_TOKEN!,
+        Authentication: token,
         "Participant-Id": patientId,
         "Content-Type": "application/json",
       },
@@ -18,5 +19,10 @@ export const fetchNutrientTable = async (
       }),
     }
   );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch nutrient table: ${response.statusText}`);
+  }
+
   return response.json();
 };

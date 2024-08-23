@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, useMemo } from "react";
+import { classNames } from "@/utils/classNames";
 import {
   Disclosure,
   DisclosureButton,
@@ -10,25 +10,19 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { ShoppingCartIcon } from "@heroicons/react/24/solid";
-import { usePathname } from "next/navigation";
-import { classNames } from "@/utils/classNames";
-import Link from "next/link";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { UserCircleIcon } from "@heroicons/react/24/solid";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ReactNode, useMemo } from "react";
+import { MdOutlineSupervisedUserCircle } from "react-icons/md";
 
 const navigation = [{ name: "Patienten", href: "/patients" }];
 
-const userNavigation = [{ name: "Abmelden", href: "#" }];
-
 export default function Header({ children }: { children: ReactNode }) {
+  const { data: session } = useSession();
   const currentPath = usePathname();
 
   const updatedNavigation = useMemo(
@@ -40,6 +34,24 @@ export default function Header({ children }: { children: ReactNode }) {
     [currentPath]
   );
 
+  const handleUserAction = () => {
+    if (session) {
+      signOut();
+    } else {
+      signIn();
+    }
+  };
+
+  const userNavigation = useMemo(
+    () => [
+      {
+        name: session ? "Abmelden" : "Anmelden",
+        action: handleUserAction,
+      },
+    ],
+    [session]
+  );
+
   return (
     <>
       <div className="min-h-full">
@@ -48,8 +60,11 @@ export default function Header({ children }: { children: ReactNode }) {
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <Link className="flex flex-shrink-0 items-center" href="/">
-                  <ShoppingCartIcon className="block h-8 w-auto lg:hidden text-primary" />
-                  <ShoppingCartIcon className="hidden h-8 w-auto lg:block text-primary" />
+                  <p className="text-primary font-base text-2xl font-sans">
+                    DietCoach
+                  </p>
+                  {/* <BsPersonArmsUp className="block h-7 w-auto text-primary" /> */}
+                  <MdOutlineSupervisedUserCircle className="ml-2 block h-8 w-auto text-primary" />
                 </Link>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                   {updatedNavigation.map((item) => (
@@ -70,28 +85,23 @@ export default function Header({ children }: { children: ReactNode }) {
                 </div>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                <button
-                  type="button"
-                  className="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                >
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon aria-hidden="true" className="h-6 w-6" />
-                </button>
-
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
                     <MenuButton className="relative flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
-                      <Image
-                        alt=""
-                        src={user.imageUrl}
-                        className="h-8 w-8 rounded-full"
-                        width={32}
-                        height={32}
-                      />
+                      {session?.user?.image ? (
+                        <Image
+                          alt=""
+                          src={session.user.image}
+                          className="h-8 w-8 rounded-full"
+                          width={32}
+                          height={32}
+                        />
+                      ) : (
+                        <UserCircleIcon className="h-8 w-8 rounded-full text-primary" />
+                      )}
                     </MenuButton>
                   </div>
                   <MenuItems
@@ -100,12 +110,12 @@ export default function Header({ children }: { children: ReactNode }) {
                   >
                     {userNavigation.map((item) => (
                       <MenuItem key={item.name}>
-                        <a
-                          href={item.href}
-                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                        <button
+                          onClick={item.action}
+                          className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100"
                         >
                           {item.name}
-                        </a>
+                        </button>
                       </MenuItem>
                     ))}
                   </MenuItems>
@@ -151,38 +161,40 @@ export default function Header({ children }: { children: ReactNode }) {
             <div className="border-t border-gray-300 pb-3 pt-4">
               <div className="flex items-center px-4">
                 <div className="flex-shrink-0">
-                  <Image
-                    alt=""
-                    src={user.imageUrl}
-                    className="h-10 w-10 rounded-full"
-                    width={40}
-                    height={40}
-                  />
+                  {session?.user?.image ? (
+                    <Image
+                      alt=""
+                      src={session.user.image}
+                      className="h-10 w-10 rounded-full"
+                      width={40}
+                      height={40}
+                    />
+                  ) : (
+                    <Image
+                      alt=""
+                      src="https://via.placeholder.com/40"
+                      className="h-10 w-10 rounded-full"
+                      width={40}
+                      height={40}
+                    />
+                  )}
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium text-gray-800">
-                    {user.name}
+                    {session?.user?.name || "Guest"}
                   </div>
                   <div className="text-sm font-medium text-gray-500">
-                    {user.email}
+                    {session?.user?.email || "guest@example.com"}
                   </div>
                 </div>
-                <button
-                  type="button"
-                  className="relative ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                >
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon aria-hidden="true" className="h-6 w-6" />
-                </button>
               </div>
               <div className="mt-3 space-y-1">
                 {userNavigation.map((item) => (
                   <DisclosureButton
                     key={item.name}
-                    as="a"
-                    href={item.href}
-                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                    as="button"
+                    onClick={item.action}
+                    className="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                   >
                     {item.name}
                   </DisclosureButton>
