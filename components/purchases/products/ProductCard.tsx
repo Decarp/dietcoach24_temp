@@ -3,7 +3,6 @@
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { BasketProductFlat, SelectedBasketProductId } from "@/types/types";
 import { classNames } from "@/utils/classNames";
-import { CakeIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
 const ProductCard = ({ product }: { product: BasketProductFlat }) => {
@@ -72,12 +71,19 @@ const ProductCard = ({ product }: { product: BasketProductFlat }) => {
         selected ? "bg-primary text-white" : ""
       )}
     >
-      <CakeIcon
-        className={classNames(
-          "border border-gray-300 h-20 w-20 p-2 flex-none rounded-md",
-          selected ? "bg-white text-primary" : "bg-gray-50 text-primary"
+      <div className="flex-none">
+        {product.imageUrl ? (
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            className="border border-gray-300 bg-gray-50 h-20 w-20 p-2 flex-none rounded-md object-contain rounded-md"
+          />
+        ) : (
+          <div className="text-xs text-gray-500 border border-gray-300 bg-gray-50 h-20 w-20 p-2 flex items-center justify-center rounded-md object-contain">
+            Kein Bild
+          </div>
         )}
-      />
+      </div>
       <div className="min-w-0 flex-1">
         <p
           className={classNames(

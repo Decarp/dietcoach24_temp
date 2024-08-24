@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Patient, Sessions } from "@/types/types";
 import { fetchSessions } from "@/utils/fetchSessions";
 import { useSession } from "next-auth/react";
+import { fetchPatientDetails } from "@/utils/fetchPatientDetails";
 
 export default function PatientCard() {
   const { data: session } = useSession();
@@ -39,14 +40,7 @@ export default function PatientCard() {
 
   const { isLoading, error, data } = useQuery<Patient>({
     queryKey: ["participant", patientId],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dietician/participant`, {
-        method: "GET",
-        headers: {
-          Authentication: session?.accessToken || "",
-          "Participant-Id": patientId,
-        },
-      }).then((res) => res.json()),
+    queryFn: () => fetchPatientDetails(patientId, session?.accessToken || ""),
     enabled: !!session?.accessToken,
   });
 

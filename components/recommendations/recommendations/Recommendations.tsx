@@ -1,27 +1,35 @@
+import ProductCardDatabase from "@/components/purchases/products/ProductCardDatabase";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import {
-  BasketProductFlat,
-  DatabaseProduct,
-  SelectedBasketProductId,
-  Session,
-} from "@/types/types";
+import { DatabaseProduct, Session } from "@/types/types";
+import { deleteSession } from "@/utils/deleteSession";
+import { fetchProduct } from "@/utils/fetchProduct";
+import { fetchSession } from "@/utils/fetchSession";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { TrashIcon } from "@heroicons/react/20/solid";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
-import RecommendationsHeader from "./RecommendationsHeader";
-import { fetchSession } from "@/utils/fetchSession";
-import { useQuery } from "@tanstack/react-query";
-import { fetchProduct } from "@/utils/fetchProduct";
+import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
+import toast from "react-hot-toast";
+import RecommendationsHeader from "./RecommendationsHeader";
+import { deleteRecommendation } from "@/utils/deleteRecommendation";
 
 const Recommendations = () => {
+  const pathname = usePathname();
+  const patientId = pathname.split("/")[2];
+
   const { data: session } = useSession();
-  const { selectedSessionId } = useCounterStore((state) => ({
-    selectedSessionId: state.selectedSessionId,
-  }));
+  const { selectedSessionId, setSelectedSessionId } = useCounterStore(
+    (state) => ({
+      selectedSessionId: state.selectedSessionId,
+      setSelectedSessionId: state.setSelectedSessionId,
+    })
+  );
 
   // Fetch existing sessions
   const { data: consultationSession, refetch } = useQuery<Session>({
@@ -30,45 +38,104 @@ const Recommendations = () => {
       fetchSession(selectedSessionId ?? 0, session?.accessToken || ""),
     enabled: selectedSessionId !== null && !!session?.accessToken,
   });
-  // // Use useQuery hook to fetch data
-  // const { data: currentProduct } = useQuery<DatabaseProduct>({
-  //   queryKey: ["products", session?.recommendations[0].suggestions.current[0]],
-  //   queryFn: () =>
-  //     fetchProduct(session?.recommendations[0].suggestions.current[0]),
-  //   enabled: session?.recommendations[0].suggestions.alternatives.length > 0,
-  // });
 
-  // // Use useQuery hook to fetch data
-  // const { data: alternativeProduct } = useQuery<DatabaseProduct>({
-  //   queryKey: [
-  //     "products",
-  //     session?.recommendations[0].suggestions.alternatives[0],
-  //   ],
-  //   queryFn: () =>
-  //     fetchProduct(session?.recommendations[0].suggestions.alternatives[0]),
-  //   enabled: session?.recommendations[0].suggestions.alternatives.length > 0,
-  // });
+  const queryClient = useQueryClient();
+
+  // Get all product IDs from recommendations
+  const alternativeProductIds =
+    consultationSession?.recommendations.flatMap(
+      (recommendation) => recommendation.suggestions.alternatives
+    ) || [];
+
+  const currentProductIds =
+    consultationSession?.recommendations.flatMap(
+      (recommendation) => recommendation.suggestions.current
+    ) || [];
+
+  // Concatenate all product IDs and remove duplicates
+  const allProductIds = Array.from(
+    new Set([...alternativeProductIds, ...currentProductIds])
+  );
+
+  // Fetch all products for the given GTINs
+  const { data: fullProducts } = useQuery<DatabaseProduct[]>({
+    queryKey: ["products", allProductIds],
+    queryFn: () =>
+      Promise.all(allProductIds.map((gtin) => fetchProduct(gtin.toString()))),
+    enabled: allProductIds.length > 0 && !!session?.accessToken,
+  });
+
+  // Map the full product details back to the recommendations
+  const enrichedRecommendations = consultationSession?.recommendations.map(
+    (recommendation) => {
+      const enrichedCurrentProducts = recommendation.suggestions.current.map(
+        (gtin) => {
+          const product = fullProducts?.find((product) =>
+            product.gtins.includes(Number(gtin))
+          );
+          if (!product) {
+            console.warn(`Product not found for GTIN: ${gtin}`);
+          }
+          return product;
+        }
+      );
+
+      const enrichedAlternativeProducts =
+        recommendation.suggestions.alternatives.map((gtin) => {
+          const product = fullProducts?.find((product) =>
+            product.gtins.includes(Number(gtin))
+          );
+          if (!product) {
+            console.warn(`Product not found for GTIN: ${gtin}`);
+          }
+          return product;
+        });
+
+      return {
+        ...recommendation,
+        suggestions: {
+          current: enrichedCurrentProducts,
+          alternatives: enrichedAlternativeProducts,
+        },
+      };
+    }
+  );
+
+  const deleteMutation = useMutation({
+    mutationFn: () =>
+      deleteSession(selectedSessionId ?? 0, session?.accessToken || ""),
+    onSuccess: () => {
+      setSelectedSessionId(null);
+      queryClient.refetchQueries({ queryKey: ["sessions", patientId] });
+      toast.success("Sitzung erfolgreich gelöscht", { duration: 3000 });
+    },
+  });
+
+  const handleDeleteSession = () => {
+    deleteMutation.mutate();
+  };
+
+  // DELETE recommendation mutation
+  const deleteRecommendationMutation = useMutation({
+    mutationFn: (recommendationId: number) =>
+      deleteRecommendation(recommendationId, session?.accessToken || ""),
+    onSuccess: () => {
+      toast.success("Empfehlung erfolgreich gelöscht", { duration: 3000 });
+      refetch(); // Refetch the session to update the recommendations list
+    },
+    onError: () => {
+      toast.error("Fehler beim Löschen der Empfehlung", { duration: 3000 });
+    },
+  });
+
+  // Handle delete recommendation
+  const handleDeleteRecommendation = (recommendationId: number) => {
+    deleteRecommendationMutation.mutate(recommendationId);
+  };
 
   if (!session) {
     return null;
   }
-
-  // if (!currentProduct || !alternativeProduct) {
-  //   return null;
-  // }
-
-  // return null;
-
-  // const [selectedBasketProductsFlat, setSelectedBasketProductsFlat] = useState<
-  //   BasketProductFlat[]
-  // >(basketProducts.slice(2, 4));
-  // const [selectedBasketProductIds, setSelectedBasketProductIds] = useState<
-  //   SelectedBasketProductId[]
-  // >([]);
-  // const [selectedAlternativeProducts, setSelectedAlternativeProducts] =
-  //   useState<BasketProductFlat[]>(basketProducts.slice(0, 2));
-
-  // console.log("session", session);
 
   if (selectedSessionId === null) {
     return (
@@ -90,38 +157,48 @@ const Recommendations = () => {
     );
   }
 
-  // const handleRemoveSelectedProduct = (gtin: number, basketId: string) => {
-  //   const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
-  //     (product) => !(product.gtin === gtin && product.basketId === basketId)
-  //   );
-  //   setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
-
-  //   const newSelectedBasketProductIds = selectedBasketProductIds.filter(
-  //     (id) => !(id.gtin === gtin && id.basketId === basketId)
-  //   );
-  //   setSelectedBasketProductIds(newSelectedBasketProductIds);
-  // };
-
-  // const handleRemoveAlternativeProduct = (gtin: number) => {
-  //   setSelectedAlternativeProducts(
-  //     selectedAlternativeProducts.filter((product) => product.gtin !== gtin)
-  //   );
-  // };
+  if (enrichedRecommendations?.length === 0) {
+    return (
+      <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
+        <RecommendationsHeader numRecommendations={0} />
+        <div className="shadow-inner -mx-6">
+          <div className="flex-1 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
+            <div className="text-center">
+              <h3 className="mt-6 text-sm font-semibold text-gray-900">
+                Keine Empfehlungen vorhanden
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">
+                Es wurden keine Empfehlungen für diese Sitzung gefunden.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button
+            onClick={handleDeleteSession}
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md"
+          >
+            Sitzung löschen
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
       <RecommendationsHeader
-        numRecommendations={consultationSession?.recommendations.length ?? 0}
+        numRecommendations={enrichedRecommendations?.length ?? 0}
       />
       <div className="shadow-inner -mx-6">
         <div className="flex-1 max-h-[calc(100vh-287px)] overflow-y-auto px-6">
           <ul className="mt-6 text-gray-500">
-            {consultationSession?.recommendations.map((recommendation) => (
+            {enrichedRecommendations?.map((recommendation) => (
               <li
                 key={recommendation.recommendationId}
                 className="bg-white p-4 border rounded-md mb-4"
               >
-                <div>
+                <div className="flex items-center">
                   {recommendation.rule.variant === "VAR1" && (
                     <div className="relative flex-1">
                       <div className="flex rounded-md items-center">
@@ -167,6 +244,39 @@ const Recommendations = () => {
                       </div>
                     </div>
                   )}
+                  <Menu as="div" className="relative inline-block text-left">
+                    <div>
+                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900">
+                        <EllipsisVerticalIcon
+                          aria-hidden="true"
+                          className="-mr-1 h-5 w-5 text-gray-400"
+                        />
+                      </MenuButton>
+                    </div>
+                    <MenuItems
+                      transition
+                      className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                    >
+                      <div className="py-1">
+                        <MenuItem>
+                          <button
+                            className="group flex items-center px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                            onClick={() =>
+                              handleDeleteRecommendation(
+                                recommendation.recommendationId
+                              )
+                            }
+                          >
+                            <TrashIcon
+                              aria-hidden="true"
+                              className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                            />
+                            Empfehlung entfernen
+                          </button>
+                        </MenuItem>
+                      </div>
+                    </MenuItems>
+                  </Menu>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mt-4 rounded-lg">
@@ -178,44 +288,25 @@ const Recommendations = () => {
                       <ShoppingCartIcon className="h-6 w-6 text-red-500" />
                       <ArrowDownIcon className="ml-1 h-4 w-4 text-red-500" />
                     </div>
-                    <div className="p-4 h-[400px] overflow-y-scroll space-y-4">
-                      {/* {[currentProduct].length === 0 && (
+
+                    <div className="overflow-y-scroll">
+                      {recommendation.suggestions.current.length === 0 && (
                         <div className="text-center">
                           <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
                           <h3 className="mt-2 text-sm font-semibold text-gray-900">
                             Keine Produkte ausgewählt
                           </h3>
-                          <p className="mt-1 text-sm text-gray-500">
-                            Bitte wählen Sie Produkte aus, zu denen Sie ihrem
-                            Kunden Empfehlungen geben möchten.
-                          </p>
                         </div>
                       )}
 
-                      {[currentProduct].map((product) => (
-                        <div
-                          key={product.gtins[0]}
-                          className="flex items-center space-x-4 justify-between"
-                        >
-                          <div className="flex items-center space-x-4">
-                            <div className="w-16 h-16 rounded-md bg-gray-200 flex-shrink-0" />
-                            <div>
-                              <h4 className="text-gray-900 font-semibold">
-                                {product.de.name}
-                              </h4>
-                              <p className="text-gray-500">
-                                {
-                                  product.nutriScoreV2023Detail
-                                    .nutriScoreCalculated
-                                }
-                              </p>
-                              <p className="text-gray-500">
-                                {product.dietCoachCategoryL1.de}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      ))} */}
+                      <ul className="p-4 space-y-4">
+                        {recommendation.suggestions.current.map((product) => (
+                          <ProductCardDatabase
+                            product={product}
+                            key={product?.gtins[0]}
+                          />
+                        ))}
+                      </ul>
                     </div>
                   </section>
 
@@ -227,49 +318,31 @@ const Recommendations = () => {
                       <ShoppingCartIcon className="h-6 w-6 text-primary" />
                       <ArrowUpIcon className="ml-1 h-4 w-4 text-primary" />
                     </div>
-                    <div className="p-4 h-[400px] overflow-y-scroll space-y-4">
-                      {/* {[alternativeProduct].length === 0 && (
+
+                    <div className="overflow-y-scroll">
+                      {recommendation.suggestions.alternatives.length === 0 && (
                         <div className="text-center">
                           <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
                           <h3 className="mt-2 text-sm font-semibold text-gray-900">
                             Keine Produkte ausgewählt
                           </h3>
-                          <p className="mt-1 text-sm text-gray-500">
-                            Bitte wählen Sie Produkte aus, um sie ihrem Kunden
-                            vorzuschlagen.
-                          </p>
                         </div>
                       )}
-
-                      {[alternativeProduct].map((product) => (
-                        <div
-                          key={product.gtins[0]}
-                          className="flex items-center space-x-4 justify-between"
-                        >
-                          <div className="flex items-center space-x-4">
-                            <div className="w-16 h-16 rounded-md bg-gray-200 flex-shrink-0" />
-                            <div>
-                              <h4 className="text-gray-900 font-semibold">
-                                {product.de.name}
-                              </h4>
-                              <p className="text-gray-500">
-                                {
-                                  product.nutriScoreV2023Detail
-                                    .nutriScoreCalculated
-                                }
-                              </p>
-                              <p className="text-gray-500">
-                                {product.dietCoachCategoryL1.de}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      ))} */}
+                      <ul className="p-4 space-y-4">
+                        {recommendation.suggestions.alternatives.map(
+                          (product) => (
+                            <ProductCardDatabase
+                              product={product}
+                              key={product?.gtins[0]}
+                            />
+                          )
+                        )}
+                      </ul>
                     </div>
                   </section>
                 </div>
 
-                <section>
+                <div>
                   {recommendation.notes && (
                     <div className="mt-4">
                       <textarea
@@ -281,10 +354,18 @@ const Recommendations = () => {
                       />
                     </div>
                   )}
-                </section>
+                </div>
               </li>
             ))}
           </ul>
+          <div>
+            <button
+              onClick={handleDeleteSession}
+              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md"
+            >
+              Sitzung löschen
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,12 +1,17 @@
 "use client";
 
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { Recommendation, Sessions } from "@/types/types";
+import { createRecommendation } from "@/utils/createRecommendation";
+import { fetchSessions } from "@/utils/fetchSessions";
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -15,11 +20,6 @@ import SelectedAlternativesSection from "./SelectedAlternativesSection";
 import SelectedProductsSection from "./SelectedProductsSection";
 import SessionSelector from "./SessionSelector";
 import TabSection from "./tabSection/TabSection";
-import { fetchSessions } from "@/utils/fetchSessions";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Recommendation, Sessions } from "@/types/types";
-import { createRecommendation } from "@/utils/createRecommendation";
-import { useSession } from "next-auth/react";
 
 export default function RecommendationDrawer({
   open,
@@ -28,14 +28,14 @@ export default function RecommendationDrawer({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const { data: sessionData } = useSession();
+  const { data: userSession } = useSession();
   const pathname = usePathname();
   const patientId = pathname.split("/")[2];
 
   // Fetch existing sessions
   const { data: sessions, refetch } = useQuery<Sessions>({
     queryKey: ["sessions", patientId],
-    queryFn: () => fetchSessions(patientId),
+    queryFn: () => fetchSessions(patientId, userSession?.accessToken || ""),
   });
 
   const [currentTab, setCurrentTab] = useState("Variante 1");
@@ -50,14 +50,12 @@ export default function RecommendationDrawer({
   });
   const [freitextState, setFreitextState] = useState("");
   const [notes, setNotes] = useState<string | null>(null);
-  const [selectedSessionId, setSelectedSessionId] = useState<number | null>(
-    null
-  );
 
   const {
     selectedBasketIds,
     selectedBasketProductsFlat,
     selectedAlternativeProducts,
+    selectedSessionId,
   } = useCounterStore((state) => state);
 
   const mutation = useMutation({
@@ -66,12 +64,12 @@ export default function RecommendationDrawer({
     ) =>
       createRecommendation(
         formData,
-        sessionData?.accessToken || "",
+        userSession?.accessToken || "",
         selectedSessionId?.toString()
       ),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success("Empfehlung erfolgreich erstellt", { duration: 3000 });
-      refetch(); // Optionally refetch or update any necessary data here
+      refetch();
     },
     onError: (error: any) => {
       toast.error(`Es ist ein Fehler aufgetreten: ${error.message}`, {
@@ -88,18 +86,40 @@ export default function RecommendationDrawer({
       return;
     }
 
-    const formData: Omit<Recommendation, "recommendationId" | "index"> = {
-      rule: {
-        variant: "VAR1",
+    let rule;
+    if (currentTab === "Variante 1") {
+      rule = {
+        variant: currentTab,
         mode: variante1State.mode,
         nutrient: variante1State.nutrient,
         category: variante1State.category,
+        text: null,
+      };
+    } else if (currentTab === "Variante 2") {
+      rule = {
+        variant: currentTab,
+        mode: variante2State.mode,
+        nutrient: null,
+        category: variante2State.category,
+        text: null,
+      };
+    } else if (currentTab === "Freitext") {
+      rule = {
+        variant: currentTab,
+        mode: null,
+        nutrient: null,
+        category: null,
         text: freitextState,
-      },
+      };
+    } else {
+      toast.error("Bitte wähle eine Variante aus", { duration: 3000 });
+      return;
+    }
+
+    const formData: Omit<Recommendation, "recommendationId" | "index"> = {
+      rule: rule,
       basketIds: selectedBasketIds,
       suggestions: {
-        // current: [0],
-        // alternatives: [0],
         current: selectedBasketProductsFlat.map((product) => product.gtin),
         alternatives: selectedAlternativeProducts.map(
           (product) => product.gtins[0]
@@ -107,8 +127,6 @@ export default function RecommendationDrawer({
       },
       notes: notes || "",
     };
-
-    console.log("formData", formData);
 
     mutation.mutate(formData);
   };
@@ -138,11 +156,7 @@ export default function RecommendationDrawer({
                   <hr />
 
                   <div className="px-6">
-                    <SessionSelector
-                      onSelectSession={(sessionId) =>
-                        setSelectedSessionId(sessionId)
-                      }
-                    />
+                    <SessionSelector />
                     <TabSection
                       currentTab={currentTab}
                       setCurrentTab={setCurrentTab}

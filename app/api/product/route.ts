@@ -1,16 +1,21 @@
-import { DatabaseProducts } from "@/types/types";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { DatabaseProduct } from "@/types/types";
 
-export async function GET(request: Request) {
-  const { pathname } = new URL(request.url);
-  const productId = pathname.split("/").pop(); // Extract the product ID from the request URL
+export async function GET(request: NextRequest) {
+  // Extract the 'gtin' query parameter from the URL
+  const searchParams = request.nextUrl.searchParams;
+  const gtin = searchParams.get("gtin");
 
-  //  = GTIN
+  if (!gtin) {
+    return NextResponse.json(
+      { error: "gtin query parameter is required" },
+      { status: 400 }
+    );
+  }
 
   try {
-    // Fetch data from the external API using the product ID
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_DB_URL}/products/${productId}`,
+      `${process.env.NEXT_PUBLIC_DB_URL}/products/${gtin}`,
       {
         method: "GET",
       }
@@ -23,21 +28,8 @@ export async function GET(request: Request) {
       );
     }
 
-    const data: DatabaseProducts = await res.json();
-
-    // Return only the product that matches the given ID (if there's more than one in the response)
-    const product = data.products.find(
-      (p) => p.productId === Number(productId)
-    );
-
-    if (!product) {
-      return NextResponse.json(
-        { error: `Product with ID ${productId} not found.` },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(product);
+    const data: DatabaseProduct = await res.json();
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Fetch error:", error);
     return NextResponse.json(

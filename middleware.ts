@@ -11,7 +11,13 @@ export async function middleware(req: NextRequest) {
   // Allow requests if:
   // 1. It's a request for the homepage
   // 2. The token exists (user is authenticated)
-  if (pathname === "/" || token) {
+  // 3. The request is for the register or login page
+  if (
+    pathname === "/" ||
+    token ||
+    pathname === "/register" ||
+    pathname === "/login"
+  ) {
     return NextResponse.next();
   }
 

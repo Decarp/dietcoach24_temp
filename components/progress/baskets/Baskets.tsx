@@ -40,7 +40,7 @@ const Baskets = () => {
 
   const { data: sessions } = useQuery<Sessions>({
     queryKey: ["sessions", patientId],
-    queryFn: () => fetchSessions(patientId),
+    queryFn: () => fetchSessions(patientId, session?.accessToken || ""),
   });
 
   const { startTimestamp, endTimestamp } = getBasketTimestamps(

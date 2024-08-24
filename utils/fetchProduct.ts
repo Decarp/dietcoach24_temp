@@ -1,9 +1,7 @@
 import { DatabaseProduct } from "@/types/types";
 
-export async function fetchProduct(
-  productId: number
-): Promise<DatabaseProduct> {
-  const res = await fetch(`/api/product/${productId}`);
+export async function fetchProduct(gtin: string): Promise<DatabaseProduct> {
+  const res = await fetch(`/api/product?gtin=${gtin}`); // Pass gtin as a query parameter
 
   if (!res.ok) {
     throw new Error(`Error fetching data: ${res.statusText}`);

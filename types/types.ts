@@ -198,16 +198,18 @@ export type Sessions = {
   timestamp: number;
 }[];
 
+export type RecommendationRule = {
+  variant: string;
+  mode: string | null;
+  nutrient: string | null;
+  category: string | null;
+  text: string | null;
+};
+
 export type Recommendation = {
   recommendationId: number;
   index: number;
-  rule: {
-    variant: string;
-    mode: string | null;
-    nutrient: string | null;
-    category: string | null;
-    text: string | null;
-  };
+  rule: RecommendationRule;
   basketIds: string[];
   suggestions: {
     current: number[];

@@ -1,5 +1,6 @@
 "use client";
 
+import { useCounterStore } from "@/providers/useStoreProvider";
 import { Sessions } from "@/types/types";
 import { createSession } from "@/utils/createSession";
 import { fetchSessions } from "@/utils/fetchSessions";
@@ -10,14 +11,14 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
-export default function SessionSelector({
-  onSelectSession,
-}: {
-  onSelectSession: (sessionId: number | null) => void;
-}) {
+export default function SessionSelector() {
   const { data: session } = useSession();
   const pathname = usePathname();
   const patientId = pathname.split("/")[2];
+
+  const { selectedSessionId, setSelectedSessionId } = useCounterStore(
+    (state) => state
+  );
 
   // Fetch existing sessions
   const { data: sessions, refetch } = useQuery<Sessions>({
@@ -43,22 +44,21 @@ export default function SessionSelector({
   };
 
   const handleSessionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedSessionId = parseInt(e.target.value, 10);
+    console.log("Session selected:", e.target.value);
+    const selectedSessionId = parseInt(e.target.value);
     if (isNaN(selectedSessionId)) {
-      onSelectSession(null); // No session selected
+      setSelectedSessionId(null);
     } else {
-      onSelectSession(selectedSessionId); // Send selected session ID back to parent
+      setSelectedSessionId(selectedSessionId);
     }
   };
 
-  // Trigger the initial selection when sessions are loaded
+  // Trigger the initial selection when sessions are loaded, but only if selectedSessionId is null
   useEffect(() => {
-    if (sessions && sessions.length > 0) {
-      onSelectSession(sessions[0].sessionId);
-    } else {
-      onSelectSession(null);
+    if (sessions && sessions.length > 0 && selectedSessionId === null) {
+      setSelectedSessionId(sessions[0].sessionId);
     }
-  }, [sessions, onSelectSession]);
+  }, [sessions]);
 
   return (
     <section className="mt-6">
@@ -70,6 +70,7 @@ export default function SessionSelector({
           <select
             id="session"
             name="session"
+            value={selectedSessionId || ""}
             onChange={handleSessionChange}
             className="block w-96 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-primary sm:text-sm sm:leading-6"
           >
@@ -86,7 +87,7 @@ export default function SessionSelector({
                 </option>
               ))
             ) : (
-              <option value="none">Keine Sitzung verfügbar</option>
+              <option value="">Keine Sitzung verfügbar</option>
             )}
           </select>
         </div>
