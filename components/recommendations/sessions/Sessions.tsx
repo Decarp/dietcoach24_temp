@@ -4,12 +4,10 @@ import { classNames } from "@/utils/classNames";
 import { fetchSessions } from "@/utils/fetchSessions";
 import { formatDate } from "@/utils/formatDate";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import SessionsHeader from "./SessionsHeader";
-import { createSession } from "@/utils/createSession";
-import { useSession } from "next-auth/react";
-import toast from "react-hot-toast";
 
 const SessionsComp = () => {
   const { data: session } = useSession();
@@ -17,7 +15,7 @@ const SessionsComp = () => {
   const patientId = pathname.split("/")[2];
 
   // Fetch existing sessions
-  const { data: sessions, refetch } = useQuery<Sessions>({
+  const { data: sessions } = useQuery<Sessions>({
     queryKey: ["sessions", patientId],
     queryFn: () => fetchSessions(patientId, session?.accessToken),
   });
@@ -26,24 +24,8 @@ const SessionsComp = () => {
     (state) => state
   );
 
-  // Create new session
-  const mutation = useMutation({
-    mutationFn: () => createSession(patientId, session?.accessToken || ""),
-    onSuccess: (newSession) => {
-      toast.success("Neue Sitzung erstellt", { duration: 3000 });
-      refetch();
-    },
-    onError: () => {
-      toast.error("Fehler beim Erstellen der Sitzung", { duration: 3000 });
-    },
-  });
-
   const handleBasketCheckboxChange = (sessionId: number) => {
     setSelectedSessionId(sessionId);
-  };
-
-  const handleCreateSession = () => {
-    mutation.mutate();
   };
 
   return (
@@ -101,13 +83,6 @@ const SessionsComp = () => {
             </li>
           ))}
         </ul>
-        <button
-          type="button"
-          onClick={handleCreateSession}
-          className="ml-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary hover:bg-green-700"
-        >
-          Neue Sitzung erstellen
-        </button>
       </div>
     </div>
   );

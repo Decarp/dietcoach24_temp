@@ -101,6 +101,8 @@ const Recommendations = () => {
     }
   );
 
+  console.log("enrichedRecommendations", enrichedRecommendations);
+
   const deleteMutation = useMutation({
     mutationFn: () =>
       deleteSession(selectedSessionId ?? 0, session?.accessToken || ""),

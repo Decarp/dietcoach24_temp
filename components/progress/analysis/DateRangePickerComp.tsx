@@ -43,6 +43,10 @@ export default function DateRangePickerComp() {
     subWeeks(fromUnixTime(ffqTimestamp || 0), 8)
   );
 
+  const ffqTimestampMinus4Weeks = getUnixTime(
+    subWeeks(fromUnixTime(ffqTimestamp || 0), 4)
+  );
+
   const ffqTimestampPlus8Weeks = getUnixTime(
     addWeeks(fromUnixTime(ffqTimestamp || 0), 8)
   );
@@ -57,16 +61,14 @@ export default function DateRangePickerComp() {
   ]);
 
   useEffect(() => {
-    if (sessions && patient) {
-      const range1Start = dayjs(ffqTimestampMinus8Weeks.toString());
-      const range1End = dayjs(ffqTimestamp.toString());
+    if (sessions && sessions.length > 1 && patient) {
+      const range1Start = dayjs.unix(ffqTimestampMinus8Weeks);
+      const range1End = dayjs.unix(ffqTimestampMinus4Weeks);
       setRange1Dates([range1Start, range1End]);
 
-      if (sessions.length > 1) {
-        const range2Start = dayjs(ffqTimestamp.toString());
-        const range2End = dayjs(ffqTimestampPlus8Weeks.toString());
-        setRange2Dates([range2Start, range2End]);
-      }
+      const range2Start = dayjs.unix(ffqTimestamp);
+      const range2End = dayjs.unix(ffqTimestampPlus8Weeks);
+      setRange2Dates([range2Start, range2End]);
     }
   }, [sessions, patient, ffqTimestampMinus8Weeks, ffqTimestampPlus8Weeks]);
 

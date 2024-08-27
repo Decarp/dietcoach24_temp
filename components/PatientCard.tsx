@@ -22,21 +22,12 @@ export default function PatientCard() {
     enabled: !!session?.accessToken,
   });
 
-  let tabs;
-  if (sessions?.length === 0 || sessions?.length === 1) {
-    tabs = [
-      { name: "Profil", path: "profile" },
-      { name: "Einkäufe", path: "purchases" },
-      { name: "Empfehlungen", path: "recommendations" },
-    ];
-  } else {
-    tabs = [
-      { name: "Profil", path: "profile" },
-      { name: "Einkäufe", path: "purchases" },
-      { name: "Empfehlungen", path: "recommendations" },
-      { name: "Fortschritt", path: "progress" },
-    ];
-  }
+  const tabs = [
+    { name: "Profil", path: "profile" },
+    { name: "Einkäufe", path: "purchases" },
+    { name: "Empfehlungen", path: "recommendations" },
+    { name: "Fortschritt", path: "progress" },
+  ];
 
   const { isLoading, error, data } = useQuery<Patient>({
     queryKey: ["participant", patientId],
@@ -74,10 +65,6 @@ export default function PatientCard() {
     );
   }
 
-  if (!patient) {
-    return <p>Patient not found</p>;
-  }
-
   const handleTabChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTab = event.target.value;
     router.push(`/p/${patientId}/${selectedTab}`);
@@ -88,7 +75,7 @@ export default function PatientCard() {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="md:flex md:items-center md:justify-between">
           <h1 className="text-2xl font-semibold">
-            {patient.profile.firstName} {patient.profile.lastName}
+            {patient?.profile.firstName} {patient?.profile.lastName}
           </h1>
         </div>
         <div className="mt-4">

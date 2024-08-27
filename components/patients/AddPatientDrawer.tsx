@@ -21,6 +21,7 @@ export default function AddPatientDrawer({
 }) {
   const { data: sessionData } = useSession();
   const [patientId, setPatientId] = useState("");
+  const [version, setVersion] = useState("");
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -43,6 +44,11 @@ export default function AddPatientDrawer({
     event.preventDefault();
     if (!patientId.trim()) {
       toast.error("Bitte valide Patienten-ID nutzen", { duration: 3000 });
+      return;
+    }
+
+    if (version !== "A" && version !== "B") {
+      toast.error("Bitte valide Version nutzen", { duration: 3000 });
       return;
     }
 
@@ -69,7 +75,7 @@ export default function AddPatientDrawer({
               <div className="bg-gray-50 flex h-full flex-col divide-y divide-gray-200 shadow-xl">
                 <div className="flex min-h-0 flex-1 flex-col overflow-y-scroll py-6">
                   <DialogTitle className="mb-3 px-6 text-2xl font-semibold leading-6 text-gray-900">
-                    Add a New Patient
+                    Neuen Patienten hinzufügen
                   </DialogTitle>
                   <hr />
 
@@ -79,7 +85,7 @@ export default function AddPatientDrawer({
                         htmlFor="patientId"
                         className="mt-6 block text-sm font-medium text-gray-700"
                       >
-                        Patient ID
+                        Patienten-ID
                       </label>
                       <input
                         type="text"
@@ -89,19 +95,35 @@ export default function AddPatientDrawer({
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
                         required
                       />
+
+                      <label
+                        htmlFor="version"
+                        className="mt-6 block text-sm font-medium text-gray-700"
+                      >
+                        Version
+                      </label>
+                      <input
+                        type="text"
+                        id="version"
+                        value={version}
+                        onChange={(e) => setVersion(e.target.value)}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                        required
+                      />
+
                       <div className="flex justify-end mt-6">
                         <button
                           type="button"
                           onClick={() => setOpen(false)}
                           className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400"
                         >
-                          Cancel
+                          Zurück
                         </button>
                         <button
                           type="submit"
                           className="ml-4 inline-flex justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                         >
-                          Add Patient
+                          Patient hinzufügen
                         </button>
                       </div>
                     </form>

@@ -10,6 +10,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import AddPatientDrawer from "./AddPatientDrawer";
 import { useRouter } from "next/navigation";
+import { ShoppingCartIcon, UserIcon } from "@heroicons/react/24/outline";
 
 export default function Patients() {
   const { data: session } = useSession();
@@ -47,7 +48,7 @@ export default function Patients() {
   return (
     <>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Patients</h1>
+        <h1 className="text-2xl font-semibold">Patientenübersicht</h1>
         <button
           onClick={() => setDrawerOpen(true)}
           className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-800"
@@ -56,6 +57,18 @@ export default function Patients() {
         </button>
       </div>
       <hr className="border-gray-300 -mx-8" />
+
+      {patients?.length === 0 && (
+        <div className="text-center mt-12">
+          <UserIcon className="mx-auto h-12 w-12 text-gray-400" />
+          <h3 className="mt-2 text-sm font-semibold text-gray-900">
+            Kein Patient hinzugefügt
+          </h3>
+          <p className="mt-1 text-sm text-gray-500">
+            Bitte fügen Sie einen Patienten hinzu, um fortzufahren.
+          </p>
+        </div>
+      )}
 
       <ul
         role="list"
@@ -70,7 +83,7 @@ export default function Patients() {
             <div className="flex w-full items-center justify-between space-x-6 p-6">
               <div className="flex-1 truncate">
                 <div className="flex items-center space-x-3">
-                  <h3 className="truncate text-sm font-medium text-gray-900">
+                  <h3 className="truncate text-xl font-medium text-gray-900">
                     {person.profile.firstName} {person.profile.lastName}
                   </h3>
                 </div>

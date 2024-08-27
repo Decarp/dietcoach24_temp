@@ -1,6 +1,6 @@
-import React from "react";
-import { classNames } from "@/utils/classNames";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { classNames } from "@/utils/classNames";
+import React from "react";
 
 const tabs = [
   { name: "Energieverteilung", path: "energy" },
@@ -21,9 +21,9 @@ const AnalysisHeader = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold">Analyse</h2>
+      <h2 className="text-xl font-semibold">Fortschritt</h2>
       <h3 className="text-xs font-light mb-5 text-gray-500">
-        Filtere Lebensmittel
+        Vergleiche Zeitfenster
       </h3>
       <div>
         <div className="sm:hidden">
@@ -44,7 +44,7 @@ const AnalysisHeader = () => {
             ))}
           </select>
         </div>
-        <div className="hidden sm:block border-b -mx-4 sm:-mx-6 lg:-mx-6 lg:-ml-8 xl:-ml-6">
+        <div className="hidden sm:block border-b -mx-8 px-2">
           <nav className="-mb-px flex space-x-8 px-4 sm:px-5 lg:px-7 xl:px-5">
             {tabs.map((tab) => (
               <button

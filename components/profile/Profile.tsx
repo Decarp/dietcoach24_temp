@@ -37,7 +37,7 @@ export default function Profile() {
   return (
     <div className="bg-white h-screen -m-8 p-8 border-x border-b border-gray-300 h-[calc(100vh-179px)]">
       <h2 className="text-xl font-semibold">Profil</h2>
-      <h3 className="text-sm font-light mb-4 text-gray-500">
+      <h3 className="text-xs font-light mb-4 text-gray-500">
         Persönliche Daten und Gesundheitsinformationen
       </h3>
 
@@ -79,7 +79,7 @@ export default function Profile() {
         </dl>
       </div>
 
-      {/* <div className="my-6 mt-2 text-sm text-gray-900 border border-gray-300 rounded-md flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+      <div className="my-6 mt-2 text-sm text-gray-900 border border-gray-300 rounded-md flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
         <div className="flex w-0 flex-1 items-center">
           <PaperClipIcon
             aria-hidden="true"
@@ -108,7 +108,7 @@ export default function Profile() {
             Ansehen
           </a>
         </div>
-      </div> */}
+      </div>
 
       <div className="mt-6">
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -146,18 +146,18 @@ export default function Profile() {
             <dd className="ml-16 items-baseline">
               <div className="flex items-baseline">
                 <p className="text-2xl font-semibold text-gray-900">
-                  {patient?.shoppingFrequency.coop}{" "}
-                </p>
-                <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
-                  Coop
-                </p>
-              </div>
-              <div className="flex items-baseline">
-                <p className="text-2xl font-semibold text-gray-900">
                   {patient?.shoppingFrequency.migros}{" "}
                 </p>
                 <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
                   Migros
+                </p>
+              </div>
+              <div className="flex items-baseline">
+                <p className="text-2xl font-semibold text-gray-900">
+                  {patient?.shoppingFrequency.coop}{" "}
+                </p>
+                <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
+                  Coop
                 </p>
               </div>
               <div className="flex items-baseline">
@@ -186,18 +186,18 @@ export default function Profile() {
             <dd className="ml-16 items-baseline">
               <div className="flex items-baseline">
                 <p className="text-2xl font-semibold text-gray-900">
-                  {patient?.loyaltyCardUsage.coop}{" "}
-                </p>
-                <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
-                  Coop
-                </p>
-              </div>
-              <div className="flex items-baseline">
-                <p className="text-2xl font-semibold text-gray-900">
                   {patient?.loyaltyCardUsage.migros}{" "}
                 </p>
                 <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
                   Migros
+                </p>
+              </div>
+              <div className="flex items-baseline">
+                <p className="text-2xl font-semibold text-gray-900">
+                  {patient?.loyaltyCardUsage.coop}{" "}
+                </p>
+                <p className="ml-2 flex items-baseline text-sm font-medium text-gray-500">
+                  Coop
                 </p>
               </div>
             </dd>

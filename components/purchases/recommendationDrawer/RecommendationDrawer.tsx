@@ -89,7 +89,7 @@ export default function RecommendationDrawer({
     let rule;
     if (currentTab === "Variante 1") {
       rule = {
-        variant: currentTab,
+        variant: "VAR1",
         mode: variante1State.mode,
         nutrient: variante1State.nutrient,
         category: variante1State.category,
@@ -97,7 +97,7 @@ export default function RecommendationDrawer({
       };
     } else if (currentTab === "Variante 2") {
       rule = {
-        variant: currentTab,
+        variant: "VAR2",
         mode: variante2State.mode,
         nutrient: null,
         category: variante2State.category,
@@ -105,7 +105,7 @@ export default function RecommendationDrawer({
       };
     } else if (currentTab === "Freitext") {
       rule = {
-        variant: currentTab,
+        variant: "FREITEXT",
         mode: null,
         nutrient: null,
         category: null,

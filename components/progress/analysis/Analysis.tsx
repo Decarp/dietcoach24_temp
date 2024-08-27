@@ -1,7 +1,6 @@
 "use client";
 
 import DiffDot from "@/components/charts/DiffDot";
-import { NutriScoreTable } from "@/components/charts/NutriScoreTable";
 import AnalysisHeader from "@/components/progress/analysis/AnalysisHeader";
 import { Spinner } from "@/components/Spinner";
 import { getChartEnergyCategoriesData } from "@/getData/getChartEnergyCategoriesData";
@@ -9,14 +8,19 @@ import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacro
 import { getChartEnergyMacroData } from "@/getData/getChartEnergyMacroData";
 import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicroCategoriesData";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { BasketProduct } from "@/types/types";
+import { BasketProduct, Sessions } from "@/types/types";
 import { fetchBasketProducts } from "@/utils/fetchBasketProducts";
-import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { fetchSessions } from "@/utils/fetchSessions";
+import {
+  CalendarDateRangeIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import DateRangePickerComp from "./DateRangePickerComp";
 
 const ChartEnergyMacro = dynamic(
   () => import("@/components/charts/ChartEnergyMacro"),
@@ -88,6 +92,8 @@ const Analysis = () => {
     enabled: selectedComparisonBasketIds.length > 0 && !!session?.accessToken,
   });
 
+  const [isProcessing, setIsProcessing] = useState(true);
+
   const [percentageDifferencePrimary, setPercentageDifferencePrimary] =
     useState<number | null>(null);
 
@@ -144,15 +150,6 @@ const Analysis = () => {
     );
   }, [basketProductsComparisonOld, selectedMicro]);
 
-  // const nutriScoreDataNew = useMemo(() => {
-  //   return getNutriScoreData(basketProductsComparisonNew || []);
-  // }, [basketProductsComparisonNew]);
-
-  // const nutriScoreTableDataOld = useMemo(() => {
-  //   return getNutriScoreData(basketProductsComparisonOld || []);
-  // }, [basketProductsComparisonOld]);
-
-  // Auto-set default category based on current tab
   useEffect(() => {
     if (currentTab === "energy" && selectedCategories.major.length === 0) {
       if (chartEnergyCategoriesData.length > 0) {
@@ -308,28 +305,73 @@ const Analysis = () => {
     chartEnergyMicroCategoriesData,
   ]);
 
-  return (
-    <div className="-mr-8 border-x border-gray-300 pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
-      <AnalysisHeader />
-      <div className="shadow-inner -mx-6">
-        {/* TODO: Add color legend for "Woche -16 bis -8" in secondary and "Woche -8 bis heute" in primary */}
-        <div className="flex justify-end px-10 pt-6 -mb-2">
-          <div className="flex items-center">
-            <div className="rounded-sm w-4 h-4 bg-secondary border-secondary border-4 mr-2"></div>
-            <span className="text-sm text-gray-700">Woche -16 bis -8</span>
-            {/* Auto fix this based on timestamps? */}
-          </div>
-          <div className="flex items-center ml-6">
-            <div className="rounded-sm w-4 h-4 bg-primary border-primary border-4 mr-2"></div>
-            <span className="text-sm text-gray-700">Woche -8 bis heute</span>
+  useEffect(() => {
+    // Check if all processing is finished
+    if (
+      !isLoadingBasketProductsComparisonNew &&
+      !isLoadingBasketProductsComparisonOld &&
+      chartEnergyMacroData &&
+      chartComparisonEnergyMacroData &&
+      chartEnergyCategoriesData &&
+      chartComparisonEnergyCategoriesData &&
+      chartEnergyMacroCategoriesData &&
+      chartComparisonEnergyMacroCategoriesData &&
+      chartEnergyMicroCategoriesData &&
+      chartComparisonEnergyMicroCategoriesData
+    ) {
+      setIsProcessing(false);
+    }
+  }, [
+    isLoadingBasketProductsComparisonNew,
+    isLoadingBasketProductsComparisonOld,
+    chartEnergyMacroData,
+    chartComparisonEnergyMacroData,
+    chartEnergyCategoriesData,
+    chartComparisonEnergyCategoriesData,
+    chartEnergyMacroCategoriesData,
+    chartComparisonEnergyMacroCategoriesData,
+    chartEnergyMicroCategoriesData,
+    chartComparisonEnergyMicroCategoriesData,
+  ]);
+
+  const { data: sessions } = useQuery<Sessions>({
+    queryKey: ["sessions", patientId],
+    queryFn: () => fetchSessions(patientId, session?.accessToken || ""),
+  });
+
+  if (sessions && sessions.length < 2) {
+    return (
+      <div className="bg-white -ml-8 -mr-8 border-x border-gray-300 pt-6 bg-gray-50 flex flex-col flex-1 px-8 border-b h-[calc(100vh-184px)]">
+        <AnalysisHeader />
+        <div className="-mx-8 flex-1 max-h-[calc(100vh-320px)] overflow-y-auto pb-6 px-8">
+          <div className="flex mt-6 px-4 justify-center w-full">
+            <div className="text-center">
+              <CalendarDateRangeIcon className="mx-auto h-12 w-12 text-gray-400" />
+              <h3 className="mt-2 text-sm font-semibold text-gray-900">
+                Keine zweite Sitzung
+              </h3>
+              <p className="mt-1 text-sm text-gray-500">
+                Ansicht des Fortschritt ist erst ab zwei Sitzungen möglich.
+              </p>
+            </div>
           </div>
         </div>
+      </div>
+    );
+  }
 
-        <div className="flex-1 max-h-[calc(100vh-348px)] overflow-y-auto pb-6 px-6">
-          {isLoadingBasketProductsComparisonNew &&
-            isLoadingBasketProductsComparisonOld && <Spinner />}
+  return (
+    <div className="bg-white -ml-8 -mr-8 border-x border-gray-300 pt-6 bg-gray-50 flex flex-col flex-1 px-8 border-b h-[calc(100vh-184px)]">
+      <AnalysisHeader />
+      <div className="-mx-8 flex-1 max-h-[calc(100vh-320px)] overflow-y-auto pb-6 px-8">
+        <DateRangePickerComp />
+        <div>
+          {(isLoadingBasketProductsComparisonNew ||
+            isLoadingBasketProductsComparisonOld ||
+            isProcessing) && <Spinner />}
           {!isLoadingBasketProductsComparisonNew &&
           !isLoadingBasketProductsComparisonOld &&
+          !isProcessing &&
           selectedBasketIds.length > 0 ? (
             <>
               {currentTab === "energy" && (
@@ -340,17 +382,11 @@ const Analysis = () => {
                   </h4>
 
                   <div className="flex items-center justify-between">
-                    <ChartEnergyMacro
-                      data={chartComparisonEnergyMacroData}
-                      className="border-secondary border-4"
-                    />
+                    <ChartEnergyMacro data={chartComparisonEnergyMacroData} />
                     <DiffDot
                       percentageDifference={percentageDifferencePrimary}
                     />
-                    <ChartEnergyMacro
-                      data={chartEnergyMacroData}
-                      className="border-primary border-4"
-                    />
+                    <ChartEnergyMacro data={chartEnergyMacroData} />
                   </div>
 
                   <br />
@@ -361,7 +397,6 @@ const Analysis = () => {
                     <ChartEnergyCategories
                       data={chartComparisonEnergyCategoriesData}
                       replace={true}
-                      className="border-secondary border-4"
                     />
                     <DiffDot
                       percentageDifference={percentageDifferenceSecondary}
@@ -369,7 +404,6 @@ const Analysis = () => {
                     <ChartEnergyCategories
                       data={chartEnergyCategoriesData}
                       replace={true}
-                      className="border-primary border-4"
                     />
                   </div>
                 </>
@@ -382,7 +416,6 @@ const Analysis = () => {
                     <ChartEnergyMacroCategories
                       data={chartComparisonEnergyMacroCategoriesData}
                       replace={true}
-                      className="border-secondary border-4"
                     />
                     <DiffDot
                       percentageDifference={percentageDifferenceSecondary}
@@ -390,7 +423,6 @@ const Analysis = () => {
                     <ChartEnergyMacroCategories
                       data={chartEnergyMacroCategoriesData}
                       replace={true}
-                      className="border-primary border-4"
                     />
                   </div>
                 </>
@@ -405,7 +437,6 @@ const Analysis = () => {
                     <ChartEnergyMicroCategories
                       data={chartComparisonEnergyMicroCategoriesData}
                       replace={true}
-                      className="border-secondary border-4"
                     />
                     <DiffDot
                       percentageDifference={percentageDifferenceSecondary}
@@ -413,38 +444,27 @@ const Analysis = () => {
                     <ChartEnergyMicroCategories
                       data={chartEnergyMicroCategoriesData}
                       replace={true}
-                      className="border-primary border-4"
                     />
                   </div>
                 </>
               )}
-              {/* {currentTab === "nutri" && (
-                <>
-                  <br />
-                  <h4 className="text-lg font-medium mb-2">Nutri-Score</h4>
-                  <div className="flex items-center justify-between">
-                    <NutriScoreTable data={nutriScoreDataOld} />
-                    <DiffDot
-                      percentageDifference={percentageDifferenceSecondary}
-                    />
-                    <NutriScoreTable data={nutriScoreDataNew} />
-                  </div>
-                </>
-              )} */}
             </>
           ) : (
             !isLoadingBasketProductsComparisonNew &&
-            !isLoadingBasketProductsComparisonOld && (
-              <div className="flex mt-6 px-4">
-                <ArrowLeftIcon className="ml-3 h-12 w-12 text-gray-400 mr-6 flex-shrink-0" />
+            !isLoadingBasketProductsComparisonOld &&
+            !isProcessing && (
+              <div className="flex mt-10 px-4 justify-center w-full">
                 <div className="text-center">
                   <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
                   <h3 className="mt-2 text-sm font-semibold text-gray-900">
                     Keine Einkäufe ausgewählt
                   </h3>
                   <p className="mt-1 text-sm text-gray-500">
-                    Bitte wählen Sie mindestens einen Einkauf aus, um Analysen
+                    Bitte wählen Sie mindestens zwei Einkäufe aus, um Analysen
                     anzuzeigen.
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Selektieren Sie dazu ein entsprechendes Zeitfenster.
                   </p>
                 </div>
               </div>

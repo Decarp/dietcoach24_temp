@@ -9,10 +9,7 @@ export default function PurchasesPage() {
     <main className="px-4 sm:px-6 lg:px-8">
       <PatientCard />
       <div className="mx-auto w-full lg:flex">
-        <div className="flex-1 xl:flex">
-          <Baskets />
-          <Analysis />
-        </div>
+        <Analysis />
       </div>
     </main>
   );
