@@ -100,10 +100,10 @@ export default function ChartEnergyMacroCategories({
             <button
               key={macro}
               onClick={() => handleMacroChange(macro as MacroCategory)}
-              className={`w-full rounded-md px-3 py-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
+              className={`w-full rounded-md px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
                 selectedMacro === macro
                   ? "bg-primary text-white"
-                  : "bg-gray-200"
+                  : "bg-gray-300"
               }`}
             >
               {macro}

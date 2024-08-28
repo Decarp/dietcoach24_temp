@@ -17,17 +17,16 @@ import {
 } from "recharts";
 
 const categoryColors = {
-  Getränke: "#0088FE",
-  Gemüse: "#00C49F",
-  "Fett, Öle & Nüsse": "#FFBB28",
-  "Milchprodukte & Alternativen": "#FF8042",
-  Snacks: "#A28DFE",
-  Ausgeschlossen: "#FEA28D",
-  "Getreideprodukte & Kartoffeln": "#8DFFF4",
-  "Fleisch, Fisch & Eier": "#FFD700",
-  Fertiggerichte: "#FF6347",
-  "Pflanzliche Proteinquellen": "#8D68A0",
-  Früchte: "#FF69B4",
+  Getränke: "#e80538",
+  Gemüse: "#c29d00",
+  "Fett, Öle & Nüsse": "#e87d1e",
+  "Milchprodukte & Alternativen": "#52a52e",
+  Snacks: "#00979d",
+  "Getreideprodukte & Kartoffeln": "#6578b4",
+  "Fleisch, Fisch & Eier": "#80408d",
+  Fertiggerichte: "#c9006b",
+  "Pflanzliche Proteinquellen": "#68666f",
+  Früchte: "#000",
 };
 
 export default function ChartEnergyCategories({

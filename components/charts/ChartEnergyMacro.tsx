@@ -16,7 +16,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#FF8042"];
+const COLORS = ["#68666f", "#80408d", "#00979d", "#e87d1e"];
 
 export default function ChartEnergyMacro({
   data,

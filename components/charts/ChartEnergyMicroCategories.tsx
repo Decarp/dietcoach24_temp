@@ -98,8 +98,8 @@ export default function ChartEnergyMicroCategories({
           <button
             key={micro}
             onClick={() => handleMicroChange(micro as MicroCategory)}
-            className={`w-full rounded-md px-3 py-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
-              selectedMicro === micro ? "bg-primary text-white" : "bg-gray-200"
+            className={`w-full rounded-md px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
+              selectedMicro === micro ? "bg-primary text-white" : "bg-gray-300"
             }`}
           >
             {micro}
