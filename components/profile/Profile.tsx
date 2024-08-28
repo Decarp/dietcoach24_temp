@@ -81,37 +81,6 @@ export default function Profile() {
         </dl>
       </div>
 
-      <div className="my-6 mt-2 text-sm text-gray-900 border border-gray-300 rounded-md flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-        <div className="flex w-0 flex-1 items-center">
-          <PaperClipIcon
-            aria-hidden="true"
-            className="h-5 w-5 flex-shrink-0 text-gray-400"
-          />
-          <div className="ml-4 flex min-w-0 flex-1 gap-2">
-            <span className="truncate font-medium">FFQ.pdf</span>
-            <span className="flex-shrink-0 text-gray-400">
-              {patient?.medicalHistory.ffqDate
-                ? format(
-                    fromUnixTime(patient.medicalHistory.ffqDate),
-                    "d. MMMM yyyy",
-                    {
-                      locale: de,
-                    }
-                  )
-                : ""}
-            </span>
-          </div>
-        </div>
-        <div className="ml-4 flex-shrink-0">
-          <a
-            href={`${patient?.medicalHistory.ffqUrl}`}
-            className="font-medium text-primary hover:text-primary"
-          >
-            Ansehen
-          </a>
-        </div>
-      </div>
-
       <div className="mt-6">
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <div className="relative overflow-hidden rounded-lg bg-white p-6 rounded-md border border-gray-300">
