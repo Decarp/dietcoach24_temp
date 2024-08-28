@@ -24,7 +24,7 @@ const SessionsComp = () => {
     (state) => state
   );
 
-  const handleBasketCheckboxChange = (sessionId: number) => {
+  const handleSessionClick = (sessionId: number) => {
     setSelectedSessionId(sessionId);
   };
 
@@ -37,8 +37,9 @@ const SessionsComp = () => {
           {sessions?.map((session) => (
             <li
               key={session.sessionId}
+              onClick={() => handleSessionClick(session.sessionId)}
               className={classNames(
-                "pl-8 flex items-center gap-x-4 px-3 py-5",
+                "pl-8 flex items-center gap-x-4 px-3 py-5 cursor-pointer",
                 selectedSessionId === session.sessionId
                   ? "bg-primary text-white"
                   : ""
@@ -74,12 +75,6 @@ const SessionsComp = () => {
                   {formatDate(session.timestamp)}
                 </p>
               </div>
-              <input
-                type="checkbox"
-                className="h-4 w-4 mr-4 rounded border-gray-300 text-primary focus:ring-primary"
-                checked={selectedSessionId === session.sessionId}
-                onChange={() => handleBasketCheckboxChange(session.sessionId)}
-              />
             </li>
           ))}
         </ul>
