@@ -1,5 +1,6 @@
 "use client";
 
+import { Spinner } from "@/components/Spinner";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -17,7 +18,13 @@ export default function HomePage() {
 
   if (status === "loading") {
     // Optionally, show a loading spinner or nothing while the session is loading
-    return <p>Lädt...</p>;
+    return (
+      <main className="px-4 py-8 sm:px-6 lg:px-8">
+        <div className="bg-white h-screen -m-8 p-8 border-x border-b border-gray-300 h-[calc(100vh-68px)]">
+          <Spinner />
+        </div>
+      </main>
+    );
   }
 
   const handleRegisterClick = () => {
