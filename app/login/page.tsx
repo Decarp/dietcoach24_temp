@@ -16,9 +16,10 @@ export default function Login() {
     setLoading(true);
 
     const result = await signIn("credentials", {
-      redirect: false,
       email,
       password,
+      redirect: true,
+      callbackUrl: "/patients",
     });
 
     setLoading(false);

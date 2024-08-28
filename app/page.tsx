@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -20,10 +20,6 @@ export default function HomePage() {
     return <p>Lädt...</p>;
   }
 
-  const handleLoginClick = () => {
-    router.push("/login");
-  };
-
   const handleRegisterClick = () => {
     router.push("/register");
   };
@@ -37,7 +33,7 @@ export default function HomePage() {
         <div className="space-x-4">
           <button
             className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-800"
-            onClick={handleLoginClick}
+            onClick={() => signIn()}
           >
             Einloggen
           </button>

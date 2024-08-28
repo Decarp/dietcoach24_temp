@@ -10,7 +10,8 @@ import { Toaster } from "react-hot-toast";
 import Provider from "@/utils/Providers";
 import "dotenv/config";
 import { getServerSession } from "next-auth";
-import SessionProvider from "@/providers/SessionProvider";
+import AuthProvider from "@/providers/SessionProvider";
+import { getSession } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,17 +21,15 @@ export const metadata: Metadata = {
     "Analyze your patient's food shopping data and provide personalized recommendations.",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
-
   return (
     <html lang="en" className="h-full">
       <body className={inter.className + " h-full"}>
-        <SessionProvider session={session}>
+        <AuthProvider>
           <Provider>
             <CounterStoreProvider>
               <ClientWrapper>
@@ -39,7 +38,7 @@ export default async function RootLayout({
               </ClientWrapper>
             </CounterStoreProvider>
           </Provider>
-        </SessionProvider>
+        </AuthProvider>
       </body>
     </html>
   );
