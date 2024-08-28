@@ -1,12 +1,11 @@
+import { sortCriteria } from "@/data/sortCriteria";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 const SortMenu = ({
-  sortCriteria,
   selectedSortCriteria,
   setSelectedSortCriteria,
 }: {
-  sortCriteria: string[];
   selectedSortCriteria: string;
   setSelectedSortCriteria: (criteria: string) => void;
 }) => {

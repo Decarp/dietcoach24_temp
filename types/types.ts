@@ -37,7 +37,7 @@ export type DatabaseNutrients = {
   fats: number;
   saturatedFats: number;
   carbohydrates: number;
-  sugar: number;
+  sugars: number;
   fibers: number;
   salt: number;
   sodium: number;

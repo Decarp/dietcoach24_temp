@@ -1,5 +1,6 @@
 import ProductsHeader from "@/components/purchases/products/ProductsHeader";
 import { Spinner } from "@/components/Spinner";
+import { sortCriteria } from "@/data/sortCriteria";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { BasketProduct, BasketProductFlat } from "@/types/types";
 import { fetchBasketProducts } from "@/utils/fetchBasketProducts";
@@ -9,22 +10,13 @@ import {
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import RecommendationDrawer from "../recommendationDrawer/RecommendationDrawer";
 import FilterPopover from "./FilterPopover";
 import ProductCard from "./ProductCard";
 import SortMenu from "./SortMenu";
-import { useSession } from "next-auth/react";
-
-const sortCriteria = [
-  "Einkaufsdatum",
-  "Kalorien",
-  "Proteine",
-  "Fette",
-  "Kohlenhydrate",
-  "Nahrungsfasern",
-];
 
 const sortProducts = (
   products: BasketProductFlat[],
@@ -39,10 +31,16 @@ const sortProducts = (
         return product.nutrients.proteins;
       case "Fette":
         return product.nutrients.fats;
+      case "Gesättigte Fettsäuren":
+        return product.nutrients.saturatedFats;
       case "Kohlenhydrate":
         return product.nutrients.carbohydrates;
+      case "Zucker":
+        return product.nutrients.sugars;
       case "Nahrungsfasern":
         return product.nutrients.fibres;
+      case "Salz":
+        return product.nutrients.salt;
       default:
         return product.basketIndex;
     }

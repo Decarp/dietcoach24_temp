@@ -32,15 +32,6 @@ import FilterPopoverProduct from "./FilterPopoverProduct";
 
 type CategoryKeys = keyof typeof categories.de;
 
-const sortCriteria = [
-  "Standard",
-  "Kalorien",
-  "Proteine",
-  "Fette",
-  "Kohlenhydrate",
-  "Nahrungsfasern",
-];
-
 const sortProducts = (
   products: DatabaseProduct[],
   selectedSortCriteria: string,
@@ -54,10 +45,16 @@ const sortProducts = (
         return product.nutrients.proteins;
       case "Fette":
         return product.nutrients.fats;
+      case "Gesättigte Fettsäuren":
+        return product.nutrients.saturatedFats;
       case "Kohlenhydrate":
         return product.nutrients.carbohydrates;
+      case "Zucker":
+        return product.nutrients.sugars;
       case "Nahrungsfasern":
         return product.nutrients.fibers;
+      case "Salz":
+        return product.nutrients.salt;
       default:
         return 0;
     }
@@ -277,7 +274,6 @@ export default function ProductPopup({
                   />
 
                   <SortMenu
-                    sortCriteria={sortCriteria}
                     selectedSortCriteria={selectedSortCriteria}
                     setSelectedSortCriteria={setSelectedSortCriteria}
                   />
