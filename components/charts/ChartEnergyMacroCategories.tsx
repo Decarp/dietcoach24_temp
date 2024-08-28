@@ -123,7 +123,7 @@ export default function ChartEnergyMacroCategories({
           <XAxis type="number" />
           <YAxis dataKey="name" type="category" tick={{ fontSize: 12 }} />
           <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey="value" fill="#9ca3af">
+          <Bar dataKey="value" fill="#9ca3af" cursor={"pointer"}>
             {data.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}

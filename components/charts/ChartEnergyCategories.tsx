@@ -80,6 +80,7 @@ export default function ChartEnergyCategories({
             dataKey="value"
             animationDuration={1000}
             onClick={(e, index) => handleClick(index)}
+            cursor="pointer"
           >
             {data.map((entry, index) => (
               <Cell
