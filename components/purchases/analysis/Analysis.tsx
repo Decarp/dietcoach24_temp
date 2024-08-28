@@ -157,11 +157,6 @@ const Analysis = () => {
               {currentTab === "energy" && (
                 <>
                   <br />
-                  <h4 className="text-lg font-medium mb-2">
-                    Energieverteilung aus Makronährstoffen
-                  </h4>
-                  <ChartEnergyMacro data={chartEnergyMacroData} />
-                  <br />
                   <div className="flex">
                     <h4 className="text-lg font-medium mb-2">
                       Energieverteilung aus Lebensmittelkategorien
@@ -176,6 +171,11 @@ const Analysis = () => {
                     </button>
                   </div>
                   <ChartEnergyCategories data={chartEnergyCategoriesData} />
+                  <br />
+                  <h4 className="text-lg font-medium mb-2">
+                    Energieverteilung aus Makronährstoffen
+                  </h4>
+                  <ChartEnergyMacro data={chartEnergyMacroData} />
                 </>
               )}
               {currentTab === "macro" && (
