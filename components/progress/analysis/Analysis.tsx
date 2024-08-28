@@ -1,5 +1,3 @@
-"use client";
-
 import DiffDot from "@/components/charts/DiffDot";
 import AnalysisHeader from "@/components/progress/analysis/AnalysisHeader";
 import { Spinner } from "@/components/Spinner";
@@ -153,7 +151,11 @@ const Analysis = () => {
   useEffect(() => {
     if (currentTab === "energy" && selectedCategories.major.length === 0) {
       if (chartEnergyCategoriesData.length > 0) {
-        const defaultCategory = chartEnergyCategoriesData[0].name;
+        // Find the category with the highest value
+        const defaultCategory = chartEnergyCategoriesData.reduce(
+          (max, category) => (category.value > max.value ? category : max)
+        ).name;
+
         setSelectedCategories({ major: [defaultCategory], sub: [] });
       }
     } else if (
@@ -161,7 +163,10 @@ const Analysis = () => {
       selectedCategories.major.length === 0
     ) {
       if (chartEnergyMacroCategoriesData.length > 0) {
-        const defaultCategory = chartEnergyMacroCategoriesData[0].name;
+        // Find the category with the highest value
+        const defaultCategory = chartEnergyMacroCategoriesData.reduce(
+          (max, category) => (category.value > max.value ? category : max)
+        ).name;
         setSelectedCategories({ major: [defaultCategory], sub: [] });
       }
     } else if (
@@ -169,7 +174,10 @@ const Analysis = () => {
       selectedCategories.major.length === 0
     ) {
       if (chartEnergyMicroCategoriesData.length > 0) {
-        const defaultCategory = chartEnergyMicroCategoriesData[0].name;
+        // Find the category with the highest value
+        const defaultCategory = chartEnergyMicroCategoriesData.reduce(
+          (max, category) => (category.value > max.value ? category : max)
+        ).name;
         setSelectedCategories({ major: [defaultCategory], sub: [] });
       }
     }
