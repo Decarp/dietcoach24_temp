@@ -80,7 +80,6 @@ const Analysis = () => {
       JSON.stringify(basketProducts) !== JSON.stringify(currentBasketProducts)
     ) {
       setBasketProducts(basketProducts);
-
       const basketProductsFlat = basketProducts.flatMap((basket) => {
         return basket.products.map((product) => ({
           basketId: basket.basketId,
@@ -89,45 +88,12 @@ const Analysis = () => {
           ...product,
         }));
       });
-
       setBasketProductsFlat(basketProductsFlat);
-
-      const availableCategories = {
-        major: Array.from(
-          new Set(
-            basketProductsFlat.map((product) => product.dietCoachCategoryL1.de)
-          )
-        ),
-        sub: Array.from(
-          new Set(
-            basketProductsFlat.map((product) => product.dietCoachCategoryL2.de)
-          )
-        ),
-      };
-
       setAvailableCategories(availableCategories);
       setSelectedCategories(availableCategories);
       setSelectedSortCriteria("Kohlenhydrate");
     }
   }, [basketProducts, setBasketProducts, currentBasketProducts]);
-
-  const allAvailableCategoriesAreSelected = useMemo(() => {
-    if (!availableCategories.major.length || !selectedCategories.major.length) {
-      return false;
-    }
-    return (
-      availableCategories.major.length === selectedCategories.major.length &&
-      availableCategories.sub.length === selectedCategories.sub.length
-    );
-  }, [availableCategories, selectedCategories]);
-
-  const handleSelectAllCategories = () => {
-    if (allAvailableCategoriesAreSelected) {
-      setSelectedCategories({ major: [], sub: [] });
-    } else {
-      setSelectedCategories(availableCategories);
-    }
-  };
 
   const chartEnergyMacroData = useMemo(() => {
     return getChartEnergyMacroData(basketProducts);
@@ -146,6 +112,48 @@ const Analysis = () => {
     return getChartEnergyMicroCategoriesData(basketProducts, selectedMicro);
   }, [basketProducts, selectedMicro]);
 
+  useEffect(() => {
+    if (currentTab === "energy" && selectedCategories.major.length === 0) {
+      if (chartEnergyCategoriesData.length > 0) {
+        // Find the category with the highest value
+        const defaultCategory = chartEnergyCategoriesData.reduce(
+          (max, category) => (category.value > max.value ? category : max)
+        ).name;
+
+        setSelectedCategories({ major: [defaultCategory], sub: [] });
+      }
+    } else if (
+      currentTab === "macro" &&
+      selectedCategories.major.length === 0
+    ) {
+      if (chartEnergyMacroCategoriesData.length > 0) {
+        // Find the category with the highest value
+        const defaultCategory = chartEnergyMacroCategoriesData.reduce(
+          (max, category) => (category.value > max.value ? category : max)
+        ).name;
+        setSelectedCategories({ major: [defaultCategory], sub: [] });
+      }
+    } else if (
+      currentTab === "micro" &&
+      selectedCategories.major.length === 0
+    ) {
+      if (chartEnergyMicroCategoriesData.length > 0) {
+        // Find the category with the highest value
+        const defaultCategory = chartEnergyMicroCategoriesData.reduce(
+          (max, category) => (category.value > max.value ? category : max)
+        ).name;
+        setSelectedCategories({ major: [defaultCategory], sub: [] });
+      }
+    }
+  }, [
+    chartEnergyCategoriesData,
+    chartEnergyMacroCategoriesData,
+    chartEnergyMicroCategoriesData,
+    currentTab,
+    selectedCategories,
+    setSelectedCategories,
+  ]);
+
   return (
     <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
       <AnalysisHeader />
@@ -157,20 +165,11 @@ const Analysis = () => {
               {currentTab === "energy" && (
                 <>
                   <br />
-                  <div className="flex">
-                    <h4 className="text-lg font-medium mb-2">
-                      Energieverteilung aus Lebensmittelkategorien
-                    </h4>
-                    <button
-                      className="ml-auto text-sm font-semibold text-gray-500"
-                      onClick={handleSelectAllCategories}
-                    >
-                      {allAvailableCategoriesAreSelected
-                        ? "Alle abwählen"
-                        : "Alle auswählen"}
-                    </button>
-                  </div>
+                  <h4 className="text-lg font-medium mb-2">
+                    Energieverteilung aus Lebensmittelkategorien
+                  </h4>
                   <ChartEnergyCategories data={chartEnergyCategoriesData} />
+
                   <br />
                   <h4 className="text-lg font-medium mb-2">
                     Energieverteilung aus Makronährstoffen
@@ -181,19 +180,7 @@ const Analysis = () => {
               {currentTab === "macro" && (
                 <>
                   <br />
-                  <div className="flex">
-                    <h4 className="text-lg font-medium mb-2">
-                      Makronährstoffe
-                    </h4>
-                    <button
-                      className="ml-auto text-sm font-semibold text-gray-500"
-                      onClick={handleSelectAllCategories}
-                    >
-                      {allAvailableCategoriesAreSelected
-                        ? "Alle abwählen"
-                        : "Alle auswählen"}
-                    </button>
-                  </div>
+                  <h4 className="text-lg font-medium mb-2">Makronährstoffe</h4>
                   <ChartEnergyMacroCategories
                     data={chartEnergyMacroCategoriesData}
                   />
@@ -202,19 +189,9 @@ const Analysis = () => {
               {currentTab === "micro" && (
                 <>
                   <br />
-                  <div className="flex">
-                    <h4 className="text-lg font-medium mb-2">
-                      Weitere Nährstoffe
-                    </h4>
-                    <button
-                      className="ml-auto text-sm font-semibold text-gray-500"
-                      onClick={handleSelectAllCategories}
-                    >
-                      {allAvailableCategoriesAreSelected
-                        ? "Alle abwählen"
-                        : "Alle auswählen"}
-                    </button>
-                  </div>
+                  <h4 className="text-lg font-medium mb-2">
+                    Weitere Nährstoffe
+                  </h4>
                   <ChartEnergyMicroCategories
                     data={chartEnergyMicroCategoriesData}
                   />
@@ -223,17 +200,7 @@ const Analysis = () => {
               {currentTab === "nutri" && (
                 <>
                   <br />
-                  <div className="flex">
-                    <h4 className="text-lg font-medium mb-2">Nutri-Score</h4>
-                    <button
-                      className="ml-auto text-sm font-semibold text-gray-500"
-                      onClick={handleSelectAllCategories}
-                    >
-                      {allAvailableCategoriesAreSelected
-                        ? "Alle abwählen"
-                        : "Alle auswählen"}
-                    </button>
-                  </div>
+                  <h4 className="text-lg font-medium mb-2">Nutri-Score</h4>
                   <NutriScoreTable />
                 </>
               )}
