@@ -20,6 +20,8 @@ export default function Profile() {
   const pathSegments = pathname.split("/");
   const patientId = pathSegments[2];
 
+  console.log("Client-side session:", session);
+
   const {
     isLoading,
     error,

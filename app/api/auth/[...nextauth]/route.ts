@@ -57,16 +57,11 @@ const handler = NextAuth({
           return null;
         }
 
-        // Step 2: Fetch the user profile using the token
-        const profile = await getUser(token);
-
         // Step 3: Return a User object
         return {
           id: loginData.email, // Using email as a unique identifier (ID)
           email: loginData.email,
           token,
-          firstName: profile.firstName,
-          lastName: profile.lastName,
           type: loginData.type,
         } as User; // Cast to User type
       },
@@ -74,20 +69,22 @@ const handler = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
+      console.log("ROUTE jwt user:", user);
       if (user) {
         const u = user as User; // Explicitly cast user to your User type
         token.accessToken = u.token;
-        token.firstName = u.firstName;
-        token.lastName = u.lastName;
         token.type = u.type;
       }
+      console.log("ROUTE jwt token:", token);
       return token;
     },
     async session({ session, token }) {
+      console.log("ROUTE token:", token);
       session.accessToken = token.accessToken;
       session.firstName = token.firstName;
       session.lastName = token.lastName;
       session.type = token.type;
+      console.log("ROUTE Session:", session);
       return session;
     },
   },
@@ -95,6 +92,9 @@ const handler = NextAuth({
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login",
+  },
 });
 
 export { handler as GET, handler as POST };
