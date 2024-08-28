@@ -41,7 +41,7 @@ export default function ChartEnergyMacro({
   const handleClick = (index: number) => {
     if (activeIndex === index) {
       setActiveIndex(undefined);
-      setSelectedSortCriteria("Einkaufsdatum");
+      setSelectedSortCriteria("Kohlenhydrate");
     } else {
       setActiveIndex(index);
       setSelectedSortCriteria(data[index]?.name);

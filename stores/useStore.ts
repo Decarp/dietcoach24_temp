@@ -57,7 +57,7 @@ export const initCounterStore = (): CounterState => {
   return {
     selectedCategories: { major: [], sub: [] },
     availableCategories: { major: [], sub: [] },
-    selectedSortCriteria: "Einkaufsdatum",
+    selectedSortCriteria: "Kohlenhydrate",
     selectedBasketIds: [],
     selectedComparisonBasketIds: [],
     selectedBasketProductIds: [],
@@ -76,7 +76,7 @@ export const initCounterStore = (): CounterState => {
 export const defaultInitState: CounterState = {
   selectedCategories: { major: [], sub: [] },
   availableCategories: { major: [], sub: [] },
-  selectedSortCriteria: "Einkaufsdatum",
+  selectedSortCriteria: "Kohlenhydrate",
   selectedBasketIds: [],
   selectedComparisonBasketIds: [],
   selectedBasketProductIds: [],

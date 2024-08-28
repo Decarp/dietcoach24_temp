@@ -1,5 +1,4 @@
 export const sortCriteria = [
-  "Einkaufsdatum",
   "Kalorien",
   "Proteine",
   "Fette",
