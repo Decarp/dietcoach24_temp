@@ -42,9 +42,6 @@ export default function Patients() {
     router.push(`/p/${externalId}`);
   };
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading patients</p>;
-
   return (
     <>
       <div className="flex justify-between items-center mb-6">

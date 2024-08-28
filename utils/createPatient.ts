@@ -17,7 +17,7 @@ export const createPatient = async (patientId: string, token: string) => {
       throw new Error(`Failed to add patient: ${response.statusText}`);
     }
 
-    return response.data;
+    return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // If the error is an AxiosError, use the message from Axios

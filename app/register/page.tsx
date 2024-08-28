@@ -1,8 +1,11 @@
 "use client";
 
+import { register } from "@/utils/register";
+import { createPatient } from "@/utils/createPatient"; // Import the createPatient function
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { createSession } from "@/utils/createSession";
 
 export default function Register() {
   const router = useRouter();
@@ -22,28 +25,61 @@ export default function Register() {
     }
 
     try {
-      const response = await fetch(
-        "https://diet-coach.interactions.ics.unisg.ch/temp//dietcoach/backend/dietician/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-            firstName,
-            lastName,
-          }),
-        }
-      );
+      const response = await register({
+        email,
+        password,
+        firstName,
+        lastName,
+      });
 
       if (response.ok) {
-        // Registration successful, show success toast and redirect to sign-in page
-        toast.success("Registrierung erfolgreich.");
+        const responseData = await response.json();
+
+        // Registration successful, show success toast
+        setTimeout(() => {
+          toast.success("Registrierung erfolgreich.", {
+            duration: 4000,
+          });
+        }, 1000);
+
+        // Randomly select patient ID (1, 2, or 3)
+        const patientIds = ["76567b0b", "36de8918", "52fb7ef2"];
+        const patientId =
+          patientIds[Math.floor(Math.random() * patientIds.length)];
+
+        // Call the createPatient API with the selected patient ID and token from the response
+        const createPatientResponse = await createPatient(
+          patientId,
+          responseData.token
+        );
+
+        // check if 201 response
+        if (createPatientResponse.status === 201) {
+          setTimeout(() => {
+            toast.success("Studien-Patient erfolgreich zugewiesen.", {
+              duration: 4000,
+            });
+          }, 2000);
+        }
+
+        // Initialize a first consultation session
+        const createSessionResponse = await createSession(
+          patientId,
+          responseData.token
+        );
+
+        if (createSessionResponse.ok) {
+          setTimeout(() => {
+            toast.success("Erste Studien-Konsultation erfolgreich erstellt.", {
+              duration: 4000,
+            });
+          }, 3000);
+        }
+
+        // Redirect to sign-in page after a short delay
         setTimeout(() => {
           router.push("/api/auth/signin");
-        }, 500); // Delay to allow users to see the toast
+        }, 0); // Delay to allow users to see the toast
       } else {
         const errorData = await response.json();
         toast.error(errorData.message || "Registrierung fehlgeschlagen.");
