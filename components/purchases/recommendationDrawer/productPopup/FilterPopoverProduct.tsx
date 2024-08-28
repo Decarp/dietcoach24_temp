@@ -17,7 +17,7 @@ const FilterPopoverProduct = ({
   updateCategories: (category: string, type: "major" | "sub") => void;
 }) => {
   return (
-    <Popover className="relative inline-block text-left">
+    <Popover className="relative inline-block text-left z-50">
       <div>
         <PopoverButton className="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
           <span>Filter</span>
