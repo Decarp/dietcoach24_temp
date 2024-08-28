@@ -168,7 +168,10 @@ const Analysis = () => {
                   <h4 className="text-lg font-medium mb-2">
                     Energieverteilung aus Lebensmittelkategorien
                   </h4>
-                  <ChartEnergyCategories data={chartEnergyCategoriesData} />
+                  <ChartEnergyCategories
+                    data={chartEnergyCategoriesData}
+                    replace={true}
+                  />
 
                   <br />
                   <h4 className="text-lg font-medium mb-2">
@@ -183,6 +186,7 @@ const Analysis = () => {
                   <h4 className="text-lg font-medium mb-2">Makronährstoffe</h4>
                   <ChartEnergyMacroCategories
                     data={chartEnergyMacroCategoriesData}
+                    replace={true}
                   />
                 </>
               )}
@@ -194,6 +198,7 @@ const Analysis = () => {
                   </h4>
                   <ChartEnergyMicroCategories
                     data={chartEnergyMicroCategoriesData}
+                    replace={true}
                   />
                 </>
               )}
