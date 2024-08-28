@@ -66,6 +66,7 @@ const Products = () => {
     availableCategories,
     selectedCategories,
     selectedSortCriteria,
+    selectedBasketProductIds,
     setSelectedSortCriteria,
     basketProducts,
     basketProductsFlat,
@@ -210,7 +211,9 @@ const Products = () => {
             onClick={() => handleDrawerOpen(true)}
             className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-700"
           >
-            Empfehlung erstellen
+            {selectedBasketProductIds.length === 0
+              ? "Empfehlung erstellen"
+              : `Empfehlung erstellen (${selectedBasketProductIds.length})`}
           </button>
         </div>
       )}
