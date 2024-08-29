@@ -1,5 +1,6 @@
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { useEffect } from "react";
 
 const FilterPopoverProduct = ({
   categoriesWithSub,
@@ -16,11 +17,30 @@ const FilterPopoverProduct = ({
   };
   updateCategories: (category: string, type: "major" | "sub") => void;
 }) => {
+  useEffect(() => {
+    // Automatically select the first major and subcategory when the component mounts
+    if (categoriesWithSub.length > 0 && selectedCategories.major.length === 0) {
+      const firstMajorCategory = categoriesWithSub[0].major;
+      const firstSubCategory = categoriesWithSub[0].subs[0];
+
+      // Update the selected major category
+      updateCategories(firstMajorCategory, "major");
+
+      // If there's a subcategory, update the selected subcategory as well
+      if (firstSubCategory) {
+        updateCategories(firstSubCategory, "sub");
+      }
+    }
+  }, [categoriesWithSub, selectedCategories, updateCategories]);
+
   return (
     <Popover className="relative inline-block text-left z-50">
       <div>
         <PopoverButton className="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-          <span>Filter</span>
+          <span>
+            Filter (
+            {selectedCategories.major.length + selectedCategories.sub.length})
+          </span>
           <ChevronDownIcon
             aria-hidden="true"
             className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"

@@ -89,6 +89,7 @@ export default function ProductPopup({
       major: [],
       sub: [],
     });
+
   const categoriesWithSub: { major: string; subs: string[] }[] = Object.entries(
     categories.de
   ).map(([major, subs]) => ({
@@ -97,6 +98,7 @@ export default function ProductPopup({
   }));
 
   const {
+    selectedCategories,
     selectedSortCriteria,
     selectedAlternativeProducts,
     setSelectedSortCriteria,
@@ -142,6 +144,11 @@ export default function ProductPopup({
     queryKey: ["products", queryParams.toString()], // Unique query key
     queryFn: () => fetchProducts(queryParams), // Fetch function
   });
+
+  useEffect(() => {
+    // Initialize selectedProductCategories with selectedCategories from the store
+    setSelectedProductCategories(selectedCategories);
+  }, [selectedCategories]);
 
   useEffect(() => {
     if (data) {
