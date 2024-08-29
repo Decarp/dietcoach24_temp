@@ -165,7 +165,7 @@ const Analysis = () => {
     >
       <AnalysisHeader />
       <div className="shadow-inner -mx-6">
-        <div className="flex-1 max-h-[calc(100vh-316px)] overflow-y-auto pb-6 px-6">
+        <div className="flex-1 h-[calc(100vh-311px)] overflow-y-auto pb-6 px-6">
           {isLoading && <Spinner />}
           {!isLoading && selectedBasketIds.length > 0 ? (
             <>

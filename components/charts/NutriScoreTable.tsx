@@ -6,6 +6,7 @@ import { fetchNutrientTable } from "@/utils/fetchNutrientTable";
 import { mapNutriScoreTableResponse } from "@/utils/mapNutriScoreTableResponse";
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import type {
+  CellClassParams,
   ColDef,
   GetDataPath,
   ICellRendererParams,
@@ -80,44 +81,51 @@ export const NutriScoreTable = () => {
       width: 120,
     },
     {
-      headerName: "Energie (kJ)",
-      field: "EnergyKJ",
-      width: 140,
+      headerName: "Energieverteilung",
+      field: "EnergyShare",
+      width: 180,
     },
     {
-      headerName: "Energie (%)",
-      field: "EnergyShare",
+      headerName: "Energie",
+      field: "EnergyKJ",
       width: 120,
+      cellStyle: RedCellStyle,
     },
     {
       headerName: "Zucker",
       field: "Sugars",
       width: 120,
+      cellStyle: RedCellStyle,
     },
     {
       headerName: "Salz",
       field: "Salt",
       width: 120,
+      cellStyle: RedCellStyle,
     },
     {
       headerName: "Gesättigte Fettsäuren",
       field: "Saturates",
       width: 220,
+      cellStyle: RedCellStyle,
     },
     {
       headerName: "Nahrungsfasern",
       field: "Fibres",
       width: 180,
+      cellStyle: GreenCellStyle,
     },
     {
       headerName: "Obst & Gemüse",
       field: "FVL",
       width: 160,
+      cellStyle: GreenCellStyle,
     },
     {
       headerName: "Protein",
       field: "Proteins",
       width: 120,
+      cellStyle: GreenCellStyle,
     },
     {
       field: "",
@@ -132,7 +140,7 @@ export const NutriScoreTable = () => {
   const getDataPath = useCallback<GetDataPath>((data) => data.category, []);
   const autoGroupColumnDef = useMemo<ColDef>(() => {
     return {
-      headerName: "Employee",
+      headerName: "Kategorie",
       width: 180,
       pinned: "left",
       sort: "asc",
@@ -234,6 +242,14 @@ const CheckboxCellRenderer: FunctionComponent<
       </div>
     </div>
   );
+};
+
+const RedCellStyle = (params: CellClassParams<any, any>) => {
+  return { color: params.value !== null ? "red" : "inherit" };
+};
+
+const GreenCellStyle = (params: CellClassParams<any, any>) => {
+  return { color: params.value !== null ? "green" : "inherit" };
 };
 
 export default CheckboxCellRenderer;
