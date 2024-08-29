@@ -171,7 +171,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {selectedSortCriteria}:{" "}
             <span className="font-medium">
               {roundedNutrientValue}
-              {nutrientKey === "kcal" ? " kcal" : " g"}
+              {nutrientKey === "kcal" ? " kcal" : "g / 100g"}
             </span>
           </p>
         </div>
