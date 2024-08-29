@@ -11,7 +11,22 @@ export const mapNutriScoreTableResponse = (
     (item) => item.MajorCategory.de !== "Ausgeschlossen"
   );
 
-  const mapped = filtered.map((item) => {
+  // Filter out rows where all values are null
+  const nonEmptyRows = filtered.filter((item) => {
+    return (
+      item.EnergyShare !== null ||
+      item.Quantity !== null ||
+      item.EnergyKJ !== null ||
+      item.Sugars !== null ||
+      item.Salt !== null ||
+      item.Saturates !== null ||
+      item.Fibres !== null ||
+      item.FVL !== null ||
+      item.Proteins !== null
+    );
+  });
+
+  const mapped = nonEmptyRows.map((item) => {
     const category: [string] | [string, string] = item.MinorCategory
       ? [item.MajorCategory.de, item.MinorCategory.de]
       : [item.MajorCategory.de];
