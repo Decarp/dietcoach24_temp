@@ -2,15 +2,12 @@
 
 import { Patient } from "@/types/types";
 import { fetchPatientDetails } from "@/utils/fetchPatientDetails";
-import { PaperClipIcon } from "@heroicons/react/24/outline";
 import {
   CreditCardIcon,
   HomeIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/solid";
 import { useQuery } from "@tanstack/react-query";
-import { format, fromUnixTime } from "date-fns";
-import { de } from "date-fns/locale";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
@@ -19,8 +16,6 @@ export default function Profile() {
   const pathname = usePathname();
   const pathSegments = pathname.split("/");
   const patientId = pathSegments[2];
-
-  console.log("Client-side session:", session);
 
   const {
     isLoading,

@@ -143,8 +143,6 @@ export default function ProductPopup({
     queryFn: () => fetchProducts(queryParams), // Fetch function
   });
 
-  console.log(data);
-
   useEffect(() => {
     if (data) {
       setAvailableProducts(data.products);

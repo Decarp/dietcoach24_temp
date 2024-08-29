@@ -1,12 +1,25 @@
 import ModeDropdown from "./ModeDropdown";
 import NutrientDropdown from "./NutrientDropdown";
 import CategoryDropdown from "./CategoryDropdown";
+import { useCounterStore } from "@/providers/useStoreProvider";
+import { useEffect } from "react";
 
 const tabs = [
   { name: "Nährstoff-spezifisch" },
   { name: "Nährstoff-unspezifisch" },
   { name: "Individuell" },
 ];
+
+type Variante1State = {
+  mode: string;
+  nutrient: string;
+  category: string;
+};
+
+type Variante2State = {
+  mode: string;
+  category: string;
+};
 
 export default function TabSection({
   currentTab,
@@ -20,17 +33,56 @@ export default function TabSection({
 }: {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
-  variante1State: { mode: string; nutrient: string; category: string };
-  setVariante1State: (state: {
-    mode: string;
-    nutrient: string;
-    category: string;
-  }) => void;
-  variante2State: { mode: string; category: string };
-  setVariante2State: (state: { mode: string; category: string }) => void;
+  variante1State: Variante1State;
+  setVariante1State: (
+    state: Variante1State | ((prevState: Variante1State) => Variante1State)
+  ) => void;
+  variante2State: Variante2State;
+  setVariante2State: (
+    state: Variante2State | ((prevState: Variante2State) => Variante2State)
+  ) => void;
   freitextState: string;
   setFreitextState: (state: string) => void;
 }) {
+  const {
+    selectedCategories,
+    selectedSortCriteria,
+    setSelectedCategories,
+    setSelectedSortCriteria,
+  } = useCounterStore((state) => state);
+
+  useEffect(() => {
+    // Preselect NutrientDropdown with selectedSortCriteria if available
+    if (selectedSortCriteria && currentTab === "Nährstoff-spezifisch") {
+      setVariante1State((prevState: Variante1State) => ({
+        ...prevState,
+        nutrient: selectedSortCriteria,
+      }));
+    }
+
+    // Preselect CategoryDropdown with major or minor category if available
+    if (currentTab !== "Individuell") {
+      const majorCategory = selectedCategories.major[0];
+      const subCategory = selectedCategories.sub[0];
+
+      setVariante1State((prevState: Variante1State) => ({
+        ...prevState,
+        category: subCategory || majorCategory || prevState.category,
+      }));
+
+      setVariante2State((prevState: Variante2State) => ({
+        ...prevState,
+        category: subCategory || majorCategory || prevState.category,
+      }));
+    }
+  }, [
+    selectedSortCriteria,
+    selectedCategories,
+    currentTab,
+    setVariante1State,
+    setVariante2State,
+  ]);
+
   return (
     <section className="mt-6">
       <div className="mt-4">

@@ -18,7 +18,6 @@ import toast from "react-hot-toast";
 import NotesSection from "./NotesSection";
 import SelectedAlternativesSection from "./SelectedAlternativesSection";
 import SelectedProductsSection from "./SelectedProductsSection";
-import SessionSelector from "./SessionSelector";
 import TabSection from "./tabSection/TabSection";
 
 export default function RecommendationDrawer({
@@ -59,16 +58,23 @@ export default function RecommendationDrawer({
   }, [sessions, setSelectedSessionId]);
 
   const [currentTab, setCurrentTab] = useState("Nährstoff-spezifisch");
-  const [variante1State, setVariante1State] = useState({
+  const [variante1State, setVariante1State] = useState<{
+    mode: string;
+    nutrient: string;
+    category: string;
+  }>({
     mode: "Erhöhen / Reduzieren",
     nutrient: "Nährstoff",
     category: "Kategorie",
   });
-  const [variante2State, setVariante2State] = useState({
+  const [variante2State, setVariante2State] = useState<{
+    mode: string;
+    category: string;
+  }>({
     mode: "Erhöhen / Reduzieren",
     category: "Kategorie",
   });
-  const [freitextState, setFreitextState] = useState("");
+  const [freitextState, setFreitextState] = useState<string>("");
   const [notes, setNotes] = useState<string | null>(null);
 
   const mutation = useMutation({

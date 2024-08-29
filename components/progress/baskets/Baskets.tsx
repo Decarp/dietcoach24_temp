@@ -106,7 +106,6 @@ export default function DateRangePickerComp() {
     if (range1Baskets) {
       setSelectedBasketIds(range1Baskets.map((basket) => basket.basketId));
     }
-    console.log(range1Baskets);
   }, [range1Baskets, setSelectedBasketIds]);
 
   useEffect(() => {
@@ -115,7 +114,6 @@ export default function DateRangePickerComp() {
         range2Baskets.map((basket) => basket.basketId)
       );
     }
-    console.log(range2Baskets);
   }, [range2Baskets, setSelectedComparisonBasketIds]);
 
   return (
