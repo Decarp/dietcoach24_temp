@@ -32,10 +32,7 @@ export default function TabSection({
   setFreitextState: (state: string) => void;
 }) {
   return (
-    <section className="mt-8">
-      <h2 className="block text-xl font-medium leading-6 text-gray-900">
-        Regel festlegen
-      </h2>
+    <section className="mt-6">
       <div className="mt-4">
         <div className="sm:hidden">
           <label htmlFor="current-tab" className="sr-only">

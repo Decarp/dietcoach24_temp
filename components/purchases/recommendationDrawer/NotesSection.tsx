@@ -7,8 +7,8 @@ export default function NotesSection({
   setNotes: (notes: string) => void;
 }) {
   return (
-    <section className="mt-8">
-      <h2 className="block text-xl font-medium leading-6 text-gray-900">
+    <section className="mt-6">
+      <h2 className="block text-lg font-medium leading-6 text-gray-900">
         Weitere Erklärungen für den Patienten (optional)
       </h2>
       <div className="mt-4">

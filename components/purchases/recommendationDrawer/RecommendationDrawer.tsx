@@ -13,7 +13,7 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import NotesSection from "./NotesSection";
 import SelectedAlternativesSection from "./SelectedAlternativesSection";
@@ -32,11 +32,31 @@ export default function RecommendationDrawer({
   const pathname = usePathname();
   const patientId = pathname.split("/")[2];
 
+  const {
+    selectedBasketIds,
+    selectedBasketProductsFlat,
+    selectedAlternativeProducts,
+    selectedSessionId,
+    setSelectedSessionId,
+  } = useCounterStore((state) => state);
+
   // Fetch existing sessions
   const { data: sessions, refetch } = useQuery<Sessions>({
     queryKey: ["sessions", patientId],
     queryFn: () => fetchSessions(patientId, userSession?.accessToken || ""),
   });
+
+  // Use useEffect to set the latest sessionId as selectedSessionId
+  useEffect(() => {
+    if (sessions && sessions.length > 0) {
+      // Find the session with the latest timestamp
+      const latestSession = sessions.reduce((latest, current) => {
+        return current.timestamp > latest.timestamp ? current : latest;
+      });
+      // Set the latest session as the selected session
+      setSelectedSessionId(latestSession.sessionId);
+    }
+  }, [sessions, setSelectedSessionId]);
 
   const [currentTab, setCurrentTab] = useState("Nährstoff-spezifisch");
   const [variante1State, setVariante1State] = useState({
@@ -50,13 +70,6 @@ export default function RecommendationDrawer({
   });
   const [freitextState, setFreitextState] = useState("");
   const [notes, setNotes] = useState<string | null>(null);
-
-  const {
-    selectedBasketIds,
-    selectedBasketProductsFlat,
-    selectedAlternativeProducts,
-    selectedSessionId,
-  } = useCounterStore((state) => state);
 
   const mutation = useMutation({
     mutationFn: (
@@ -157,7 +170,6 @@ export default function RecommendationDrawer({
                   <hr />
 
                   <div className="px-6">
-                    <SessionSelector />
                     <TabSection
                       currentTab={currentTab}
                       setCurrentTab={setCurrentTab}
@@ -168,10 +180,8 @@ export default function RecommendationDrawer({
                       freitextState={freitextState}
                       setFreitextState={setFreitextState}
                     />
-                    <section className="mt-8">
-                      <h2 className="mt-8 block text-xl font-medium leading-6 text-gray-900">
-                        Alternative Produkte vorschlagen
-                      </h2>
+
+                    <section className="mt-6">
                       <div className="grid grid-cols-2 gap-4 mt-4 rounded-lg">
                         <SelectedProductsSection
                           open={open}
