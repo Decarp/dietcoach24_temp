@@ -29,7 +29,11 @@ const AnalysisHeader = () => {
   };
 
   return (
-    <div className="flex justify-between items-center min-w-[300px] xl:max-w-[800px] xl:w-full">
+    <div
+      className={`flex justify-between items-center min-w-[300px] xl:w-full ${
+        hideProducts ? "" : "xl:max-w-[800px]"
+      }`}
+    >
       <div className="w-full">
         <div className="relative flex justify-between mb-5">
           {/* Left Arrow */}
