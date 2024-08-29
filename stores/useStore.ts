@@ -26,6 +26,7 @@ export type CounterState = {
   basketProductsFlat: BasketProductFlat[];
   selectedMacro: MacroCategory;
   selectedMicro: MicroCategory;
+  highlightBorder: boolean;
 };
 
 export type CounterActions = {
@@ -49,6 +50,7 @@ export type CounterActions = {
   ) => void;
   setSelectedMacro: (macro: MacroCategory) => void;
   setSelectedMicro: (micro: MicroCategory) => void;
+  setHighlightBorder: (highlight: boolean) => void;
 };
 
 export type CounterStore = CounterState & CounterActions;
@@ -70,6 +72,7 @@ export const initCounterStore = (): CounterState => {
     basketProductsFlat: [],
     selectedMacro: "Kohlenhydrate",
     selectedMicro: "Salz",
+    highlightBorder: false,
   };
 };
 
@@ -89,6 +92,7 @@ export const defaultInitState: CounterState = {
   basketProductsFlat: [],
   selectedMacro: "Kohlenhydrate",
   selectedMicro: "Salz",
+  highlightBorder: false,
 };
 
 export const createCounterStore = (
@@ -290,5 +294,14 @@ export const createCounterStore = (
       set(() => ({ selectedMacro: macro })),
     setSelectedMicro: (micro: MicroCategory) =>
       set(() => ({ selectedMicro: micro })),
+    setHighlightBorder: (highlight: boolean) => {
+      set(() => ({ highlightBorder: highlight }));
+
+      if (highlight) {
+        setTimeout(() => {
+          set(() => ({ highlightBorder: false }));
+        }, 3000); // Reset after 3 seconds
+      }
+    },
   }));
 };

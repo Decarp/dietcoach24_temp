@@ -38,7 +38,7 @@ export default function RecommendationDrawer({
     queryFn: () => fetchSessions(patientId, userSession?.accessToken || ""),
   });
 
-  const [currentTab, setCurrentTab] = useState("Variante 1");
+  const [currentTab, setCurrentTab] = useState("Nährstoff-spezifisch");
   const [variante1State, setVariante1State] = useState({
     mode: "Erhöhen / Reduzieren",
     nutrient: "Nährstoff",
@@ -69,6 +69,7 @@ export default function RecommendationDrawer({
       ),
     onSuccess: () => {
       toast.success("Empfehlung erfolgreich erstellt", { duration: 3000 });
+      setOpen(false);
       refetch();
     },
     onError: (error: any) => {
@@ -87,7 +88,7 @@ export default function RecommendationDrawer({
     }
 
     let rule;
-    if (currentTab === "Variante 1") {
+    if (currentTab === "Nährstoff-spezifisch") {
       rule = {
         variant: "VAR1",
         mode: variante1State.mode,
@@ -95,7 +96,7 @@ export default function RecommendationDrawer({
         category: variante1State.category,
         text: null,
       };
-    } else if (currentTab === "Variante 2") {
+    } else if (currentTab === "Nährstoff-unspezifisch") {
       rule = {
         variant: "VAR2",
         mode: variante2State.mode,
@@ -103,7 +104,7 @@ export default function RecommendationDrawer({
         category: variante2State.category,
         text: null,
       };
-    } else if (currentTab === "Freitext") {
+    } else if (currentTab === "Individuell") {
       rule = {
         variant: "FREITEXT",
         mode: null,
@@ -172,7 +173,10 @@ export default function RecommendationDrawer({
                         Alternative Produkte vorschlagen
                       </h2>
                       <div className="grid grid-cols-2 gap-4 mt-4 rounded-lg">
-                        <SelectedProductsSection />
+                        <SelectedProductsSection
+                          open={open}
+                          setOpen={setOpen}
+                        />
                         <SelectedAlternativesSection />
                       </div>
                     </section>

@@ -29,6 +29,7 @@ import { useEffect, useRef, useState } from "react";
 import NutriScoreMenu from "../../products/NutriScoreMenu";
 import SortMenu from "../../products/SortMenu";
 import FilterPopoverProduct from "./FilterPopoverProduct";
+import DatabaseProductCard from "@/components/DatabaseProductCard";
 
 type CategoryKeys = keyof typeof categories.de;
 
@@ -308,7 +309,7 @@ export default function ProductPopup({
               </div>
               <div
                 ref={scrollableContainerRef}
-                className="bg-white border border-gray-300 rounded-md h-[420px] overflow-y-scroll"
+                className="shadow-inner bg-white border border-gray-300 rounded-md h-[420px] overflow-y-scroll"
               >
                 {isLoading ? (
                   <Spinner />
@@ -328,75 +329,17 @@ export default function ProductPopup({
                     </div>
                   </div>
                 ) : (
-                  sortedProducts?.map((product) => (
-                    <div
-                      key={product.productId}
-                      className={
-                        selectedAlternativeProducts.some(
-                          (altProduct) =>
-                            altProduct.productId === product.productId
-                        )
-                          ? "flex items-center space-x-4 justify-between bg-primary p-4"
-                          : "flex items-center space-x-4 justify-between p-4"
-                      }
-                    >
-                      <div className="flex items-center space-x-4">
-                        <div className="w-16 h-16 rounded-md bg-gray-200 flex-shrink-0" />
-                        <div>
-                          <h4
-                            className={
-                              selectedAlternativeProducts.some(
-                                (altProduct) =>
-                                  altProduct.productId === product.productId
-                              )
-                                ? "text-white font-semibold"
-                                : "text-gray-900 font-semibold"
-                            }
-                          >
-                            {product.de.name}
-                          </h4>
-                          <p
-                            className={
-                              selectedAlternativeProducts.some(
-                                (altProduct) =>
-                                  altProduct.productId === product.productId
-                              )
-                                ? "text-gray-300"
-                                : "text-gray-500"
-                            }
-                          >
-                            {product.nutriScoreV2023Detail.nutriScoreCalculated}
-                          </p>
-                          <p
-                            className={
-                              selectedAlternativeProducts.some(
-                                (altProduct) =>
-                                  altProduct.productId === product.productId
-                              )
-                                ? "text-gray-300"
-                                : "text-gray-500"
-                            }
-                          >
-                            {product.dietCoachCategoryL1.de}
-                          </p>
-                        </div>
-                      </div>
-                      {selectedAlternativeProducts.some(
-                        (altProduct) =>
-                          altProduct.productId === product.productId
-                      ) ? (
-                        <CheckCircleIcon
-                          className="h-6 w-6 text-white hover:text-gray-200 cursor-pointer flex-shrink-0"
-                          onClick={() => handleRemoveProduct(product.productId)}
-                        />
-                      ) : (
-                        <PlusCircleIcon
-                          className="h-6 w-6 text-gray-500 hover:text-primary cursor-pointer flex-shrink-0"
-                          onClick={() => handleAddProduct(product)}
-                        />
-                      )}
-                    </div>
-                  ))
+                  <ul role="list" className="divide-y divide-gray-300">
+                    {sortedProducts?.map((product) => (
+                      <DatabaseProductCard
+                        key={product.productId}
+                        product={product}
+                        variant="default"
+                        onAdd={handleAddProduct}
+                        onRemove={handleRemoveProduct}
+                      />
+                    ))}{" "}
+                  </ul>
                 )}
               </div>
             </div>

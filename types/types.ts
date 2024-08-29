@@ -24,7 +24,7 @@ export type DietCoachCategory = {
 export type Product = {
   gtin: number;
   name: string;
-  productSize: number;
+  quantity: number;
   nutrients: Nutrients;
   dietCoachCategoryL1: DietCoachCategory;
   dietCoachCategoryL2: DietCoachCategory;
@@ -103,7 +103,7 @@ export type BasketProductFlat = {
   basketTimestamp: number;
   gtin: number;
   name: string;
-  productSize: number;
+  quantity: number;
   nutrients: Nutrients;
   dietCoachCategoryL1: DietCoachCategory;
   dietCoachCategoryL2: DietCoachCategory;

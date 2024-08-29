@@ -18,6 +18,10 @@ import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
 import RecommendationsHeader from "./RecommendationsHeader";
 import { deleteRecommendation } from "@/utils/deleteRecommendation";
+import SelectedProductsSection from "@/components/purchases/recommendationDrawer/SelectedProductsSection";
+import SelectedAlternativesSection from "@/components/purchases/recommendationDrawer/SelectedAlternativesSection";
+import RecommendedAlternativesSection from "./RecommendedAlternativesSection";
+import RecommendedProductsSection from "./RecommendedProductsSection";
 
 const Recommendations = () => {
   const pathname = usePathname();
@@ -68,28 +72,24 @@ const Recommendations = () => {
   // Map the full product details back to the recommendations
   const enrichedRecommendations = consultationSession?.recommendations.map(
     (recommendation) => {
-      const enrichedCurrentProducts = recommendation.suggestions.current.map(
-        (gtin) => {
-          const product = fullProducts?.find((product) =>
+      const enrichedCurrentProducts = recommendation.suggestions.current
+        .map((gtin) => {
+          return fullProducts?.find((product) =>
             product.gtins.includes(Number(gtin))
           );
-          if (!product) {
-            console.warn(`Product not found for GTIN: ${gtin}`);
-          }
-          return product;
-        }
-      );
+        })
+        .filter((product): product is DatabaseProduct => product !== undefined); // Filter out undefined
 
       const enrichedAlternativeProducts =
-        recommendation.suggestions.alternatives.map((gtin) => {
-          const product = fullProducts?.find((product) =>
-            product.gtins.includes(Number(gtin))
-          );
-          if (!product) {
-            console.warn(`Product not found for GTIN: ${gtin}`);
-          }
-          return product;
-        });
+        recommendation.suggestions.alternatives
+          .map((gtin) => {
+            return fullProducts?.find((product) =>
+              product.gtins.includes(Number(gtin))
+            );
+          })
+          .filter(
+            (product): product is DatabaseProduct => product !== undefined
+          ); // Filter out undefined
 
       return {
         ...recommendation,
@@ -282,66 +282,12 @@ const Recommendations = () => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mt-4 rounded-lg">
-                  <section className="bg-white border rounded-md">
-                    <div className="flex items-center py-2 px-4 border border-0 border-b ">
-                      <h3 className="w-full block text-sm font-medium text-gray-500">
-                        Gekaufte Produkte
-                      </h3>
-                      <ShoppingCartIcon className="h-6 w-6 text-red-500" />
-                      <ArrowDownIcon className="ml-1 h-4 w-4 text-red-500" />
-                    </div>
-
-                    <div className="overflow-y-scroll">
-                      {recommendation.suggestions.current.length === 0 && (
-                        <div className="text-center">
-                          <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
-                          <h3 className="mt-2 text-sm font-semibold text-gray-900">
-                            Keine Produkte ausgewählt
-                          </h3>
-                        </div>
-                      )}
-
-                      <ul className="p-4 space-y-4">
-                        {recommendation.suggestions.current.map((product) => (
-                          <ProductCardDatabase
-                            product={product}
-                            key={product?.gtins[0]}
-                          />
-                        ))}
-                      </ul>
-                    </div>
-                  </section>
-
-                  <section className="bg-white border rounded-md">
-                    <div className="flex items-center py-2 px-4 border border-0 border-b ">
-                      <h3 className="w-full block text-sm font-medium text-gray-500">
-                        Alternative Produkte
-                      </h3>
-                      <ShoppingCartIcon className="h-6 w-6 text-primary" />
-                      <ArrowUpIcon className="ml-1 h-4 w-4 text-primary" />
-                    </div>
-
-                    <div className="overflow-y-scroll">
-                      {recommendation.suggestions.alternatives.length === 0 && (
-                        <div className="text-center">
-                          <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
-                          <h3 className="mt-2 text-sm font-semibold text-gray-900">
-                            Keine Produkte ausgewählt
-                          </h3>
-                        </div>
-                      )}
-                      <ul className="p-4 space-y-4">
-                        {recommendation.suggestions.alternatives.map(
-                          (product) => (
-                            <ProductCardDatabase
-                              product={product}
-                              key={product?.gtins[0]}
-                            />
-                          )
-                        )}
-                      </ul>
-                    </div>
-                  </section>
+                  <RecommendedProductsSection
+                    products={recommendation.suggestions.current}
+                  />
+                  <RecommendedAlternativesSection
+                    products={recommendation.suggestions.alternatives}
+                  />
                 </div>
 
                 <div>

@@ -1,3 +1,4 @@
+import ProductCard from "@/components/ProductCard";
 import ProductsHeader from "@/components/purchases/products/ProductsHeader";
 import { Spinner } from "@/components/Spinner";
 import { sortCriteria } from "@/data/sortCriteria";
@@ -15,7 +16,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import RecommendationDrawer from "../recommendationDrawer/RecommendationDrawer";
 import FilterPopover from "./FilterPopover";
-import ProductCard from "./ProductCard";
 import SortMenu from "./SortMenu";
 
 const sortProducts = (
@@ -72,6 +72,7 @@ const Products = () => {
     basketProductsFlat,
     setBasketProductsFlat,
     updateCategories,
+    highlightBorder,
   } = useCounterStore((state) => state);
 
   const { isLoading, error, data } = useQuery<BasketProduct[]>({
@@ -154,7 +155,6 @@ const Products = () => {
         />
 
         <SortMenu
-          sortCriteria={sortCriteria}
           selectedSortCriteria={selectedSortCriteria}
           setSelectedSortCriteria={setSelectedSortCriteria}
         />
@@ -173,7 +173,7 @@ const Products = () => {
         </div>
       </div>
 
-      <div className="-mr-6 flex-1 overflow-y-auto min-h-0  shadow-inner border-b border-gray-300">
+      <div className="-mr-6 flex-1 overflow-y-auto min-h-0 shadow-inner border-b border-gray-300">
         {isLoading && <Spinner />}
         {selectedCategories.major.length === 0 &&
           !isLoading &&
@@ -192,17 +192,21 @@ const Products = () => {
               </div>
             </div>
           )}
-        <ul role="list" className="divide-y divide-gray-100">
-          {sortedProducts.map((product) => {
-            return (
-              <ProductCard
-                key={`${product.basketId},${product.gtin}`}
-                product={product}
-              />
-            );
-          })}
+        <ul
+          role="list"
+          className={`divide-y divide-gray-300 ${
+            highlightBorder ? "border-4 border-orange-500" : ""
+          }`}
+        >
+          {sortedProducts.map((product) => (
+            <ProductCard
+              key={`${product.basketId},${product.gtin}`}
+              product={product}
+            />
+          ))}
         </ul>
       </div>
+
       {(selectedCategories.major.length !== 0 ||
         selectedCategories.sub.length !== 0) && (
         <div className="flex justify-end p-6">

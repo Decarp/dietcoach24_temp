@@ -3,9 +3,9 @@ import NutrientDropdown from "./NutrientDropdown";
 import CategoryDropdown from "./CategoryDropdown";
 
 const tabs = [
-  { name: "Variante 1" },
-  { name: "Variante 2" },
-  { name: "Freitext" },
+  { name: "Nährstoff-spezifisch" },
+  { name: "Nährstoff-unspezifisch" },
+  { name: "Individuell" },
 ];
 
 export default function TabSection({
@@ -74,7 +74,7 @@ export default function TabSection({
         </div>
       </div>
 
-      {currentTab === "Variante 1" && (
+      {currentTab === "Nährstoff-spezifisch" && (
         <div className="relative mt-6 flex-1">
           <div className="mt-2 flex rounded-md items-center">
             <ModeDropdown
@@ -105,7 +105,7 @@ export default function TabSection({
         </div>
       )}
 
-      {currentTab === "Variante 2" && (
+      {currentTab === "Nährstoff-unspezifisch" && (
         <div className="relative mt-6 flex-1">
           <div className="mt-2 flex rounded-md items-center">
             <ModeDropdown
@@ -115,7 +115,7 @@ export default function TabSection({
               }
             />
             <span className="h-7 inline-flex items-center border rounded-md mx-2 border-gray-300 px-3 text-gray-500 sm:text-xs">
-              der Zufuhr aus
+              der Zufuhr von
             </span>
             <CategoryDropdown
               selectedOption={variante2State.category}
@@ -127,9 +127,9 @@ export default function TabSection({
         </div>
       )}
 
-      {currentTab === "Freitext" && (
+      {currentTab === "Individuell" && (
         <div className="relative mt-6 flex-1">
-          <div className="mt-2 flex rounded-md shadow-sm">
+          <div className="mt-2 flex rounded-md">
             <input
               id="freitext"
               name="freitext"

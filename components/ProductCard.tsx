@@ -1,36 +1,202 @@
 import React from "react";
+import { useCounterStore } from "@/providers/useStoreProvider";
+import {
+  BasketProductFlat,
+  SelectedBasketProductId,
+  Nutrients,
+} from "@/types/types";
+import { classNames } from "@/utils/classNames";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { BasketProductFlat } from "@/types/types";
 
-interface ProductCardProps {
+const nutrientKeyMap: { [key: string]: keyof Nutrients } = {
+  Kalorien: "kcal",
+  Proteine: "proteins",
+  Fette: "fats",
+  "Gesättigte Fettsäuren": "saturatedFats",
+  Kohlenhydrate: "carbohydrates",
+  Zucker: "sugars",
+  Nahrungsfasern: "fibres",
+  Salz: "salt",
+};
+
+const nutriScoreColorMap: { [key: string]: string } = {
+  A: "bg-green-700 border border-green-800 text-white",
+  B: "bg-green-500 border border-green-600 text-white",
+  C: "bg-yellow-500 border border-yellow-600 text-white",
+  D: "bg-orange-500 border border-orange-600 text-white",
+  E: "bg-red-600 border border-red-700 text-white",
+};
+
+type ProductCardProps = {
   product: BasketProductFlat;
-  handleRemoveSelectedProduct: (gtin: number, basketId: string) => void;
-}
+  variant?: "default" | "selected";
+  onRemove?: (gtin: number, basketId: string) => void;
+};
 
 const ProductCard: React.FC<ProductCardProps> = ({
   product,
-  handleRemoveSelectedProduct,
+  variant = "default",
+  onRemove,
 }) => {
+  const uniqueId = `${product.basketId},${product.gtin}`;
+
+  const {
+    selectedBasketProductIds,
+    setSelectedBasketProductIds,
+    selectedBasketProductsFlat,
+    setSelectedBasketProductsFlat,
+    selectedSortCriteria,
+  } = useCounterStore((state) => state);
+
+  const isProductSelected = (gtin: number, basketId: string) =>
+    selectedBasketProductIds.some(
+      (item) => item.gtin === gtin && item.basketId === basketId
+    );
+
+  const handleProductCheckboxChange = (
+    selectedBasketProductId: SelectedBasketProductId
+  ) => {
+    if (
+      isProductSelected(
+        selectedBasketProductId.gtin,
+        selectedBasketProductId.basketId
+      )
+    ) {
+      const newSelectedBasketProductIds = selectedBasketProductIds.filter(
+        (product) =>
+          product.gtin !== selectedBasketProductId.gtin &&
+          product.basketId !== selectedBasketProductId.basketId
+      );
+
+      setSelectedBasketProductIds(newSelectedBasketProductIds);
+
+      const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
+        (product) =>
+          product.gtin !== selectedBasketProductId.gtin &&
+          product.basketId !== selectedBasketProductId.basketId
+      );
+
+      setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
+    } else {
+      const newSelectedBasketProductIds = [
+        ...selectedBasketProductIds,
+        selectedBasketProductId,
+      ];
+
+      setSelectedBasketProductIds(newSelectedBasketProductIds);
+
+      const newSelectedBasketProductsFlat = [
+        ...selectedBasketProductsFlat,
+        product,
+      ];
+
+      setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
+    }
+  };
+
+  const selected = isProductSelected(product.gtin, product.basketId);
+
+  const nutrientKey = nutrientKeyMap[selectedSortCriteria];
+  const nutrientValue = nutrientKey
+    ? product.nutrients[nutrientKey]
+    : undefined;
+  const roundedNutrientValue =
+    typeof nutrientValue === "number"
+      ? nutrientValue.toFixed(0)
+      : nutrientValue || "N/A";
+
+  const nutriScoreClass =
+    nutriScoreColorMap[product.nutrients.nutriScore] ||
+    "bg-gray-200 text-gray-700";
+
   return (
-    <div
-      key={product.gtin}
-      className="flex items-center space-x-4 justify-between"
+    <li
+      key={uniqueId}
+      className={classNames(
+        "pl-6 flex items-center gap-x-4 px-3 py-5",
+        selected && variant === "default" ? "bg-primary text-white" : ""
+      )}
     >
-      <div className="flex items-center space-x-4">
-        <div className="w-16 h-16 rounded-md bg-gray-200 flex-shrink-0"></div>
-        <div>
-          <h4 className="text-gray-900 font-semibold">{product.name}</h4>
-          <p className="text-gray-500">{product.nutrients.nutriScore}</p>
-          <p className="text-gray-500">{product.dietCoachCategoryL1.de}</p>
+      <div className="relative flex-none">
+        {product.imageUrl ? (
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            className="border border-gray-300 bg-gray-50 h-20 w-20 p-2 flex-none rounded-md object-contain"
+          />
+        ) : (
+          <div className="text-xs text-gray-500 border border-gray-300 bg-gray-50 h-20 w-20 p-2 flex items-center justify-center rounded-md">
+            Kein Bild
+          </div>
+        )}
+        <div
+          className={classNames(
+            "shadow absolute bottom-0 right-0 m-1.5 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium",
+            nutriScoreClass
+          )}
+        >
+          {product.nutrients.nutriScore}
         </div>
       </div>
-      <TrashIcon
-        className="h-6 w-6 text-gray-500 hover:text-red-500 cursor-pointer flex-shrink-0"
-        onClick={() =>
-          handleRemoveSelectedProduct(product.gtin, product.basketId)
-        }
-      />
-    </div>
+      <div className="w-full flex justify-between items-center">
+        <div className="flex-1">
+          <p
+            className={classNames(
+              "text-base font-semibold leading-6",
+              selected && variant === "default" ? "text-white" : "text-gray-900"
+            )}
+          >
+            {product.name}
+          </p>
+          <p
+            className={classNames(
+              "text-sm font-normal leading-6",
+              selected && variant === "default" ? "text-white" : "text-gray-700"
+            )}
+          >
+            Menge:{" "}
+            <span className="font-medium">
+              {Number.isInteger(product.quantity)
+                ? product.quantity
+                : product.quantity.toFixed(2)}
+              {Number.isInteger(product.quantity) ? "" : " kg"}
+            </span>
+          </p>
+          <p
+            className={classNames(
+              "text-sm font-normal leading-6",
+              selected && variant === "default" ? "text-white" : "text-gray-700"
+            )}
+          >
+            {selectedSortCriteria}:{" "}
+            <span className="font-medium">
+              {roundedNutrientValue}
+              {nutrientKey === "kcal" ? " kcal" : " g"}
+            </span>
+          </p>
+        </div>
+        {variant === "selected" && onRemove && (
+          <TrashIcon
+            className="h-6 w-6 mr-4 text-gray-500 hover:text-red-500 cursor-pointer flex-shrink-0"
+            onClick={() => onRemove(product.gtin, product.basketId)}
+          />
+        )}
+      </div>
+
+      {variant === "default" && (
+        <input
+          type="checkbox"
+          className="h-4 w-4 mx-auto mr-4 rounded border-gray-300 text-primary focus:ring-primary"
+          checked={selected}
+          onChange={() =>
+            handleProductCheckboxChange({
+              basketId: product.basketId,
+              gtin: product.gtin,
+            })
+          }
+        />
+      )}
+    </li>
   );
 };
 

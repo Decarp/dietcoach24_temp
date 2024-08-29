@@ -1,15 +1,6 @@
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import {
-  ArchiveBoxIcon,
-  ArrowRightCircleIcon,
-  ChevronDownIcon,
-  DocumentDuplicateIcon,
-  HeartIcon,
-  PencilSquareIcon,
-  TrashIcon,
-  UserPlusIcon,
-} from "@heroicons/react/20/solid";
 import { RecommendationRule } from "@/types/types";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { TrashIcon } from "@heroicons/react/20/solid";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 
 export default function RecommendationRuleComp({
@@ -47,7 +38,7 @@ export default function RecommendationRuleComp({
               {rule.mode}
             </span>
             <span className="inline-flex items-center border rounded-md mx-2 border-gray-300 px-3 text-gray-500 sm:text-xs">
-              der Zufuhr aus
+              der Zufuhr von
             </span>
             <span className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-primary">
               {rule.category}
