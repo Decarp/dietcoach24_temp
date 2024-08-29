@@ -1,6 +1,7 @@
 import React from "react";
 import { classNames } from "@/utils/classNames";
 import { useCounterStore } from "@/providers/useStoreProvider";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const tabs = [
   { name: "Energieverteilung", path: "energy" },
@@ -10,7 +11,14 @@ const tabs = [
 ];
 
 const AnalysisHeader = () => {
-  const { currentTab, setCurrentTab } = useCounterStore((state) => state);
+  const {
+    currentTab,
+    setCurrentTab,
+    hideBaskets,
+    setHideBaskets,
+    hideProducts,
+    setHideProducts,
+  } = useCounterStore((state) => state);
 
   const handleTabChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentTab(event.target.value);
@@ -21,12 +29,47 @@ const AnalysisHeader = () => {
   };
 
   return (
-    <div className="border-b border-gray-300 -mx-6">
-      <div className="mx-6">
-        <h2 className="text-xl font-semibold">Analyse</h2>
-        <h3 className="text-xs font-light mb-5 text-gray-500">
-          Filtere Lebensmittel
-        </h3>
+    <div className="flex justify-between items-center">
+      <div className="w-full">
+        <div className="relative flex justify-between mb-5">
+          {/* Left Arrow */}
+          <button
+            onClick={() => setHideBaskets(!hideBaskets)}
+            className={`-ml-[38px] p-1 bg-white border border-gray-300 rounded-full shadow hover:bg-gray-100 focus:outline-none absolute left-0 transition ease-in-out delay-150 hover:scale-110 hover:bg-gray-50 ${
+              !hideBaskets ? "hover:-translate-x-1" : "hover:translate-x-1"
+            }`}
+          >
+            {hideBaskets ? (
+              <ChevronRightIcon className="h-4 w-4 text-gray-500" />
+            ) : (
+              <ChevronLeftIcon className="h-4 w-4 text-gray-500" />
+            )}
+          </button>
+
+          {/* Header Title */}
+          <div className="flex-grow text-center">
+            <h2 className="text-xl font-semibold">Analyse</h2>
+            <h3 className="text-xs font-light text-gray-500">
+              Filtere Lebensmittel
+            </h3>
+          </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={() => setHideProducts(!hideProducts)}
+            className={`z-10 -mr-[37px] p-1 bg-white border border-gray-300 rounded-full shadow hover:bg-gray-100 focus:outline-none absolute right-0 transition ease-in-out delay-150 hover:scale-110 hover:bg-gray-50 ${
+              !hideProducts ? "hover:translate-x-1" : "hover:-translate-x-1"
+            }`}
+          >
+            {hideProducts ? (
+              <ChevronLeftIcon className="h-4 w-4 text-gray-500" />
+            ) : (
+              <ChevronRightIcon className="h-4 w-4 text-gray-500" />
+            )}
+          </button>
+        </div>
+
+        {/* Tabs */}
         <div>
           <div className="sm:hidden">
             <label htmlFor="current-tab" className="sr-only">
@@ -46,7 +89,7 @@ const AnalysisHeader = () => {
               ))}
             </select>
           </div>
-          <div className="hidden sm:block  -mx-4 sm:-mx-6 lg:-mx-6 lg:-ml-8 xl:-ml-6">
+          <div className="hidden sm:block border-b -mx-4 sm:-mx-6 lg:-mx-6 lg:-ml-8 xl:-ml-6">
             <nav className="-mb-px flex space-x-8 px-4 sm:px-5 lg:px-7 xl:px-5">
               {tabs.map((tab) => (
                 <button

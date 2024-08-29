@@ -50,7 +50,7 @@ export default function ChartEnergyMacro({
 
   return (
     <div
-      className={`bg-white rounded-lg p-4 border border-gray-300 w-full ${className}`}
+      className={`rounded-lg p-4 border border-gray-300 w-full ${className}`}
       style={{ height: "350px" }}
     >
       <ResponsiveContainer width="100%" height="100%">

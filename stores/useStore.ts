@@ -1,7 +1,6 @@
 import {
   BasketProductFlat,
   CategorySelection,
-  Product,
   SelectedBasketProductId,
   MacroCategory,
   MicroCategory,
@@ -27,6 +26,8 @@ export type CounterState = {
   selectedMacro: MacroCategory;
   selectedMicro: MicroCategory;
   highlightBorder: boolean;
+  hideBaskets: boolean;
+  hideProducts: boolean;
 };
 
 export type CounterActions = {
@@ -51,6 +52,8 @@ export type CounterActions = {
   setSelectedMacro: (macro: MacroCategory) => void;
   setSelectedMicro: (micro: MicroCategory) => void;
   setHighlightBorder: (highlight: boolean) => void;
+  setHideBaskets: (hide: boolean) => void;
+  setHideProducts: (hide: boolean) => void;
 };
 
 export type CounterStore = CounterState & CounterActions;
@@ -73,6 +76,8 @@ export const initCounterStore = (): CounterState => {
     selectedMacro: "Kohlenhydrate",
     selectedMicro: "Salz",
     highlightBorder: false,
+    hideBaskets: false,
+    hideProducts: false,
   };
 };
 
@@ -93,6 +98,8 @@ export const defaultInitState: CounterState = {
   selectedMacro: "Kohlenhydrate",
   selectedMicro: "Salz",
   highlightBorder: false,
+  hideBaskets: false,
+  hideProducts: false,
 };
 
 export const createCounterStore = (
@@ -303,5 +310,7 @@ export const createCounterStore = (
         }, 3000); // Reset after 3 seconds
       }
     },
+    setHideBaskets: (hide: boolean) => set(() => ({ hideBaskets: hide })),
+    setHideProducts: (hide: boolean) => set(() => ({ hideProducts: hide })),
   }));
 };

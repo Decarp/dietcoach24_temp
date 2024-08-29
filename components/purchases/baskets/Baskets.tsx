@@ -27,6 +27,7 @@ const Baskets = () => {
   const weeksToSelect = 8;
 
   const {
+    hideBaskets,
     selectedBasketIds,
     setSelectedBasketIds,
     selectedBasketProductIds,
@@ -151,7 +152,11 @@ const Baskets = () => {
   };
 
   return (
-    <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-300 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)]">
+    <div
+      className={`pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-300 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)] ${
+        hideBaskets ? "hidden" : ""
+      }`}
+    >
       <BasketsHeader
         baskets={baskets}
         areLastNWeeksSelected={areLastNWeeksSelected}

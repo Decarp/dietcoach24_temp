@@ -90,7 +90,7 @@ export default function ChartEnergyMicroCategories({
 
   return (
     <div
-      className={`bg-white rounded-lg p-4 border border-gray-300 w-full ${className}`}
+      className={`rounded-lg p-4 border border-gray-300 w-full ${className}`}
       style={{ height: "550px" }}
     >
       <div className="flex items-center justify-between space-x-4">

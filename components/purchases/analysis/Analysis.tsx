@@ -46,6 +46,8 @@ const Analysis = () => {
   const patientId = pathname.split("/")[2];
 
   const {
+    hideBaskets,
+    hideProducts,
     selectedBasketIds,
     currentTab,
     selectedMacro,
@@ -155,7 +157,12 @@ const Analysis = () => {
   ]);
 
   return (
-    <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
+    <div
+      className={`pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-gray-300 border-b border-x ${
+        hideProducts || hideBaskets ? "bg-white " : " "
+      } ${hideBaskets ? "-ml-8 " : " "} ${hideProducts ? "-mr-8 " : " "}
+      `}
+    >
       <AnalysisHeader />
       <div className="shadow-inner -mx-6">
         <div className="flex-1 max-h-[calc(100vh-316px)] overflow-y-auto pb-6 px-6">
@@ -171,13 +178,21 @@ const Analysis = () => {
                   <ChartEnergyCategories
                     data={chartEnergyCategoriesData}
                     replace={true}
+                    className={`${
+                      hideProducts || hideBaskets ? "bg-gray-50" : "bg-white"
+                    }`}
                   />
 
                   <br />
                   <h4 className="text-lg font-medium mb-2">
                     Energieverteilung aus Makronährstoffen
                   </h4>
-                  <ChartEnergyMacro data={chartEnergyMacroData} />
+                  <ChartEnergyMacro
+                    data={chartEnergyMacroData}
+                    className={`${
+                      hideProducts || hideBaskets ? "bg-gray-50" : "bg-white"
+                    }`}
+                  />
                 </>
               )}
               {currentTab === "macro" && (
@@ -187,6 +202,9 @@ const Analysis = () => {
                   <ChartEnergyMacroCategories
                     data={chartEnergyMacroCategoriesData}
                     replace={true}
+                    className={`${
+                      hideProducts || hideBaskets ? "bg-gray-50" : "bg-white"
+                    }`}
                   />
                 </>
               )}
@@ -199,6 +217,9 @@ const Analysis = () => {
                   <ChartEnergyMicroCategories
                     data={chartEnergyMicroCategoriesData}
                     replace={true}
+                    className={`${
+                      hideProducts || hideBaskets ? "bg-gray-50" : "bg-white"
+                    }`}
                   />
                 </>
               )}
