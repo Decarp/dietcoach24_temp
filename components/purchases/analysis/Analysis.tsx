@@ -158,7 +158,7 @@ const Analysis = () => {
 
   return (
     <div
-      className={`pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-gray-300 border-b border-x ${
+      className={`pt-6 bg-gray-50 flex flex-col flex-1 px-6 border-gray-300 border-b border-x ${
         hideProducts || hideBaskets ? "bg-white " : " "
       } ${hideBaskets ? "-ml-8 " : " "} ${hideProducts ? "-mr-8 " : " "}
       `}

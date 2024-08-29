@@ -28,15 +28,17 @@ const SessionsHeader = () => {
   };
 
   return (
-    <div className="flex justify-between items-center mb-8 pl-8 pr-5">
-      <div>
-        <h2 className="text-xl font-semibold">Sitzungen</h2>
-        <h3 className="text-xs font-light text-gray-500">Alle Sitzungen</h3>
+    <div className="border-b border-gray-300">
+      <div className="flex justify-between items-center mb-8 pl-8 pr-5">
+        <div>
+          <h2 className="text-xl font-semibold">Sitzungen</h2>
+          <h3 className="text-xs font-light text-gray-500">Alle Sitzungen</h3>
+        </div>
+        <PlusCircleIcon
+          onClick={handleCreateSession}
+          className="h-10 w-10 text-primary hover:text-green-800 hover:cursor-pointer"
+        />
       </div>
-      <PlusCircleIcon
-        onClick={handleCreateSession}
-        className="h-10 w-10 text-primary hover:text-green-800 hover:cursor-pointer"
-      />
     </div>
   );
 };

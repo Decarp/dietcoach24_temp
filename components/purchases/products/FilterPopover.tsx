@@ -1,10 +1,10 @@
+import { useCounterStore } from "@/providers/useStoreProvider";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 const FilterPopover = ({
   categoriesWithSub,
   selectedCategories,
-  updateCategories,
 }: {
   categoriesWithSub: {
     major: string;
@@ -14,10 +14,11 @@ const FilterPopover = ({
     major: string[];
     sub: string[];
   };
-  updateCategories: (category: string, type: "major" | "sub") => void;
 }) => {
+  const { updateCategories } = useCounterStore((state) => state);
+
   return (
-    <Popover className="relative inline-block text-left">
+    <Popover className="z-50 relative inline-block text-left">
       <div>
         <PopoverButton className="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
           <span className="flex-none">
@@ -32,7 +33,7 @@ const FilterPopover = ({
 
       <PopoverPanel
         transition
-        className="absolute right-0 z-80 h-[420px] overflow-y-scroll mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+        className="absolute right-0 z-50 h-[420px] overflow-y-scroll mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
       >
         <form className="space-y-4">
           {categoriesWithSub
@@ -48,7 +49,9 @@ const FilterPopover = ({
                     value={category.major}
                     type="checkbox"
                     checked={selectedCategories.major.includes(category.major)}
-                    onChange={() => updateCategories(category.major, "major")}
+                    onChange={() =>
+                      updateCategories(category.major, "major", true)
+                    }
                     className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                   />
                   <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
@@ -64,7 +67,9 @@ const FilterPopover = ({
                           value={subCategory}
                           type="checkbox"
                           checked={selectedCategories.sub.includes(subCategory)}
-                          onChange={() => updateCategories(subCategory, "sub")}
+                          onChange={() =>
+                            updateCategories(subCategory, "sub", true)
+                          }
                           className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                         />
                         <label className="ml-3 whitespace-nowrap pr-6 text-sm text-gray-900">

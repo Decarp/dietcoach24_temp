@@ -55,10 +55,10 @@ const Notes = () => {
   };
 
   return (
-    <div className="relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-300 lg:w-64 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-185px)]">
+    <div className="relative pt-6 -mr-8 bg-white border-r flex flex-col shrink-0 border-t border-b border-gray-300 w-64 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-185px)]">
       <NotesHeader />
 
-      <div className="mt-12 -mr-6 flex-1 overflow-y-auto min-h-0 min-h-80 shadow-inner">
+      <div className="border-t border-gray-300 mt-12 -mr-6 flex-1 overflow-y-auto min-h-0 min-h-80 shadow-inner">
         {selectedSessionId === null ? (
           <div className="shadow-inner -mx-6 px-4">
             <div className="flex-1 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">

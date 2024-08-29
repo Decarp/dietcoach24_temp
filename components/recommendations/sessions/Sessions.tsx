@@ -29,7 +29,7 @@ const SessionsComp = () => {
   };
 
   return (
-    <div className="pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-300 min-w-56 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)]">
+    <div className="pt-6 -ml-8 bg-white border-l flex flex-col border-b border-gray-300 min-w-56 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)]">
       <SessionsHeader />
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">

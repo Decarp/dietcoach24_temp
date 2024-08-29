@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import RecommendationDrawer from "../recommendationDrawer/RecommendationDrawer";
 import FilterPopover from "./FilterPopover";
 import SortMenu from "./SortMenu";
+import { categories } from "@/data/categories";
 
 const sortProducts = (
   products: BasketProductFlat[],
@@ -136,13 +137,15 @@ const Products = () => {
     setDrawerOpen(open);
   };
 
-  const categoriesWithSub = availableCategories.major.map((majorCategory) => ({
-    major: majorCategory,
-    subs: basketProductsFlat
-      .filter((product) => product.dietCoachCategoryL1.de === majorCategory)
-      .map((product) => product.dietCoachCategoryL2.de)
-      .filter((sub, index, self) => self.indexOf(sub) === index),
+  const categoriesWithSub: { major: string; subs: string[] }[] = Object.entries(
+    categories.de
+  ).map(([major, subs]) => ({
+    major,
+    subs,
   }));
+
+  console.log("categoriesWithSub", categoriesWithSub);
+  console.log("availableCategories", availableCategories);
 
   return (
     <div
@@ -152,11 +155,10 @@ const Products = () => {
     >
       <ProductsHeader products={sortedProducts} />
 
-      <div className="border-b border-gray-300 px-6 -mt-[7px] -mr-6 pb-2 flex gap-x-8 items-center overflow-x-auto">
+      <div className="border-b border-gray-300 px-6 -mt-[7px] -mr-6 pb-2 flex gap-x-8 items-center">
         <FilterPopover
           categoriesWithSub={categoriesWithSub}
           selectedCategories={selectedCategories}
-          updateCategories={updateCategories}
         />
 
         <SortMenu
