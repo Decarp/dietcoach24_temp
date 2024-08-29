@@ -29,7 +29,7 @@ const AnalysisHeader = () => {
   };
 
   return (
-    <div className="flex justify-between items-center min-w-[300px] lg:max-w-[390px] xl:w-full">
+    <div className="flex justify-between items-center min-w-[300px] lg:max-w-[390px] xl:max-w-[800px] xl:w-full">
       <div className="w-full">
         <div className="relative flex justify-between mb-5">
           {/* Left Arrow */}
