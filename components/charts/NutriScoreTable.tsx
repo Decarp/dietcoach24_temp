@@ -81,9 +81,9 @@ export const NutriScoreTable = () => {
       width: 120,
     },
     {
-      headerName: "Energieverteilung",
+      headerName: "Energieverteilung (%)",
       field: "EnergyShare",
-      width: 180,
+      width: 220,
     },
     {
       headerName: "Energie",
