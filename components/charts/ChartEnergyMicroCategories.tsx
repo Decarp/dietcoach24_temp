@@ -1,10 +1,4 @@
-"use client";
-
-import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicroCategoriesData";
-import { CustomTooltip } from "@/components/CustomTooltip";
-import { useCounterStore } from "@/providers/useStoreProvider";
-import { ChartEnergyCategoriesData, MicroCategory } from "@/types/types";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -12,10 +6,13 @@ import {
   Cell,
   LabelList,
   ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
+import { useCounterStore } from "@/providers/useStoreProvider";
+import { ChartEnergyCategoriesData, MicroCategory } from "@/types/types";
+
+const tabs = ["Salz", "Zucker", "Gesättigte Fettsäuren"];
 
 const CustomLabel = ({
   x = 0,
@@ -52,7 +49,8 @@ export default function ChartEnergyMicroCategories({
   replace?: boolean;
   className?: string;
 }) {
-  const { selectedMicro, setSelectedMicro } = useCounterStore((state) => state);
+  const { selectedMicro, setSelectedMicro, setSelectedSortCriteria } =
+    useCounterStore((state) => state);
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
   const { selectedCategories, updateCategories } = useCounterStore(
@@ -74,7 +72,7 @@ export default function ChartEnergyMicroCategories({
 
   const handleMicroChange = (micro: MicroCategory) => {
     setSelectedMicro(micro);
-    setActiveIndices([]); // Clear active indices when macro changes
+    setActiveIndices([]); // Clear active indices when micro changes
   };
 
   const handleClick = (index: number) => {
@@ -88,16 +86,26 @@ export default function ChartEnergyMicroCategories({
     );
   };
 
+  // Sync the selectedSortCriteria with the selectedMicro when the component mounts
+  useEffect(() => {
+    if (tabs.includes(selectedMicro)) {
+      setSelectedSortCriteria(selectedMicro);
+    }
+  }, [selectedMicro, setSelectedSortCriteria]);
+
   return (
     <div
       className={`rounded-lg p-4 border border-gray-300 w-full ${className}`}
       style={{ height: "550px" }}
     >
       <div className="flex items-center justify-between space-x-4">
-        {["Salz", "Zucker", "Gesättigte Fettsäuren"].map((micro) => (
+        {tabs.map((micro) => (
           <button
             key={micro}
-            onClick={() => handleMicroChange(micro as MicroCategory)}
+            onClick={() => {
+              handleMicroChange(micro as MicroCategory);
+              setSelectedSortCriteria(micro);
+            }}
             className={`w-full rounded-md px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
               selectedMicro === micro ? "bg-primary text-white" : "bg-gray-300"
             }`}

@@ -1,6 +1,3 @@
-"use client";
-
-import { CustomTooltip } from "@/components/CustomTooltip";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { ChartEnergyCategoriesData, MacroCategory } from "@/types/types";
 import { useEffect, useMemo, useState } from "react";
@@ -11,10 +8,11 @@ import {
   Cell,
   LabelList,
   ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
+
+const tabs = ["Kohlenhydrate", "Fette", "Proteine", "Nahrungsfasern"];
 
 const CustomLabel = ({
   x = 0,
@@ -51,7 +49,9 @@ export default function ChartEnergyMacroCategories({
   replace?: boolean;
   className?: string;
 }) {
-  const { selectedMacro, setSelectedMacro } = useCounterStore((state) => state);
+  const { selectedMacro, setSelectedMacro, setSelectedSortCriteria } =
+    useCounterStore((state) => state);
+
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
   const { selectedCategories, updateCategories } = useCounterStore(
@@ -89,27 +89,33 @@ export default function ChartEnergyMacroCategories({
     }
   };
 
+  useEffect(() => {
+    // Set the currently active tab to the selectedSortCriteria
+    if (tabs.includes(selectedMacro)) {
+      setSelectedSortCriteria(selectedMacro);
+    }
+  }, [selectedMacro, setSelectedSortCriteria]);
+
   return (
     <div
       className={`rounded-lg p-4 border border-gray-300 w-full ${className}`}
       style={{ height: "550px" }}
     >
       <div className="flex items-center justify-between space-x-4">
-        {["Kohlenhydrate", "Fette", "Proteine", "Nahrungsfasern"].map(
-          (macro) => (
-            <button
-              key={macro}
-              onClick={() => handleMacroChange(macro as MacroCategory)}
-              className={`w-full rounded-md px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
-                selectedMacro === macro
-                  ? "bg-primary text-white"
-                  : "bg-gray-300"
-              }`}
-            >
-              {macro}
-            </button>
-          )
-        )}
+        {tabs.map((macro) => (
+          <button
+            key={macro}
+            onClick={() => {
+              handleMacroChange(macro as MacroCategory);
+              setSelectedSortCriteria(macro);
+            }}
+            className={`w-full rounded-md px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
+              selectedMacro === macro ? "bg-primary text-white" : "bg-gray-300"
+            }`}
+          >
+            {macro}
+          </button>
+        ))}
       </div>
 
       <ResponsiveContainer width="100%" height="100%">
