@@ -59,9 +59,9 @@ export const NutriScoreTable = () => {
   const handleClick = (category: string) => {
     if (category.includes(" > ")) {
       const sub = category.split(" > ")[1];
-      updateCategories(sub, "sub");
+      updateCategories(sub, "sub", true);
     } else {
-      updateCategories(category, "major");
+      updateCategories(category, "major", true);
     }
   };
 
