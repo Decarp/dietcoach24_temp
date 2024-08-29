@@ -29,7 +29,7 @@ const AnalysisHeader = () => {
   };
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center min-w-[300px] lg:max-w-[390px] xl:w-full">
       <div className="w-full">
         <div className="relative flex justify-between mb-5">
           {/* Left Arrow */}
@@ -89,7 +89,7 @@ const AnalysisHeader = () => {
               ))}
             </select>
           </div>
-          <div className="hidden sm:block border-b -mx-4 sm:-mx-6 lg:-mx-6 lg:-ml-8 xl:-ml-6">
+          <div className="hidden sm:block border-b border-gray-300 -mx-4 sm:-mx-6 lg:-mx-6 lg:-mx-8 xl:-mx-6 overflow-x-auto">
             <nav className="-mb-px flex space-x-8 px-4 sm:px-5 lg:px-7 xl:px-5">
               {tabs.map((tab) => (
                 <button

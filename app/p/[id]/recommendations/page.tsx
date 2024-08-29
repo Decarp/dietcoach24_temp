@@ -9,8 +9,8 @@ export default function RecommendationsPage() {
   return (
     <main className="px-4 sm:px-6 lg:px-8">
       <PatientCard />
-      <div className="mx-auto w-full max-w-7xl lg:flex">
-        <div className="flex-1 xl:flex">
+      <div className="mx-auto w-full max-w-7xl flex">
+        <div className="flex-1 flex">
           <SessionsComp />
           <Recommendations />
         </div>

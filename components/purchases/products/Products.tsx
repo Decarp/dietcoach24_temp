@@ -146,13 +146,13 @@ const Products = () => {
 
   return (
     <div
-      className={`relative pt-6 -mr-8 bg-white border-x flex flex-col shrink-0 border-t border-b border-gray-300 lg:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-185px)] ${
+      className={`relative pt-6 -mr-8 bg-white border-r flex flex-col shrink-0 border-t border-b border-gray-300 min-w-60 md:max-w-80 xl:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-185px)] ${
         hideProducts ? "hidden" : ""
       }`}
     >
       <ProductsHeader products={sortedProducts} />
 
-      <div className="border-b border-gray-300 px-6 -mt-[7px] -mr-6 pb-2 flex gap-x-8 items-center">
+      <div className="border-b border-gray-300 px-6 -mt-[7px] -mr-6 pb-2 flex gap-x-8 items-center overflow-x-auto">
         <FilterPopover
           categoriesWithSub={categoriesWithSub}
           selectedCategories={selectedCategories}

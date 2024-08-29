@@ -40,7 +40,7 @@ export default function PatientCard() {
   if (isLoading) {
     // Pulsing loading skeleton
     return (
-      <header className="pt-8 bg-white border-x relative -mx-4 sm:-mx-6 lg:-mx-8 border-b border-gray-300 pb-5 sm:pb-0">
+      <header className="pt-4 lg:pt-6 xl:pt-8 bg-white border-x relative -mx-4 sm:-mx-6 lg:-mx-8 border-b border-gray-300 pb-5 sm:pb-0">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="md:flex md:items-center md:justify-between">
             <div className="w-48 h-8 bg-gray-200 rounded-md animate-pulse"></div>
@@ -71,7 +71,7 @@ export default function PatientCard() {
   };
 
   return (
-    <header className="pt-8 bg-white border-x relative -mx-4 sm:-mx-6 lg:-mx-8 border-b border-gray-300 pb-5 sm:pb-0">
+    <header className="pt-4 lg:pt-6 xl:pt-8 bg-white border-x relative -mx-4 sm:-mx-6 lg:-mx-8 border-b border-gray-300 pb-5 sm:pb-0">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="md:flex md:items-center md:justify-between">
           <h1 className="text-2xl font-semibold">

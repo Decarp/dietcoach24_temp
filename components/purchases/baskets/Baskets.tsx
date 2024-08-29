@@ -153,7 +153,7 @@ const Baskets = () => {
 
   return (
     <div
-      className={`pt-6 -ml-8 bg-white border-x flex flex-col border-b border-gray-300 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)] ${
+      className={`pt-6 -ml-8 bg-white border-l flex flex-col border-b border-gray-300 min-w-64 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)] ${
         hideBaskets ? "hidden" : ""
       }`}
     >
