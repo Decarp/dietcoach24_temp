@@ -24,8 +24,8 @@ export default function PatientCard() {
 
   const tabs = [
     { name: "Profil", path: "profile" },
-    { name: "Einkäufe", path: "purchases" },
     { name: "Empfehlungen", path: "recommendations" },
+    { name: "Einkäufe", path: "purchases" },
     { name: "Fortschritt", path: "progress" },
   ];
 
