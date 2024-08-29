@@ -1,6 +1,6 @@
 import ProductCard from "@/components/ProductCard";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { ArrowDownIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/24/solid";
 
 export default function SelectedProductsSection({
@@ -36,13 +36,12 @@ export default function SelectedProductsSection({
         <h3 className="w-full block text-sm font-medium text-gray-500">
           Gekaufte Produkte
         </h3>
-        <div className="relative">
+        <div className="relative mr-2">
           <ShoppingCartIcon className="h-8 w-8 text-red-500" />
           <div className="absolute -top-1.5 -right-2 bg-red-500 border border-white text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
             {selectedBasketProductsFlat.length}
           </div>
         </div>
-        <ArrowDownIcon className="ml-2 h-5 w-5 text-red-500" />
       </div>
 
       <div className="h-[320px] overflow-y-scroll shadow-inner border-b border-gray-300">
