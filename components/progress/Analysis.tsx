@@ -386,19 +386,6 @@ const Analysis = () => {
                 <>
                   <br />
                   <h4 className="text-lg font-medium mb-2">
-                    Energieverteilung aus Makronährstoffen
-                  </h4>
-
-                  <div className="flex items-center justify-between">
-                    <ChartEnergyMacro data={chartComparisonEnergyMacroData} />
-                    <DiffDot
-                      percentageDifference={percentageDifferencePrimary}
-                    />
-                    <ChartEnergyMacro data={chartEnergyMacroData} />
-                  </div>
-
-                  <br />
-                  <h4 className="text-lg font-medium mb-2">
                     Energieverteilung aus Lebensmittelkategorien
                   </h4>
                   <div className="flex items-center justify-between">
@@ -413,6 +400,19 @@ const Analysis = () => {
                       data={chartEnergyCategoriesData}
                       replace={true}
                     />
+                  </div>
+
+                  <br />
+                  <h4 className="text-lg font-medium mb-2">
+                    Energieverteilung aus Makronährstoffen
+                  </h4>
+
+                  <div className="flex items-center justify-between">
+                    <ChartEnergyMacro data={chartComparisonEnergyMacroData} />
+                    <DiffDot
+                      percentageDifference={percentageDifferencePrimary}
+                    />
+                    <ChartEnergyMacro data={chartEnergyMacroData} />
                   </div>
                 </>
               )}
