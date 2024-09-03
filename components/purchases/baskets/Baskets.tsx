@@ -40,7 +40,7 @@ const Baskets = () => {
     enabled: !!session?.accessToken,
   });
 
-  const { data: sessions } = useQuery<Sessions>({
+  const { data: sessions, isLoading: isLoadingSpinner } = useQuery<Sessions>({
     queryKey: ["sessions", patientId],
     queryFn: () => fetchSessions(patientId, session?.accessToken || ""),
     enabled: !!session?.accessToken,
@@ -164,7 +164,7 @@ const Baskets = () => {
       />
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
-        {isLoading && <Spinner />}
+        {(isLoading || isLoadingSpinner) && <Spinner />}
         {error && <Error message={error.message} />}
         {data && (
           <nav aria-label="Baskets List" className="overflow-y-auto">

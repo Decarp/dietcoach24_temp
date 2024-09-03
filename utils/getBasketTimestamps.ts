@@ -11,16 +11,22 @@ export const getBasketTimestamps = (patient?: Patient, sessions?: Sessions) => {
   const ffqTimestampPlus8Weeks = getUnixTime(
     addWeeks(fromUnixTime(ffqTimestamp || 0), 8)
   );
+  if (sessions === undefined) {
+    return {
+      startTimestamp: "",
+      endTimestamp: "",
+    };
+  }
 
-  const startTimestamp = ffqTimestampMinus8Weeks.toString();
-
-  if (
-    sessions?.length === 0 ||
-    sessions?.length === 1 ||
-    sessions === undefined
-  ) {
-    return { startTimestamp, endTimestamp: ffqTimestamp?.toString() };
+  if (sessions?.length === 0 || sessions?.length === 1) {
+    return {
+      startTimestamp: ffqTimestampMinus8Weeks.toString(),
+      endTimestamp: ffqTimestamp?.toString() || "",
+    };
   } else {
-    return { startTimestamp, endTimestamp: ffqTimestampPlus8Weeks.toString() };
+    return {
+      startTimestamp: ffqTimestampMinus8Weeks.toString(),
+      endTimestamp: ffqTimestampPlus8Weeks.toString(),
+    };
   }
 };
