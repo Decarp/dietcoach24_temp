@@ -1,19 +1,18 @@
 "use client";
 
-import { getChartEnergyCategoriesData } from "@/getData/getChartEnergyCategoriesData";
 import { CustomTooltip } from "@/components/CustomTooltip";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { ChartEnergyCategoriesData } from "@/types/types";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
 import { renderCustomizedChartLabel } from "@/utils/renderCustomizedChartLabel";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  PieChart,
-  Pie,
   Cell,
-  Tooltip,
   Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
+  Tooltip,
 } from "recharts";
 
 const categoryColors = {

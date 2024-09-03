@@ -1,5 +1,5 @@
 import DiffDot from "@/components/charts/DiffDot";
-import AnalysisHeader from "@/components/progress/analysis/AnalysisHeader";
+import AnalysisHeader from "@/components/progress/AnalysisHeader";
 import { Spinner } from "@/components/Spinner";
 import { getChartEnergyCategoriesData } from "@/getData/getChartEnergyCategoriesData";
 import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";

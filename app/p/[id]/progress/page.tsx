@@ -1,7 +1,7 @@
 "use client";
 
 import PatientCard from "@/components/PatientCard";
-import Analysis from "@/components/progress/analysis/Analysis";
+import Analysis from "@/components/progress/Analysis";
 import Baskets from "@/components/progress/baskets/Baskets";
 
 export default function PurchasesPage() {

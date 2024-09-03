@@ -23,7 +23,7 @@ const AnalysisHeader = () => {
     <div>
       <h2 className="text-xl font-semibold">Fortschritt</h2>
       <h3 className="text-xs font-light mb-5 text-gray-500">
-        Vergleiche Zeitfenster
+        Fortschritt zwischen zwei Zeitfenstern
       </h3>
       <div>
         <div className="sm:hidden">
