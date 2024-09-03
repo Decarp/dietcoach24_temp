@@ -10,6 +10,7 @@ import { LicenseInfo } from "@mui/x-license";
 import { useQuery } from "@tanstack/react-query";
 import { addWeeks, fromUnixTime, getUnixTime, subWeeks } from "date-fns";
 import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/de";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -118,8 +119,11 @@ export default function DateRangePickerComp() {
     }
   }, [range2Baskets, setSelectedComparisonBasketIds]);
 
+  // Set the locale to German
+  dayjs.locale("de");
+
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
       <div className="grid grid-cols-2 gap-28 mt-6">
         <section className="space-y-4">
           <h3 className="text-md font-medium">Zeitfenster 1</h3>

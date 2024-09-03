@@ -44,7 +44,7 @@ const AnalysisHeader = () => {
             ))}
           </select>
         </div>
-        <div className="hidden sm:block border-b -mx-8 px-2">
+        <div className="hidden sm:block border-b border-gray-300 -mx-8 px-2">
           <nav className="-mb-px flex space-x-8 px-4 sm:px-5 lg:px-7 xl:px-5">
             {tabs.map((tab) => (
               <button
