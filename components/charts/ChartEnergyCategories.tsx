@@ -31,10 +31,12 @@ const categoryColors = {
 export default function ChartEnergyCategories({
   data,
   replace = false,
+  rounded = true,
   className,
 }: {
   data: ChartEnergyCategoriesData[];
   replace?: boolean;
+  rounded?: boolean;
   className?: string;
 }) {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
@@ -71,7 +73,7 @@ export default function ChartEnergyCategories({
             cx="50%"
             cy="50%"
             labelLine={false}
-            label={renderCustomizedChartLabel}
+            label={(props) => renderCustomizedChartLabel({ ...props, rounded })}
             innerRadius={0}
             outerRadius={80}
             fill="#8884d8"

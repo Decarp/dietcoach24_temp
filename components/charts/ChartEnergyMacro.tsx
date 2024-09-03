@@ -1,5 +1,3 @@
-"use client";
-
 import { CustomTooltip } from "@/components/CustomTooltip";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { ChartEnergyMacroData } from "@/types/types";
@@ -24,9 +22,11 @@ const categoryColors = {
 
 export default function ChartEnergyMacro({
   data,
+  rounded = true,
   className,
 }: {
   data: ChartEnergyMacroData[];
+  rounded?: boolean;
   className?: string;
 }) {
   const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
@@ -66,7 +66,7 @@ export default function ChartEnergyMacro({
             cx="50%"
             cy="50%"
             labelLine={false}
-            label={renderCustomizedChartLabel}
+            label={(props) => renderCustomizedChartLabel({ ...props, rounded })}
             innerRadius={0}
             outerRadius={80}
             fill="#8884d8"

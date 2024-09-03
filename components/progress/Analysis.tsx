@@ -392,6 +392,7 @@ const Analysis = () => {
                     <ChartEnergyCategories
                       data={chartComparisonEnergyCategoriesData}
                       replace={true}
+                      rounded={false}
                     />
                     <DiffDot
                       percentageDifference={percentageDifferenceSecondary}
@@ -400,6 +401,7 @@ const Analysis = () => {
                     <ChartEnergyCategories
                       data={chartEnergyCategoriesData}
                       replace={true}
+                      rounded={false}
                     />
                   </div>
 
@@ -409,12 +411,18 @@ const Analysis = () => {
                   </h4>
 
                   <div className="flex items-center justify-between">
-                    <ChartEnergyMacro data={chartComparisonEnergyMacroData} />
+                    <ChartEnergyMacro
+                      data={chartComparisonEnergyMacroData}
+                      rounded={false}
+                    />
                     <DiffDot
                       percentageDifference={percentageDifferencePrimary}
                       variant="sort"
                     />
-                    <ChartEnergyMacro data={chartEnergyMacroData} />
+                    <ChartEnergyMacro
+                      data={chartEnergyMacroData}
+                      rounded={false}
+                    />
                   </div>
                 </>
               )}
@@ -426,6 +434,7 @@ const Analysis = () => {
                     <ChartEnergyMacroCategories
                       data={chartComparisonEnergyMacroCategoriesData}
                       replace={true}
+                      rounded={false}
                     />
                     <DiffDot
                       percentageDifference={percentageDifferenceSecondary}
@@ -434,6 +443,7 @@ const Analysis = () => {
                     <ChartEnergyMacroCategories
                       data={chartEnergyMacroCategoriesData}
                       replace={true}
+                      rounded={false}
                     />
                   </div>
                 </>
@@ -448,6 +458,7 @@ const Analysis = () => {
                     <ChartEnergyMicroCategories
                       data={chartComparisonEnergyMicroCategoriesData}
                       replace={true}
+                      rounded={false}
                     />
                     <DiffDot
                       percentageDifference={percentageDifferenceSecondary}
@@ -456,6 +467,7 @@ const Analysis = () => {
                     <ChartEnergyMicroCategories
                       data={chartEnergyMicroCategoriesData}
                       replace={true}
+                      rounded={false}
                     />
                   </div>
                 </>

@@ -20,12 +20,14 @@ const CustomLabel = ({
   width = 0,
   height = 0,
   percent = 0,
+  rounded = true,
 }: {
   x?: number;
   y?: number;
   width?: number;
   height?: number;
   percent?: number;
+  rounded?: boolean;
 }) => {
   return (
     <text
@@ -35,7 +37,7 @@ const CustomLabel = ({
       textAnchor="start"
       dominantBaseline="middle"
     >
-      {`${(percent * 100).toFixed(0)}%`}
+      {`${(percent * 100).toFixed(rounded ? 0 : 1)}%`}
     </text>
   );
 };
@@ -43,10 +45,12 @@ const CustomLabel = ({
 export default function ChartEnergyMacroCategories({
   data,
   replace = false,
+  rounded = true,
   className,
 }: {
   data: ChartEnergyCategoriesData[];
   replace?: boolean;
+  rounded?: boolean;
   className?: string;
 }) {
   const { selectedMacro, setSelectedMacro, setSelectedSortCriteria } =
@@ -146,6 +150,7 @@ export default function ChartEnergyMacroCategories({
                   width={Number(width)}
                   height={Number(height)}
                   percent={totalValue ? Number(value) / totalValue : 0}
+                  rounded={rounded} // Pass the rounded prop to CustomLabel
                 />
               )}
             />

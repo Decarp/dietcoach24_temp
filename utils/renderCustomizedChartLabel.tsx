@@ -1,8 +1,9 @@
 const RADIAN = Math.PI / 180;
 
 export const renderCustomizedChartLabel = (props: any) => {
-  const { cx, cy, midAngle, outerRadius, fill, payload, percent, value } =
+  const { cx, cy, midAngle, outerRadius, fill, percent, value, rounded } =
     props;
+
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
   const sx = cx + (outerRadius + 10) * cos;
@@ -12,6 +13,8 @@ export const renderCustomizedChartLabel = (props: any) => {
   const ex = mx + (cos >= 0 ? 1 : -1) * 22;
   const ey = my;
   const textAnchor = cos >= 0 ? "start" : "end";
+
+  const formattedPercent = (percent * 100).toFixed(rounded ? 0 : 1); // Adjust based on rounded prop
 
   return (
     <>
@@ -27,7 +30,7 @@ export const renderCustomizedChartLabel = (props: any) => {
         textAnchor={textAnchor}
         fill="#333"
       >
-        {(percent * 100).toFixed(0)}%
+        {formattedPercent}%
       </text>
     </>
   );
