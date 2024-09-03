@@ -21,7 +21,8 @@ import { MdOutlineSupervisedUserCircle } from "react-icons/md";
 
 const navigation = [
   { name: "Patienten", href: "/patients" },
-  { name: "Fragebogen", href: "https://forms.office.com/e/wb6ze3KLEv" },
+  { name: "(Fragebogen 1)", href: "https://forms.office.com/e/wb6ze3KLEv" },
+  { name: "(Fragebogen 2)", href: "https://forms.office.com/e/wb6ze3KLEv" },
 ];
 
 export default function Header({ children }: { children: ReactNode }) {
