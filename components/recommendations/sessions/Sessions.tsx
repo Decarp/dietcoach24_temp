@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import SessionsHeader from "./SessionsHeader";
+import { Spinner } from "@/components/Spinner";
 
 const SessionsComp = () => {
   const { data: session } = useSession();
@@ -15,7 +16,7 @@ const SessionsComp = () => {
   const patientId = pathname.split("/")[2];
 
   // Fetch existing sessions
-  const { data: sessions } = useQuery<Sessions>({
+  const { data: sessions, isLoading } = useQuery<Sessions>({
     queryKey: ["sessions", patientId],
     queryFn: () => fetchSessions(patientId, session?.accessToken),
   });
@@ -33,6 +34,7 @@ const SessionsComp = () => {
       <SessionsHeader />
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
+        {isLoading && <Spinner />}
         <ul aria-label="Sessions List" className="overflow-y-auto">
           {sessions?.map((session) => (
             <li
