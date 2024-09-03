@@ -368,11 +368,31 @@ const Analysis = () => {
     );
   }
 
+  const range1ProductCount =
+    basketProductsComparisonNew?.reduce(
+      (sum, basket) => sum + basket.products.length,
+      0
+    ) || 0;
+
+  const range2ProductCount =
+    basketProductsComparisonOld?.reduce(
+      (sum, basket) => sum + basket.products.length,
+      0
+    ) || 0;
+
+  const range1BasketCount = basketProductsComparisonNew?.length || 0;
+  const range2BasketCount = basketProductsComparisonOld?.length || 0;
+
   return (
     <div className="bg-white -ml-8 -mr-8 border-x border-gray-300 pt-6 bg-gray-50 flex flex-col flex-1 px-8 border-b h-[calc(100vh-184px)]">
       <AnalysisHeader />
       <div className="-mx-8 flex-1 max-h-[calc(100vh-320px)] overflow-y-auto pb-6 px-8">
-        <DateRangePickerComp />
+        <DateRangePickerComp
+          range1ProductCount={range1ProductCount}
+          range2ProductCount={range2ProductCount}
+          range1BasketCount={range1BasketCount}
+          range2BasketCount={range2BasketCount}
+        />
         <div>
           {(isLoadingBasketProductsComparisonNew ||
             isLoadingBasketProductsComparisonOld ||
