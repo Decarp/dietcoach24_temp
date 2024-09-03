@@ -1,4 +1,4 @@
-export default function SVGLine() {
+export default function SVGLine({ color = "gray" }: { color?: string }) {
   return (
     <svg width="50px" height="10" xmlns="http://www.w3.org/2000/svg">
       <line
@@ -6,7 +6,7 @@ export default function SVGLine() {
         y1="5"
         x2="100%"
         y2="5"
-        stroke="gray"
+        stroke={color}
         strokeWidth="2"
         strokeDasharray="5, 5"
         strokeDashoffset="10"

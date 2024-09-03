@@ -395,6 +395,7 @@ const Analysis = () => {
                     />
                     <DiffDot
                       percentageDifference={percentageDifferenceSecondary}
+                      variant="categoryMultiColor"
                     />
                     <ChartEnergyCategories
                       data={chartEnergyCategoriesData}
@@ -411,6 +412,7 @@ const Analysis = () => {
                     <ChartEnergyMacro data={chartComparisonEnergyMacroData} />
                     <DiffDot
                       percentageDifference={percentageDifferencePrimary}
+                      variant="sort"
                     />
                     <ChartEnergyMacro data={chartEnergyMacroData} />
                   </div>
@@ -427,6 +429,7 @@ const Analysis = () => {
                     />
                     <DiffDot
                       percentageDifference={percentageDifferenceSecondary}
+                      variant="categorySingleColor"
                     />
                     <ChartEnergyMacroCategories
                       data={chartEnergyMacroCategoriesData}
@@ -448,6 +451,7 @@ const Analysis = () => {
                     />
                     <DiffDot
                       percentageDifference={percentageDifferenceSecondary}
+                      variant="categorySingleColor"
                     />
                     <ChartEnergyMicroCategories
                       data={chartEnergyMicroCategoriesData}

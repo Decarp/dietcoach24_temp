@@ -1,22 +1,26 @@
 "use client";
 
-import { getChartEnergyMacroData } from "@/getData/getChartEnergyMacroData";
 import { CustomTooltip } from "@/components/CustomTooltip";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { ChartEnergyMacroData, MetricOptions } from "@/types/types";
+import { ChartEnergyMacroData } from "@/types/types";
 import { renderActiveChartShape } from "@/utils/renderActiveChartShape";
 import { renderCustomizedChartLabel } from "@/utils/renderCustomizedChartLabel";
-import React, { useState, useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import {
-  PieChart,
-  Pie,
   Cell,
-  Tooltip,
   Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
+  Tooltip,
 } from "recharts";
 
-const COLORS = ["#68666f", "#80408d", "#00979d", "#e87d1e"];
+const categoryColors = {
+  Kohlenhydrate: "#68666f",
+  Fette: "#80408d",
+  Proteine: "#00979d",
+  "Weitere Nährstoffe": "#e87d1e",
+};
 
 export default function ChartEnergyMacro({
   data,
@@ -74,7 +78,10 @@ export default function ChartEnergyMacro({
             {data.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
+                fill={
+                  categoryColors[entry.name as keyof typeof categoryColors] ||
+                  "#CCCCCC"
+                }
                 opacity={activeIndex === index ? 1 : 1}
               />
             ))}
