@@ -210,8 +210,7 @@ const Analysis = () => {
 
         if (selectedItem) {
           const difference =
-            ((selectedItem.value - comparisonItem.value) /
-              comparisonItem.value) *
+            ((comparisonItem.value - selectedItem.value) / selectedItem.value) *
             100;
           setPercentageDifferencePrimary(parseInt(difference.toFixed(0)));
         } else {
@@ -243,8 +242,8 @@ const Analysis = () => {
 
           if (selectedItem && comparisonItem) {
             const difference =
-              ((selectedItem.value - comparisonItem.value) /
-                comparisonItem.value) *
+              ((comparisonItem.value - selectedItem.value) /
+                selectedItem.value) *
               100;
             setPercentageDifferenceSecondary(parseInt(difference.toFixed(0)));
           } else {
@@ -267,8 +266,8 @@ const Analysis = () => {
 
           if (selectedItem && comparisonItem) {
             const difference =
-              ((selectedItem.value - comparisonItem.value) /
-                comparisonItem.value) *
+              ((comparisonItem.value - selectedItem.value) /
+                selectedItem.value) *
               100;
             setPercentageDifferenceSecondary(parseInt(difference.toFixed(0)));
           } else {
@@ -291,8 +290,8 @@ const Analysis = () => {
 
           if (selectedItem && comparisonItem) {
             const difference =
-              ((selectedItem.value - comparisonItem.value) /
-                comparisonItem.value) *
+              ((comparisonItem.value - selectedItem.value) /
+                selectedItem.value) *
               100;
             setPercentageDifferenceSecondary(parseInt(difference.toFixed(0)));
           } else {
@@ -410,7 +409,7 @@ const Analysis = () => {
                   </h4>
                   <div className="flex items-center justify-between">
                     <ChartEnergyCategories
-                      data={chartComparisonEnergyCategoriesData}
+                      data={chartEnergyCategoriesData}
                       replace={true}
                       rounded={false}
                     />
@@ -419,7 +418,7 @@ const Analysis = () => {
                       variant="categoryMultiColor"
                     />
                     <ChartEnergyCategories
-                      data={chartEnergyCategoriesData}
+                      data={chartComparisonEnergyCategoriesData}
                       replace={true}
                       rounded={false}
                     />
@@ -432,7 +431,7 @@ const Analysis = () => {
 
                   <div className="flex items-center justify-between">
                     <ChartEnergyMacro
-                      data={chartComparisonEnergyMacroData}
+                      data={chartEnergyMacroData}
                       rounded={false}
                     />
                     <DiffDot
@@ -440,7 +439,7 @@ const Analysis = () => {
                       variant="sort"
                     />
                     <ChartEnergyMacro
-                      data={chartEnergyMacroData}
+                      data={chartComparisonEnergyMacroData}
                       rounded={false}
                     />
                   </div>
@@ -452,7 +451,7 @@ const Analysis = () => {
                   <h4 className="text-lg font-medium mb-2">Makronährstoffe</h4>
                   <div className="flex items-center justify-between">
                     <ChartEnergyMacroCategories
-                      data={chartComparisonEnergyMacroCategoriesData}
+                      data={chartEnergyMacroCategoriesData}
                       replace={true}
                       rounded={false}
                     />
@@ -461,7 +460,7 @@ const Analysis = () => {
                       variant="categorySingleColor"
                     />
                     <ChartEnergyMacroCategories
-                      data={chartEnergyMacroCategoriesData}
+                      data={chartComparisonEnergyMacroCategoriesData}
                       replace={true}
                       rounded={false}
                     />
@@ -476,7 +475,7 @@ const Analysis = () => {
                   </h4>
                   <div className="flex items-center justify-between">
                     <ChartEnergyMicroCategories
-                      data={chartComparisonEnergyMicroCategoriesData}
+                      data={chartEnergyMicroCategoriesData}
                       replace={true}
                       rounded={false}
                     />
@@ -485,7 +484,7 @@ const Analysis = () => {
                       variant="categorySingleColor"
                     />
                     <ChartEnergyMicroCategories
-                      data={chartEnergyMicroCategoriesData}
+                      data={chartComparisonEnergyMicroCategoriesData}
                       replace={true}
                       rounded={false}
                     />
