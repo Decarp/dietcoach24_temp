@@ -15,22 +15,36 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: true,
-      callbackUrl: "/patients",
-    });
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false, // Set redirect to false to capture the response
+      });
 
-    setLoading(false);
+      setLoading(false);
 
-    if (result?.error) {
-      toast.error(result.error);
-    } else {
-      toast.success("Login erfolgreich");
-      setTimeout(() => {
-        router.push("/patients"); // Redirect to your desired page after login
-      }, 500);
+      console.log("login result", result);
+
+      if (result?.error) {
+        // Check for specific error types or messages
+        if (result.status === 401) {
+          toast.error("Email oder Passwort falsch");
+        } else if (result.status === 400) {
+          toast.error("Nutzer nicht bekannt oder anderer Fehler");
+        } else {
+          toast.error(result.error); // General error message for other errors
+        }
+      } else if (result?.ok) {
+        toast.success("Login erfolgreich");
+        setTimeout(() => {
+          router.push("/patients"); // Redirect to your desired page after login
+        }, 500);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
+      console.error("Login error", error);
     }
   };
 
