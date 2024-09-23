@@ -146,11 +146,6 @@ export default function ProductPopup({
   });
 
   useEffect(() => {
-    // Initialize selectedProductCategories with selectedCategories from the store
-    setSelectedProductCategories(selectedCategories);
-  }, [selectedCategories]);
-
-  useEffect(() => {
     if (data) {
       setAvailableProducts(data.products);
       setSortedProducts(
