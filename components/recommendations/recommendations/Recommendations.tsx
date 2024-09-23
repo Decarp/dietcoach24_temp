@@ -22,6 +22,7 @@ import SelectedProductsSection from "@/components/purchases/recommendationDrawer
 import SelectedAlternativesSection from "@/components/purchases/recommendationDrawer/SelectedAlternativesSection";
 import RecommendedAlternativesSection from "./RecommendedAlternativesSection";
 import RecommendedProductsSection from "./RecommendedProductsSection";
+import Link from "next/link";
 
 const Recommendations = () => {
   const pathname = usePathname();
@@ -167,9 +168,15 @@ const Recommendations = () => {
               <h3 className="mt-6 text-sm font-semibold text-gray-900">
                 Keine Empfehlungen vorhanden
               </h3>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 mb-4 text-sm text-gray-500">
                 Es wurden keine Empfehlungen für diese Sitzung gefunden.
               </p>
+              <Link
+                href={`/p/${patientId}/purchases`}
+                className="bg-primary text-white px-4 py-2 rounded hover:bg-green-600"
+              >
+                Einkäufe analysieren und Empfehlungen erstellen
+              </Link>
             </div>
           </div>
         </div>
