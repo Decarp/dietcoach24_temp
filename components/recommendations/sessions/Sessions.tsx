@@ -6,11 +6,19 @@ import { fetchPatientDetails } from "@/utils/fetchPatientDetails";
 import { fetchSessions } from "@/utils/fetchSessions";
 import { formatDateLong } from "@/utils/formatDateLong";
 import { getSessionTimestamp } from "@/utils/getSessionTimestamp";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { useQuery } from "@tanstack/react-query";
+import {
+  PencilSquareIcon,
+  TrashIcon,
+  EllipsisVerticalIcon,
+} from "@heroicons/react/24/outline";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import SessionsHeader from "./SessionsHeader";
+import { deleteSession } from "@/utils/deleteSession";
+import toast from "react-hot-toast";
+import { useState, useRef } from "react";
 
 const SessionsComp = () => {
   const { data: session } = useSession();
@@ -23,7 +31,6 @@ const SessionsComp = () => {
     enabled: !!session?.accessToken,
   });
 
-  // Fetch existing sessions
   const { data: sessions, isLoading } = useQuery<Sessions>({
     queryKey: ["sessions", patientId],
     queryFn: () => fetchSessions(patientId, session?.accessToken),
@@ -34,16 +41,51 @@ const SessionsComp = () => {
   );
 
   const sessionTimestamps = getSessionTimestamp(patient, sessions);
+  const queryClient = useQueryClient();
+
+  // Delete session mutation
+  const deleteMutation = useMutation({
+    mutationFn: (sessionId: number) =>
+      deleteSession(sessionId, session?.accessToken || ""),
+    onSuccess: () => {
+      setSelectedSessionId(null);
+      queryClient.refetchQueries({ queryKey: ["sessions", patientId] });
+      toast.success("Sitzung erfolgreich gelöscht", { duration: 3000 });
+    },
+    onError: () => {
+      toast.error("Fehler beim Löschen der Sitzung", { duration: 3000 });
+    },
+  });
+
+  const handleDeleteSession = (sessionId: number) => {
+    deleteMutation.mutate(sessionId);
+  };
 
   const handleSessionClick = (sessionId: number) => {
     setSelectedSessionId(sessionId);
+  };
+
+  const [menuPosition, setMenuPosition] = useState("bottom");
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Ensure the menu is fully visible and not cut off
+  const handleMenuButtonClick = () => {
+    const menuElement = menuRef.current;
+    if (menuElement) {
+      const { bottom } = menuElement.getBoundingClientRect();
+      if (bottom > window.innerHeight) {
+        setMenuPosition("top");
+      } else {
+        setMenuPosition("bottom");
+      }
+    }
   };
 
   return (
     <div className="pt-6 -ml-8 bg-white border-l flex flex-col border-b border-gray-300 min-w-56 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)]">
       <SessionsHeader />
 
-      <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
+      <div className="bg-white flex-1 overflow-y-auto min-h-0 shadow-inner">
         {isLoading && <Spinner />}
         <ul aria-label="Sessions List" className="overflow-y-auto">
           {[...sessionTimestamps]
@@ -53,40 +95,91 @@ const SessionsComp = () => {
                 key={sessionId}
                 onClick={() => handleSessionClick(sessionId)}
                 className={classNames(
-                  "pl-8 flex items-center gap-x-4 px-3 py-5 cursor-pointer",
+                  "pl-8 flex items-center justify-between gap-x-4 px-3 py-5 cursor-pointer",
                   selectedSessionId === sessionId ? "bg-primary text-white" : ""
                 )}
               >
-                <PencilSquareIcon
-                  className={classNames(
-                    "border border-gray-300 h-12 w-12 p-2 flex-none rounded-md",
-                    selectedSessionId === sessionId
-                      ? "bg-white text-primary"
-                      : "bg-gray-50 text-primary"
-                  )}
-                />
-                <div className="min-w-0 flex-1">
-                  <p
+                <div className="flex items-center gap-x-4">
+                  <PencilSquareIcon
                     className={classNames(
-                      "text-base font-semibold leading-6",
+                      "border border-gray-300 h-12 w-12 p-2 flex-none rounded-md",
                       selectedSessionId === sessionId
-                        ? "text-white"
-                        : "text-gray-900"
+                        ? "bg-white text-primary"
+                        : "bg-gray-50 text-primary"
                     )}
-                  >
-                    Sitzung {sessionTimestamps.length - index}
-                  </p>
-                  <p
-                    className={classNames(
-                      "truncate text-sm leading-5",
-                      selectedSessionId === sessionId
-                        ? "text-white"
-                        : "text-gray-500"
-                    )}
-                  >
-                    {formatDateLong(timestamp)}
-                  </p>
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className={classNames(
+                        "text-base font-semibold leading-6",
+                        selectedSessionId === sessionId
+                          ? "text-white"
+                          : "text-gray-900"
+                      )}
+                    >
+                      Sitzung {sessionTimestamps.length - index}
+                    </p>
+                    <p
+                      className={classNames(
+                        "truncate text-sm leading-5",
+                        selectedSessionId === sessionId
+                          ? "text-white"
+                          : "text-gray-500"
+                      )}
+                    >
+                      {formatDateLong(timestamp)}
+                    </p>
+                  </div>
                 </div>
+
+                {/* Menu for delete option */}
+                <Menu
+                  as="div"
+                  className="relative inline-block text-left"
+                  ref={menuRef}
+                >
+                  <div>
+                    <MenuButton
+                      className="flex items-center rounded-full text-gray-400 hover:text-gray-600"
+                      onClick={handleMenuButtonClick}
+                    >
+                      <EllipsisVerticalIcon
+                        aria-hidden="true"
+                        className={classNames(
+                          "h-6 w-6",
+                          selectedSessionId === sessionId
+                            ? "text-white hover:text-gray-300"
+                            : ""
+                        )}
+                      />
+                    </MenuButton>
+                  </div>
+                  <MenuItems
+                    className={classNames(
+                      "fixed z-50 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
+                      menuPosition === "top" ? "bottom-full mb-2" : "mt-2"
+                    )}
+                  >
+                    <MenuItem>
+                      {({ active }) => (
+                        <button
+                          onClick={() => handleDeleteSession(sessionId)}
+                          className={classNames(
+                            "group flex items-center w-full px-4 py-2 text-sm text-gray-700",
+                            active ? "bg-gray-100" : "",
+                            "rounded-md" // Ensure rounded-md applies even on hover
+                          )}
+                        >
+                          <TrashIcon
+                            className="mr-3 h-5 w-5 text-gray-400 group-hover:text-red-500"
+                            aria-hidden="true"
+                          />
+                          Sitzung löschen
+                        </button>
+                      )}
+                    </MenuItem>
+                  </MenuItems>
+                </Menu>
               </li>
             ))}
         </ul>

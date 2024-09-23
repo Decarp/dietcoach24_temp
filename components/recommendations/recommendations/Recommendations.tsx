@@ -1,28 +1,19 @@
-import ProductCardDatabase from "@/components/purchases/products/ProductCardDatabase";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { DatabaseProduct, Session } from "@/types/types";
-import { deleteSession } from "@/utils/deleteSession";
+import { deleteRecommendation } from "@/utils/deleteRecommendation";
 import { fetchProduct } from "@/utils/fetchProduct";
 import { fetchSession } from "@/utils/fetchSession";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { TrashIcon } from "@heroicons/react/20/solid";
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  ShoppingCartIcon,
-} from "@heroicons/react/24/outline";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
 import RecommendationsHeader from "./RecommendationsHeader";
-import { deleteRecommendation } from "@/utils/deleteRecommendation";
-import SelectedProductsSection from "@/components/purchases/recommendationDrawer/SelectedProductsSection";
-import SelectedAlternativesSection from "@/components/purchases/recommendationDrawer/SelectedAlternativesSection";
 import RecommendedAlternativesSection from "./RecommendedAlternativesSection";
 import RecommendedProductsSection from "./RecommendedProductsSection";
-import Link from "next/link";
 
 const Recommendations = () => {
   const pathname = usePathname();
@@ -102,21 +93,6 @@ const Recommendations = () => {
     }
   );
 
-  const deleteMutation = useMutation({
-    mutationFn: () =>
-      deleteSession(selectedSessionId ?? 0, session?.accessToken || ""),
-    onSuccess: () => {
-      setSelectedSessionId(null);
-      queryClient.refetchQueries({ queryKey: ["sessions", patientId] });
-      toast.success("Sitzung erfolgreich gelöscht", { duration: 3000 });
-    },
-  });
-
-  const handleDeleteSession = () => {
-    deleteMutation.mutate();
-  };
-
-  // DELETE recommendation mutation
   const deleteRecommendationMutation = useMutation({
     mutationFn: (recommendationId: number) =>
       deleteRecommendation(recommendationId, session?.accessToken || ""),
@@ -129,7 +105,6 @@ const Recommendations = () => {
     },
   });
 
-  // Handle delete recommendation
   const handleDeleteRecommendation = (recommendationId: number) => {
     deleteRecommendationMutation.mutate(recommendationId);
   };
@@ -179,14 +154,6 @@ const Recommendations = () => {
               </Link>
             </div>
           </div>
-        </div>
-        <div>
-          <button
-            onClick={handleDeleteSession}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md"
-          >
-            Sitzung löschen
-          </button>
         </div>
       </div>
     );
@@ -311,14 +278,6 @@ const Recommendations = () => {
               </li>
             ))}
           </ul>
-          <div>
-            <button
-              onClick={handleDeleteSession}
-              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md"
-            >
-              Sitzung löschen
-            </button>
-          </div>
         </div>
       </div>
     </div>
