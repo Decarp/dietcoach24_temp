@@ -18,7 +18,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import SessionsHeader from "./SessionsHeader";
 import { deleteSession } from "@/utils/deleteSession";
 import toast from "react-hot-toast";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const SessionsComp = () => {
   const { data: session } = useSession();
@@ -31,7 +31,11 @@ const SessionsComp = () => {
     enabled: !!session?.accessToken,
   });
 
-  const { data: sessions, isLoading } = useQuery<Sessions>({
+  const {
+    data: sessions,
+    isLoading,
+    refetch,
+  } = useQuery<Sessions>({
     queryKey: ["sessions", patientId],
     queryFn: () => fetchSessions(patientId, session?.accessToken),
   });
@@ -43,12 +47,36 @@ const SessionsComp = () => {
   const sessionTimestamps = getSessionTimestamp(patient, sessions);
   const queryClient = useQueryClient();
 
+  // Automatically select the newest session if none is selected
+  useEffect(() => {
+    if (sessionTimestamps.length > 0 && selectedSessionId === null) {
+      const newestSession =
+        sessionTimestamps[sessionTimestamps.length - 1].sessionId;
+      setSelectedSessionId(newestSession);
+    }
+  }, [sessionTimestamps, selectedSessionId, setSelectedSessionId]);
+
+  // Automatically reselect the next newest session if the latest one was deleted
+  useEffect(() => {
+    if (
+      selectedSessionId !== null &&
+      !sessionTimestamps.some((s) => s.sessionId === selectedSessionId)
+    ) {
+      if (sessionTimestamps.length > 0) {
+        const newestSession =
+          sessionTimestamps[sessionTimestamps.length - 1].sessionId;
+        setSelectedSessionId(newestSession);
+      } else {
+        setSelectedSessionId(null); // If no sessions left
+      }
+    }
+  }, [sessionTimestamps, selectedSessionId, setSelectedSessionId]);
+
   // Delete session mutation
   const deleteMutation = useMutation({
     mutationFn: (sessionId: number) =>
       deleteSession(sessionId, session?.accessToken || ""),
     onSuccess: () => {
-      setSelectedSessionId(null);
       queryClient.refetchQueries({ queryKey: ["sessions", patientId] });
       toast.success("Sitzung erfolgreich gelöscht", { duration: 3000 });
     },
@@ -82,7 +110,7 @@ const SessionsComp = () => {
   };
 
   return (
-    <div className="pt-6 -ml-8 bg-white border-l flex flex-col border-b border-gray-300 min-w-56 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)]">
+    <div className="pt-6 -ml-8 bg-white flex flex-col border-b border-x border-gray-300 w-[300px] h-[calc(100vh-185px)]">
       <SessionsHeader />
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 shadow-inner">

@@ -115,7 +115,7 @@ const Recommendations = () => {
 
   if (selectedSessionId === null) {
     return (
-      <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b border-x border-gray-300">
+      <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b border-gray-300">
         <RecommendationsHeader numRecommendations={0} />
         <div className="shadow-inner -mx-6">
           <div className="flex-1 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
