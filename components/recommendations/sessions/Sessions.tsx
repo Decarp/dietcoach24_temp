@@ -168,7 +168,7 @@ const SessionsComp = () => {
                 >
                   <div>
                     <MenuButton
-                      className="flex items-center rounded-full text-gray-400 hover:text-gray-600"
+                      className="flex items-center rounded-full text-gray-400 hover:text-gray-600 hover:scale-110"
                       onClick={handleMenuButtonClick}
                     >
                       <EllipsisVerticalIcon

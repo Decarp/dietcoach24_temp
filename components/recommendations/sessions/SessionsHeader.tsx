@@ -36,7 +36,7 @@ const SessionsHeader = () => {
         </div>
         <PlusCircleIcon
           onClick={handleCreateSession}
-          className="h-10 w-10 text-primary hover:text-green-800 hover:cursor-pointer"
+          className="h-10 w-10 text-primary hover:text-green-700 hover:cursor-pointer hover:scale-110 transition-transform"
         />
       </div>
     </div>

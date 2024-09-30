@@ -218,6 +218,18 @@ export type Recommendation = {
   notes: string | null;
 };
 
+export type EnrichedRecommendation = {
+  recommendationId: number;
+  index: number;
+  rule: RecommendationRule;
+  basketIds: string[];
+  suggestions: {
+    current: DatabaseProduct[];
+    alternatives: DatabaseProduct[];
+  };
+  notes: string | null;
+};
+
 export type Session = {
   sessionId: number;
   index: number;

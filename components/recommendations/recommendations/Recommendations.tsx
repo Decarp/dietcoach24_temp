@@ -1,5 +1,9 @@
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { DatabaseProduct, Session } from "@/types/types";
+import {
+  DatabaseProduct,
+  EnrichedRecommendation,
+  Session,
+} from "@/types/types";
 import { deleteRecommendation } from "@/utils/deleteRecommendation";
 import { fetchProduct } from "@/utils/fetchProduct";
 import { fetchSession } from "@/utils/fetchSession";
@@ -62,8 +66,8 @@ const Recommendations = () => {
   });
 
   // Map the full product details back to the recommendations
-  const enrichedRecommendations = consultationSession?.recommendations.map(
-    (recommendation) => {
+  const enrichedRecommendations: EnrichedRecommendation[] =
+    consultationSession?.recommendations.map((recommendation) => {
       const enrichedCurrentProducts = recommendation.suggestions.current
         .map((gtin) => {
           return fullProducts?.find((product) =>
@@ -90,8 +94,7 @@ const Recommendations = () => {
           alternatives: enrichedAlternativeProducts,
         },
       };
-    }
-  );
+    }) || [];
 
   const deleteRecommendationMutation = useMutation({
     mutationFn: (recommendationId: number) =>
@@ -116,7 +119,11 @@ const Recommendations = () => {
   if (selectedSessionId === null) {
     return (
       <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b border-gray-300">
-        <RecommendationsHeader numRecommendations={0} />
+        <RecommendationsHeader
+          numRecommendations={0}
+          sessionData={consultationSession}
+          enrichedRecommendations={enrichedRecommendations}
+        />
         <div className="shadow-inner -mx-6">
           <div className="flex-1 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
             <div className="text-center">
@@ -136,7 +143,11 @@ const Recommendations = () => {
   if (enrichedRecommendations?.length === 0) {
     return (
       <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b border-x border-gray-300">
-        <RecommendationsHeader numRecommendations={0} />
+        <RecommendationsHeader
+          numRecommendations={0}
+          sessionData={consultationSession}
+          enrichedRecommendations={enrichedRecommendations}
+        />
         <div className="shadow-inner -mx-6">
           <div className="flex-1 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
             <div className="text-center">
@@ -148,7 +159,7 @@ const Recommendations = () => {
               </p>
               <Link
                 href={`/p/${patientId}/purchases`}
-                className="bg-primary text-white px-4 py-2 rounded hover:bg-green-600"
+                className="bg-primary text-white px-4 py-2 rounded hover:bg-green-700"
               >
                 Einkäufe analysieren und Empfehlungen erstellen
               </Link>
@@ -160,9 +171,11 @@ const Recommendations = () => {
   }
 
   return (
-    <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b">
+    <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b border-gray-300">
       <RecommendationsHeader
         numRecommendations={enrichedRecommendations?.length ?? 0}
+        sessionData={consultationSession}
+        enrichedRecommendations={enrichedRecommendations}
       />
       <div className="shadow-inner -mx-6">
         <div className="flex-1 max-h-[calc(100vh-287px)] overflow-y-auto px-6">
@@ -170,7 +183,7 @@ const Recommendations = () => {
             {enrichedRecommendations?.map((recommendation) => (
               <li
                 key={recommendation.recommendationId}
-                className="bg-white p-4 border rounded-md mb-4"
+                className="bg-white p-4 border rounded-md mb-4 border-gray-300"
               >
                 <div className="flex items-center">
                   {recommendation.rule.variant === "VAR1" && (
@@ -269,7 +282,7 @@ const Recommendations = () => {
                         id="comment"
                         name="comment"
                         rows={4}
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                        className="block w-full rounded-md border-0 border-gray-300 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                         defaultValue={recommendation.notes}
                       />
                     </div>
