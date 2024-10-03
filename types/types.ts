@@ -60,6 +60,7 @@ export type DatabaseProduct = {
   dietCoachCategoryL1: DietCoachCategory;
   dietCoachCategoryL2: DietCoachCategory;
   imageUrl: string;
+  base64Image?: string;
 };
 
 export type DatabaseProducts = {

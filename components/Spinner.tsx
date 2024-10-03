@@ -1,9 +1,18 @@
-export const Spinner = () => {
+import React from "react";
+
+type SpinnerProps = {
+  className?: string;
+};
+
+export const Spinner: React.FC<SpinnerProps> = ({ className }) => {
   return (
-    <div role="status" className="flex items-center justify-center mt-6 z-10">
+    <div
+      role="status"
+      className={`flex items-center justify-center mt-6 z-10 ${className}`}
+    >
       <svg
         aria-hidden="true"
-        className="inline w-8 h-8 text-gray-200 animate-spin fill-primary"
+        className={`inline w-8 h-8 text-gray-200 animate-spin fill-primary ${className}`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

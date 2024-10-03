@@ -1,19 +1,37 @@
-import React, { useState } from "react";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
-import PdfDocument from "./PdfDocument"; // The component you created for PDF rendering
-import { EnrichedRecommendation, Session } from "@/types/types";
-import { PhoneArrowDownLeftIcon } from "@heroicons/react/24/outline";
-import { DocumentArrowDownIcon } from "@heroicons/react/20/solid";
+import React from "react";
+import { EnrichedRecommendation, Patient, Session } from "@/types/types";
+import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPatientDetails } from "@/utils/fetchPatientDetails";
+import PdfDownloadButton from "./PdfDownloadButton";
 
-const RecommendationsHeader = ({
-  numRecommendations,
-  sessionData,
-  enrichedRecommendations,
-}: {
+type RecommendationsHeaderProps = {
   numRecommendations: number;
   sessionData: Session | undefined;
   enrichedRecommendations: EnrichedRecommendation[];
+};
+
+const RecommendationsHeader: React.FC<RecommendationsHeaderProps> = ({
+  numRecommendations,
+  sessionData,
+  enrichedRecommendations,
 }) => {
+  const { data: session } = useSession();
+  const pathname = usePathname();
+  const pathSegments = pathname.split("/");
+  const patientId = pathSegments[2];
+
+  const {
+    isLoading,
+    error,
+    data: patient,
+  } = useQuery<Patient>({
+    queryKey: ["participant", patientId],
+    queryFn: () => fetchPatientDetails(patientId, session?.accessToken),
+    enabled: !!session?.accessToken,
+  });
+
   return (
     <div className="border-b border-gray-300 -mx-6 flex justify-between pb-8 ">
       <div className="mx-6">
@@ -24,21 +42,13 @@ const RecommendationsHeader = ({
         </h3>
       </div>
 
-      {sessionData && (
+      {sessionData && patient && (
         <div className="mx-6">
-          <PDFDownloadLink
-            document={
-              <PdfDocument
-                session={sessionData}
-                enrichedRecommendations={enrichedRecommendations}
-              />
-            }
-            fileName={`session_${sessionData.sessionId}_recommendations.pdf`}
-            className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-700 hover:scale-105 transition-transform"
-          >
-            <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
-            PDF herunterladen
-          </PDFDownloadLink>
+          <PdfDownloadButton
+            sessionData={sessionData}
+            enrichedRecommendations={enrichedRecommendations}
+            patient={patient}
+          />
         </div>
       )}
     </div>
