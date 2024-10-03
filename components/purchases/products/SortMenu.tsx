@@ -21,7 +21,7 @@ const SortMenu = ({
         </MenuButton>
       </div>
 
-      <MenuItems className="absolute left-0 z-10 mt-2 w-50 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
+      <MenuItems className="absolute left-0 z-10 mt-2 w-50 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none">
         <div className="py-1">
           {sortCriteria.map((option) => (
             <MenuItem key={option}>
@@ -36,7 +36,7 @@ const SortMenu = ({
                     className="h-4 w-4 text-primary focus:ring-primary border-gray-300"
                   />
                   <label
-                    className="block px-4 py-2 text-sm font-medium text-gray-900 data-[focus]:bg-gray-100"
+                    className="block px-4 py-2 text-sm font-medium text-gray-900 cursor-pointer"
                     onClick={() => setSelectedSortCriteria(option)}
                   >
                     {option}

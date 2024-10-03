@@ -1,10 +1,6 @@
 import React from "react";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import {
-  BasketProductFlat,
-  SelectedBasketProductId,
-  Nutrients,
-} from "@/types/types";
+import { BasketProductFlat, Nutrients } from "@/types/types";
 import { classNames } from "@/utils/classNames";
 import { TrashIcon } from "@heroicons/react/24/outline";
 
@@ -38,8 +34,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   variant = "default",
   onRemove,
 }) => {
-  const uniqueId = `${product.basketId},${product.gtin}`;
-
   const {
     selectedBasketProductIds,
     setSelectedBasketProductIds,
@@ -48,53 +42,41 @@ const ProductCard: React.FC<ProductCardProps> = ({
     selectedSortCriteria,
   } = useCounterStore((state) => state);
 
-  const isProductSelected = (gtin: number, basketId: string) =>
-    selectedBasketProductIds.some(
-      (item) => item.gtin === gtin && item.basketId === basketId
-    );
+  const isProductSelected = (gtin: number) =>
+    selectedBasketProductIds.some((item) => item.gtin === gtin);
 
-  const handleProductCheckboxChange = (
-    selectedBasketProductId: SelectedBasketProductId
-  ) => {
-    if (
-      isProductSelected(
-        selectedBasketProductId.gtin,
-        selectedBasketProductId.basketId
-      )
-    ) {
+  const handleProductCheckboxChange = () => {
+    if (isProductSelected(product.gtin)) {
       const newSelectedBasketProductIds = selectedBasketProductIds.filter(
-        (product) =>
-          product.gtin !== selectedBasketProductId.gtin &&
-          product.basketId !== selectedBasketProductId.basketId
+        (item) => item.gtin !== product.gtin
       );
-
       setSelectedBasketProductIds(newSelectedBasketProductIds);
 
       const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
-        (product) =>
-          product.gtin !== selectedBasketProductId.gtin &&
-          product.basketId !== selectedBasketProductId.basketId
+        (p) => p.gtin !== product.gtin
       );
-
       setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
     } else {
+      const selectedBasketProductId = {
+        basketId: product.basketId,
+        gtin: product.gtin,
+      };
+
       const newSelectedBasketProductIds = [
         ...selectedBasketProductIds,
         selectedBasketProductId,
       ];
-
       setSelectedBasketProductIds(newSelectedBasketProductIds);
 
       const newSelectedBasketProductsFlat = [
         ...selectedBasketProductsFlat,
         product,
       ];
-
       setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
     }
   };
 
-  const selected = isProductSelected(product.gtin, product.basketId);
+  const selected = isProductSelected(product.gtin);
 
   const nutrientKey = nutrientKeyMap[selectedSortCriteria];
   const nutrientValue = nutrientKey
@@ -111,7 +93,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <li
-      key={uniqueId}
+      key={product.gtin}
       className={classNames(
         "pl-6 flex items-center gap-x-4 px-3 py-5",
         selected && variant === "default" ? "bg-primary text-white" : ""
@@ -162,18 +144,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
               {Number.isInteger(product.quantity) ? "" : " kg"}
             </span>
           </p>
-          <p
-            className={classNames(
-              "text-sm font-normal leading-6",
-              selected && variant === "default" ? "text-white" : "text-gray-700"
-            )}
-          >
-            {selectedSortCriteria}:{" "}
-            <span className="font-medium">
-              {roundedNutrientValue}
-              {nutrientKey === "kcal" ? " kcal" : "g / 100g"}
-            </span>
-          </p>
+          {selectedSortCriteria !== "Menge" && (
+            <p
+              className={classNames(
+                "text-sm font-normal leading-6",
+                selected && variant === "default"
+                  ? "text-white"
+                  : "text-gray-700"
+              )}
+            >
+              {selectedSortCriteria}:{" "}
+              <span className="font-medium">
+                {roundedNutrientValue}
+                {nutrientKey === "kcal" ? " kcal" : "g / 100g"}
+              </span>
+            </p>
+          )}
         </div>
         {variant === "selected" && onRemove && (
           <TrashIcon
@@ -188,12 +174,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           type="checkbox"
           className="h-4 w-4 mx-auto mr-4 rounded border-gray-300 text-primary focus:ring-primary"
           checked={selected}
-          onChange={() =>
-            handleProductCheckboxChange({
-              basketId: product.basketId,
-              gtin: product.gtin,
-            })
-          }
+          onChange={handleProductCheckboxChange}
         />
       )}
     </li>

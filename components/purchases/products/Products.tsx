@@ -26,6 +26,8 @@ const sortProducts = (
 ) => {
   const getSortValue = (product: BasketProductFlat) => {
     switch (selectedSortCriteria) {
+      case "Menge":
+        return product.quantity;
       case "Kalorien":
         return product.nutrients.kcal;
       case "Proteine":
@@ -47,11 +49,31 @@ const sortProducts = (
     }
   };
 
-  return [...products].sort((a, b) =>
-    ascending
-      ? getSortValue(a) - getSortValue(b)
-      : getSortValue(b) - getSortValue(a)
-  );
+  return [...products].sort((a, b) => {
+    const aValue = getSortValue(a);
+    const bValue = getSortValue(b);
+
+    if (aValue === undefined || bValue === undefined) {
+      return 0;
+    }
+
+    return ascending ? aValue - bValue : bValue - aValue;
+  });
+};
+
+const groupProductsByGtin = (
+  products: BasketProductFlat[]
+): BasketProductFlat[] => {
+  const grouped = products.reduce((acc, product) => {
+    const gtin = product.gtin;
+    if (!acc[gtin]) {
+      acc[gtin] = { ...product };
+    } else {
+      acc[gtin].quantity += product.quantity;
+    }
+    return acc;
+  }, {} as { [gtin: number]: BasketProductFlat });
+  return Object.values(grouped);
 };
 
 const Products = () => {
@@ -65,7 +87,6 @@ const Products = () => {
   const {
     hideProducts,
     selectedBasketIds,
-    availableCategories,
     selectedCategories,
     selectedSortCriteria,
     selectedBasketProductIds,
@@ -73,11 +94,10 @@ const Products = () => {
     basketProducts,
     basketProductsFlat,
     setBasketProductsFlat,
-    updateCategories,
     highlightBorder,
   } = useCounterStore((state) => state);
 
-  const { isLoading, error, data } = useQuery<BasketProduct[]>({
+  const { isLoading } = useQuery<BasketProduct[]>({
     queryKey: ["basketProducts", selectedBasketIds],
     queryFn: () =>
       fetchBasketProducts(
@@ -121,8 +141,10 @@ const Products = () => {
               selectedCategories.sub.includes(product.dietCoachCategoryL2.de))
         );
 
+  const groupedProducts = groupProductsByGtin(filteredProducts);
+
   const sortedProducts = sortProducts(
-    filteredProducts,
+    groupedProducts,
     selectedSortCriteria,
     ascending
   );
@@ -143,9 +165,6 @@ const Products = () => {
     major,
     subs,
   }));
-
-  console.log("categoriesWithSub", categoriesWithSub);
-  console.log("availableCategories", availableCategories);
 
   return (
     <div
@@ -206,10 +225,7 @@ const Products = () => {
           }`}
         >
           {sortedProducts.map((product) => (
-            <ProductCard
-              key={`${product.basketId},${product.gtin}`}
-              product={product}
-            />
+            <ProductCard key={product.gtin} product={product} />
           ))}
         </ul>
       </div>

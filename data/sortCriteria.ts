@@ -7,4 +7,5 @@ export const sortCriteria = [
   "Zucker",
   "Nahrungsfasern",
   "Salz",
+  "Menge",
 ];
