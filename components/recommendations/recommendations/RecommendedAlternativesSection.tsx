@@ -4,8 +4,10 @@ import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 
 export default function RecommendedAlternativesSection({
   products,
+  selectedNutrient,
 }: {
   products: DatabaseProduct[];
+  selectedNutrient?: string | null;
 }) {
   return (
     <div className="bg-white border border-gray-300 rounded-md">
@@ -38,6 +40,8 @@ export default function RecommendedAlternativesSection({
               key={product.productId}
               product={product}
               variant="selected"
+              selectedNutrient={selectedNutrient}
+              selectedNutrientColor="text-primary"
             />
           ))}
         </ul>

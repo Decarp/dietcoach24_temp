@@ -268,9 +268,11 @@ const Recommendations = () => {
                 <div className="grid grid-cols-2 gap-4 mt-4 rounded-lg">
                   <RecommendedProductsSection
                     products={recommendation.suggestions.current}
+                    selectedNutrient={recommendation.rule.nutrient}
                   />
                   <RecommendedAlternativesSection
                     products={recommendation.suggestions.alternatives}
+                    selectedNutrient={recommendation.rule.nutrient}
                   />
                 </div>
 
