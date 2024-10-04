@@ -167,8 +167,10 @@ const Products = () => {
 
   return (
     <div
-      className={`relative pt-6 -mr-8 bg-white border-r flex flex-col shrink-0 border-t border-b border-gray-300 min-w-60 md:max-w-96 xl:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-185px)] ${
-        hideProducts ? "hidden" : ""
+      className={`relative pt-6 -mr-8 bg-white border-r flex flex-col shrink-0 border-t border-b border-gray-300 min-w-60 md:max-w-96 xl:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-185px)] transform transition-all duration-1000 ease-in-out ${
+        hideProducts
+          ? "opacity-0 translate-x-10 -mr-96"
+          : "opacity-100 translate-x-0"
       }`}
     >
       <ProductsHeader products={sortedProducts} />

@@ -16,7 +16,7 @@ import { fromUnixTime, isAfter, max, subWeeks } from "date-fns";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import BasketsHeader from "./BasketsHeader";
 import { nutriScoreColorMap } from "@/data/nutriScoreColorMap";
 
@@ -154,8 +154,10 @@ const Baskets = () => {
 
   return (
     <div
-      className={`pt-6 -ml-8 bg-white border-l flex flex-col border-b border-gray-300 min-w-64 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)] ${
-        hideBaskets ? "hidden" : ""
+      className={`pt-6 -ml-8 bg-white border-l flex flex-col border-b border-gray-300 min-w-64 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)] transform transition-all duration-1000 ease-in-out ${
+        hideBaskets
+          ? "opacity-0 -translate-x-10 -ml-64"
+          : "opacity-100 translate-x-0"
       }`}
     >
       <BasketsHeader
