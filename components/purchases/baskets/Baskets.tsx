@@ -164,7 +164,7 @@ const Baskets = () => {
       />
 
       <div className="bg-white flex-1 overflow-y-auto min-h-0 min-h-8 shadow-inner">
-        {(isLoading || isLoadingSpinner) && <Spinner />}
+        {(isLoading || isLoadingSpinner) && <Spinner className="mt-4" />}
         {error && <Error message={error.message} />}
         {data && (
           <nav aria-label="Baskets List" className="overflow-y-auto">
@@ -180,7 +180,7 @@ const Baskets = () => {
                       <h3>{letter}</h3>
                       <input
                         type="checkbox"
-                        className="mr-4 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                        className="mr-4 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
                         checked={allSelected}
                         onChange={(e) =>
                           handleSelectAllChange(letter, e.target.checked)
@@ -235,7 +235,7 @@ const Baskets = () => {
                         </div>
                         <input
                           type="checkbox"
-                          className="h-4 w-4 mr-4 rounded border-gray-300 text-primary focus:ring-primary"
+                          className="h-4 w-4 mr-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
                           checked={selectedBasketIds.includes(basket.basketId)}
                           onChange={() =>
                             handleBasketCheckboxChange(basket.basketId)

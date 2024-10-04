@@ -92,7 +92,7 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({
 
                 {/* Check if both lists are empty */}
                 {currentProductsEmpty && alternativeProductsEmpty ? (
-                  <Text style={styles.text}>Keine Produkte selektiert.</Text>
+                  <Text style={styles.text}>Keine Produkte selektiert</Text>
                 ) : (
                   <View style={styles.table}>
                     {/* Table Header */}

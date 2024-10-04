@@ -20,9 +20,8 @@ import {
   ArrowUpIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  PlusCircleIcon,
-  ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
@@ -30,6 +29,7 @@ import NutriScoreMenu from "../../products/NutriScoreMenu";
 import SortMenu from "../../products/SortMenu";
 import FilterPopoverProduct from "./FilterPopoverProduct";
 import DatabaseProductCard from "@/components/DatabaseProductCard";
+import Button from "@/components/Button";
 
 type CategoryKeys = keyof typeof categories.de;
 
@@ -312,17 +312,17 @@ export default function ProductPopup({
                 className="shadow-inner bg-white border border-gray-300 rounded-md h-[420px] overflow-y-scroll"
               >
                 {isLoading ? (
-                  <Spinner />
+                  <Spinner className="mt-4" />
                 ) : selectedProductCategories.major.length === 0 &&
                   selectedProductCategories.sub.length === 0 &&
                   searchTerm.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center">
                       <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
-                      <h3 className="mt-2 text-sm font-semibold text-gray-900">
+                      <h3 className="mt-6 text-sm font-semibold text-gray-900">
                         Keine Produkte ausgewählt
                       </h3>
-                      <p className="mt-1 text-sm text-gray-500">
+                      <p className="mt-2 text-sm text-gray-500">
                         Bitte wählen Sie eine Kategorie oder geben Sie einen
                         Suchbegriff ein.
                       </p>
@@ -349,7 +349,7 @@ export default function ProductPopup({
                 type="button"
                 onClick={handlePreviousPage}
                 disabled={currentPage === 1}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                className="hover:scale-110 transition-transform inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 <ChevronLeftIcon
                   className="mr-2 h-5 w-5 text-gray-400"
@@ -365,7 +365,7 @@ export default function ProductPopup({
                 type="button"
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                className="hover:scale-110 transition-transform inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Vor
                 <ChevronRightIcon
@@ -374,13 +374,13 @@ export default function ProductPopup({
                 />
               </button>
             </div>
-            <button
-              type="button"
+            <Button
               onClick={() => setOpen(false)}
-              className="mt-4 w-full rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              className="w-full mt-4 justify-center hover:scale-105"
+              icon={<CheckCircleIcon className="h-5 w-5" />}
             >
               Speichern
-            </button>
+            </Button>
           </DialogPanel>
         </div>
       </div>

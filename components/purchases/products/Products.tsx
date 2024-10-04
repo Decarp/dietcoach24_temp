@@ -5,11 +5,8 @@ import { sortCriteria } from "@/data/sortCriteria";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { BasketProduct, BasketProductFlat } from "@/types/types";
 import { fetchBasketProducts } from "@/utils/fetchBasketProducts";
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  ShoppingCartIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -18,6 +15,8 @@ import RecommendationDrawer from "../recommendationDrawer/RecommendationDrawer";
 import FilterPopover from "./FilterPopover";
 import SortMenu from "./SortMenu";
 import { categories } from "@/data/categories";
+import Button from "@/components/Button";
+import { PlusIcon } from "@heroicons/react/24/solid";
 
 const sortProducts = (
   products: BasketProductFlat[],
@@ -174,7 +173,7 @@ const Products = () => {
     >
       <ProductsHeader products={sortedProducts} />
 
-      <div className="border-b border-gray-300 px-6 -mt-[7px] -mr-6 pb-2 flex gap-x-8 items-center">
+      <div className="border-b border-gray-300 px-6 mt-[1px] -mr-6 pb-2 flex gap-x-8 items-center">
         <FilterPopover
           categoriesWithSub={categoriesWithSub}
           selectedCategories={selectedCategories}
@@ -191,27 +190,27 @@ const Products = () => {
             onClick={() => setAscending(!ascending)}
           >
             {ascending ? (
-              <ArrowUpIcon className="h-5 w-5 text-gray-400" />
+              <ArrowUpIcon className="h-5 w-5 text-gray-400 hover:scale-125 transform-transition" />
             ) : (
-              <ArrowDownIcon className="h-5 w-5 text-gray-400" />
+              <ArrowDownIcon className="h-5 w-5 text-gray-400 hover:scale-125 transform-transition" />
             )}
           </button>
         </div>
       </div>
 
       <div className="-mr-6 flex-1 overflow-y-auto min-h-0 shadow-inner border-b border-gray-300">
-        {isLoading && <Spinner />}
+        {isLoading && <Spinner className="mt-4" />}
         {selectedCategories.major.length === 0 &&
           !isLoading &&
           selectedCategories.sub.length === 0 && (
-            <div className="flex mt-6 px-4">
+            <div className="flex mt-12 px-4">
               <ArrowUpIcon className="ml-3 h-12 w-12 text-gray-400 mr-6 flex-shrink-0" />
               <div className="text-center">
                 <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
-                <h3 className="mt-2 text-sm font-semibold text-gray-900">
+                <h3 className="mt-6 text-sm font-semibold text-gray-900">
                   Keine Lebensmittelkategorie ausgewählt
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-2 text-sm text-gray-500">
                   Bitte wählen Sie mindestens eine Lebensmittelkategorie aus, um
                   die Lebensmittel anzuzeigen.
                 </p>
@@ -232,16 +231,15 @@ const Products = () => {
 
       {(selectedCategories.major.length !== 0 ||
         selectedCategories.sub.length !== 0) && (
-        <div className="flex justify-end p-6">
-          <button
-            type="button"
+        <div className="flex justify-end py-6">
+          <Button
             onClick={() => handleDrawerOpen(true)}
-            className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-700"
+            icon={<PlusIcon className="h-5 w-5" />}
           >
             {selectedBasketProductIds.length === 0
               ? "Empfehlung erstellen"
               : `Empfehlung erstellen (${selectedBasketProductIds.length})`}
-          </button>
+          </Button>
         </div>
       )}
       <RecommendationDrawer open={drawerOpen} setOpen={handleDrawerOpen} />

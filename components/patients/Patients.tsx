@@ -3,26 +3,30 @@
 import { Patient } from "@/types/types";
 import { deletePatient } from "@/utils/deletePatient";
 import { fetchPatients } from "@/utils/fetchPatients";
-import { TrashIcon } from "@heroicons/react/20/solid";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import AddPatientDrawer from "./AddPatientDrawer";
 import { useRouter } from "next/navigation";
-import { ShoppingCartIcon, UserIcon } from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/outline";
+import DeleteModal from "@/components/DeleteModal";
+import Button from "../Button";
+import { UserPlusIcon } from "@heroicons/react/24/solid";
 
+// Updated Patients Component
 export default function Patients() {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const router = useRouter();
 
-  const {
-    isLoading,
-    error,
-    data: patients,
-  } = useQuery<Patient[]>({
+  // State for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [patientToDelete, setPatientToDelete] = useState<Patient | null>(null);
+
+  const { data: patients } = useQuery<Patient[]>({
     queryKey: ["participants"],
     queryFn: () => fetchPatients(session?.accessToken || ""),
     enabled: !!session?.accessToken,
@@ -32,7 +36,7 @@ export default function Patients() {
     try {
       await deletePatient(patientId, session?.accessToken || "");
       toast.success("Patient erfolgreich entfernt");
-      queryClient.invalidateQueries({ queryKey: ["participants"] }); // Refresh the patient list
+      queryClient.invalidateQueries({ queryKey: ["participants"] });
     } catch (error: any) {
       toast.error(`Patient konnte nicht entfernt werden: ${error.message}`);
     }
@@ -42,16 +46,28 @@ export default function Patients() {
     router.push(`/p/${externalId}`);
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setPatientToDelete(null);
+  };
+
+  const confirmDelete = () => {
+    if (patientToDelete) {
+      handleRemovePatient(patientToDelete.externalId);
+    }
+    closeModal();
+  };
+
   return (
     <>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Patientenübersicht</h1>
-        <button
+        <Button
+          icon={<UserPlusIcon className="h-6 w-6 mr-2" />}
           onClick={() => setDrawerOpen(true)}
-          className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-800"
         >
           Patient hinzufügen
-        </button>
+        </Button>
       </div>
       <hr className="border-gray-300 -mx-8" />
 
@@ -74,7 +90,7 @@ export default function Patients() {
         {patients?.map((person) => (
           <li
             key={person.externalId}
-            className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white rounded-md border border-gray-300 hover:bg-gray-50 cursor-pointer"
+            className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white border border-gray-300 hover:bg-gray-50 cursor-pointer hover:scale-105 transition-transform"
             onClick={() => handleCardClick(person.externalId)}
           >
             <div className="flex w-full items-center justify-between space-x-6 p-6">
@@ -102,10 +118,11 @@ export default function Patients() {
                 </div>
               </div>
               <TrashIcon
-                className="h-6 w-6 text-gray-500 hover:text-red-500 cursor-pointer flex-shrink-0"
+                className="h-6 w-6 text-gray-500 hover:text-red-500 cursor-pointer flex-shrink-0 hover:scale-110 transition-transform"
                 onClick={(e) => {
-                  e.stopPropagation(); // Prevent the click from triggering the card click
-                  handleRemovePatient(person.externalId);
+                  e.stopPropagation();
+                  setPatientToDelete(person);
+                  setIsModalOpen(true);
                 }}
               />
             </div>
@@ -113,6 +130,13 @@ export default function Patients() {
         ))}
       </ul>
       <AddPatientDrawer open={drawerOpen} setOpen={setDrawerOpen} />
+      {isModalOpen && (
+        <DeleteModal
+          isOpen={isModalOpen}
+          closeModal={closeModal}
+          onConfirm={confirmDelete}
+        />
+      )}
     </>
   );
 }

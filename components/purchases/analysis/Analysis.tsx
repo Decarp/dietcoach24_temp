@@ -8,7 +8,8 @@ import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicro
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { BasketProduct } from "@/types/types";
 import { fetchBasketProducts } from "@/utils/fetchBasketProducts";
-import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
@@ -165,8 +166,8 @@ const Analysis = () => {
     >
       <AnalysisHeader />
       <div className="shadow-inner -mx-6">
-        <div className="flex-1 h-[calc(100vh-311px)] overflow-y-auto pb-6 px-6">
-          {isLoading && <Spinner />}
+        <div className="flex-1 h-[calc(100vh-320px)] overflow-y-auto pb-6 px-6">
+          {isLoading && <Spinner className="mt-4" />}
           {!isLoading && selectedBasketIds.length > 0 ? (
             <>
               {currentTab === "energy" && (
@@ -233,14 +234,14 @@ const Analysis = () => {
             </>
           ) : (
             !isLoading && (
-              <div className="flex mt-6 px-4">
+              <div className="flex mt-12 px-4">
                 <ArrowLeftIcon className="ml-3 h-12 w-12 text-gray-400 mr-6 flex-shrink-0" />
                 <div className="text-center">
                   <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
-                  <h3 className="mt-2 text-sm font-semibold text-gray-900">
+                  <h3 className="mt-6 text-sm font-semibold text-gray-900">
                     Keine Einkäufe ausgewählt
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-gray-500">
                     Bitte wählen Sie mindestens einen Einkauf aus, um Analysen
                     anzuzeigen.
                   </p>

@@ -234,7 +234,7 @@ const CheckboxCellRenderer: FunctionComponent<
       <div className="flex items-center justify-center">
         <input
           type="checkbox"
-          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
           data-category={category}
           checked={isChecked}
           onChange={handleClick}

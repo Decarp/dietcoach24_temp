@@ -1,6 +1,7 @@
+import Button from "@/components/Button";
 import ProductCard from "@/components/ProductCard";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 import { PlusIcon } from "@heroicons/react/24/solid";
 
 export default function SelectedProductsSection({
@@ -49,10 +50,10 @@ export default function SelectedProductsSection({
           <div className="flex items-center justify-center h-full p-4">
             <div className="text-center">
               <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
-              <h3 className="mt-2 text-sm font-semibold text-gray-900">
+              <h3 className="mt-6 text-sm font-semibold text-gray-900">
                 Keine Produkte ausgewählt
               </h3>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-500">
                 Bitte wählen Sie gekaufte Produkte aus den Einkäufen Ihres
                 Kunden aus, zu denen Sie ihrem Kunden Empfehlungen geben
                 möchten.
@@ -73,17 +74,15 @@ export default function SelectedProductsSection({
       </div>
 
       <div className="flex justify-center p-4">
-        <button
-          type="button"
-          className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        <Button
           onClick={() => {
             setOpen(false);
             setHighlightBorder(true);
           }}
+          icon={<PlusIcon className="h-5 w-5" />}
         >
-          <PlusIcon className="-ml-0.5 mr-1.5 h-5 w-5" />
           Produkte auswählen
-        </button>
+        </Button>
       </div>
     </div>
   );

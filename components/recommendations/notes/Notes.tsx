@@ -1,12 +1,14 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
-import NotesHeader from "./NotesHeader";
-import { fetchSession } from "@/utils/fetchSession";
+import Button from "@/components/Button";
 import { useCounterStore } from "@/providers/useStoreProvider";
-import { useSession } from "next-auth/react";
 import { Session } from "@/types/types";
-import { useState, useEffect } from "react";
 import { createNote } from "@/utils/createNote";
+import { fetchSession } from "@/utils/fetchSession";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import NotesHeader from "./NotesHeader";
 
 const Notes = () => {
   const { data: session } = useSession();
@@ -59,20 +61,7 @@ const Notes = () => {
       <NotesHeader />
 
       <div className="border-t border-gray-300 mt-12 -mr-6 flex-1 overflow-y-auto min-h-0 min-h-80 shadow-inner">
-        {selectedSessionId === null ? (
-          <div className="shadow-inner -mx-6 px-4">
-            <div className="flex-1 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
-              <div className="text-center">
-                <h3 className="mt-6 text-sm font-semibold text-gray-900">
-                  Keine Sitzung ausgewählt
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Bitte wählen Sie eine Sitzung aus, um Empfehlungen anzuzeigen.
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : (
+        {selectedSessionId !== null && (
           <div className="mt-2 p-4">
             <textarea
               id="comment"
@@ -82,12 +71,14 @@ const Notes = () => {
               value={patientNote}
               onChange={handleNoteChange}
             />
-            <button
-              onClick={handleNoteSubmit}
-              className="mt-4 bg-primary text-white px-4 py-2 rounded hover:bg-green-600"
-            >
-              Speichern
-            </button>
+            <div className="flex justify-end py-4">
+              <Button
+                onClick={handleNoteSubmit}
+                icon={<CheckCircleIcon className="h-5 w-5" />}
+              >
+                Speichern
+              </Button>
+            </div>
           </div>
         )}
       </div>

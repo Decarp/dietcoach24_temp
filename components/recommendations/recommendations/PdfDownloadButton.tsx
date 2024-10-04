@@ -9,6 +9,8 @@ import { pdf } from "@react-pdf/renderer";
 import PdfDocument from "./PdfDocument";
 import { DocumentArrowDownIcon } from "@heroicons/react/20/solid";
 import { Spinner } from "@/components/Spinner";
+import Button from "@/components/Button";
+import toast from "react-hot-toast";
 
 type PdfDownloadButtonProps = {
   sessionData: Session;
@@ -102,27 +104,23 @@ const PdfDownloadButton: React.FC<PdfDownloadButtonProps> = ({
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
+    toast.success("PDF erfolgreich heruntergeladen", {
+      duration: 3000,
+    });
+
     setLoading(false);
   };
 
   return (
-    <button
+    <Button
       onClick={handleDownloadClick}
-      className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-700 hover:scale-105 transition-transform"
-      disabled={loading}
+      icon={<DocumentArrowDownIcon className="h-5 w-5" />}
+      loading={loading}
+      loadingIcon={<Spinner className="h-5 w-5" />}
+      loadingText="PDF wird generiert..."
     >
-      {loading ? (
-        <>
-          <Spinner className="h-6 w-6 mr-1 text-white mt-0" />
-          PDF wird generiert...
-        </>
-      ) : (
-        <>
-          <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
-          PDF herunterladen
-        </>
-      )}
-    </button>
+      PDF herunterladen
+    </Button>
   );
 };
 

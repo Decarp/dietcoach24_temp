@@ -4,6 +4,9 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import Button from "@/components/Button";
+import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/solid";
+import { Spinner } from "@/components/Spinner";
 
 export default function Login() {
   const router = useRouter();
@@ -87,13 +90,14 @@ export default function Login() {
               required
             />
           </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-800"
+          <Button
+            onClick={() => {}}
+            loading={loading}
+            icon={<ArrowRightEndOnRectangleIcon className="h-5 w-5" />}
+            loadingIcon={<Spinner className="h-5 w-5" />}
           >
-            {loading ? "Einloggen..." : "Einloggen"}
-          </button>
+            Einloggen
+          </Button>
         </form>
       </div>
     </main>

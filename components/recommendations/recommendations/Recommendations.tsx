@@ -7,9 +7,11 @@ import {
 import { deleteRecommendation } from "@/utils/deleteRecommendation";
 import { fetchProduct } from "@/utils/fetchProduct";
 import { fetchSession } from "@/utils/fetchSession";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { TrashIcon } from "@heroicons/react/20/solid";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import {
+  MagnifyingGlassIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/24/solid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -18,6 +20,8 @@ import toast from "react-hot-toast";
 import RecommendationsHeader from "./RecommendationsHeader";
 import RecommendedAlternativesSection from "./RecommendedAlternativesSection";
 import RecommendedProductsSection from "./RecommendedProductsSection";
+import { useState } from "react";
+import DeleteModal from "@/components/DeleteModal";
 
 const Recommendations = () => {
   const pathname = usePathname();
@@ -108,8 +112,26 @@ const Recommendations = () => {
     },
   });
 
-  const handleDeleteRecommendation = (recommendationId: number) => {
-    deleteRecommendationMutation.mutate(recommendationId);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [recommendationToDelete, setRecommendationToDelete] = useState<
+    number | null
+  >(null);
+
+  const openModal = (recommendationId: number) => {
+    setRecommendationToDelete(recommendationId);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setRecommendationToDelete(null);
+  };
+
+  const handleDeleteRecommendation = () => {
+    if (recommendationToDelete !== null) {
+      deleteRecommendationMutation.mutate(recommendationToDelete);
+    }
+    closeModal();
   };
 
   if (!session) {
@@ -125,12 +147,13 @@ const Recommendations = () => {
           enrichedRecommendations={enrichedRecommendations}
         />
         <div className="shadow-inner -mx-6">
-          <div className="flex-1 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
+          <div className="flex-1 mt-12 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
             <div className="text-center">
+              <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
               <h3 className="mt-6 text-sm font-semibold text-gray-900">
                 Keine Sitzung ausgewählt
               </h3>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-500">
                 Bitte wählen Sie eine Sitzung aus, um Empfehlungen anzuzeigen.
               </p>
             </div>
@@ -142,25 +165,30 @@ const Recommendations = () => {
 
   if (enrichedRecommendations?.length === 0) {
     return (
-      <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b border-x border-gray-300">
+      <div className="pt-6 bg-gray-50 flex flex-col flex-1 px-4 sm:px-6 lg:pl-8 xl:pl-6 border-b border-gray-300">
         <RecommendationsHeader
           numRecommendations={0}
           sessionData={consultationSession}
           enrichedRecommendations={enrichedRecommendations}
         />
         <div className="shadow-inner -mx-6">
-          <div className="flex-1 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
+          <div className="flex-1 mt-12 max-h-[calc(100vh-314px)] overflow-y-auto pb-6 px-6">
             <div className="text-center">
+              <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
               <h3 className="mt-6 text-sm font-semibold text-gray-900">
                 Keine Empfehlungen vorhanden
               </h3>
-              <p className="mt-1 mb-4 text-sm text-gray-500">
+              <p className="mt-2 mb-12 text-sm text-gray-500">
                 Es wurden keine Empfehlungen für diese Sitzung gefunden.
               </p>
               <Link
                 href={`/p/${patientId}/purchases`}
-                className="bg-primary text-white px-4 py-2 rounded hover:bg-green-700"
+                className="inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm hover:scale-105 transition-transform bg-primary text-white hover:bg-green-700"
               >
+                <MagnifyingGlassIcon
+                  aria-hidden="true"
+                  className="-ml-0.5 mr-2 h-5 w-5 text-white"
+                />
                 Einkäufe analysieren und Empfehlungen erstellen
               </Link>
             </div>
@@ -231,39 +259,10 @@ const Recommendations = () => {
                       </div>
                     </div>
                   )}
-                  <Menu as="div" className="relative inline-block text-left">
-                    <div>
-                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900">
-                        <EllipsisVerticalIcon
-                          aria-hidden="true"
-                          className="-mr-1 h-5 w-5 text-gray-400"
-                        />
-                      </MenuButton>
-                    </div>
-                    <MenuItems
-                      transition
-                      className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-                    >
-                      <div className="py-1">
-                        <MenuItem>
-                          <button
-                            className="group flex items-center px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                            onClick={() =>
-                              handleDeleteRecommendation(
-                                recommendation.recommendationId
-                              )
-                            }
-                          >
-                            <TrashIcon
-                              aria-hidden="true"
-                              className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                            />
-                            Empfehlung entfernen
-                          </button>
-                        </MenuItem>
-                      </div>
-                    </MenuItems>
-                  </Menu>
+                  <TrashIcon
+                    className="ml-3 h-6 w-6 flex-shrink-0 cursor-pointer text-gray-500 hover:text-red-500 hover:scale-110 transition-transform"
+                    onClick={() => openModal(recommendation.recommendationId)}
+                  />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mt-4 rounded-lg">
@@ -281,7 +280,7 @@ const Recommendations = () => {
                       <textarea
                         id="comment"
                         name="comment"
-                        rows={4}
+                        rows={2}
                         className="block w-full rounded-md border-0 border-gray-300 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                         defaultValue={recommendation.notes}
                       />
@@ -293,6 +292,15 @@ const Recommendations = () => {
           </ul>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {isModalOpen && (
+        <DeleteModal
+          isOpen={isModalOpen}
+          closeModal={closeModal}
+          onConfirm={handleDeleteRecommendation}
+        />
+      )}
     </div>
   );
 };

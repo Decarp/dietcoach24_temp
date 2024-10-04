@@ -113,7 +113,7 @@ export default function ChartEnergyMacroCategories({
               handleMacroChange(macro as MacroCategory);
               setSelectedSortCriteria(macro);
             }}
-            className={`w-full rounded-md px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
+            className={`hover:scale-105 transition-transform w-full rounded-md px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:text-white ${
               selectedMacro === macro ? "bg-primary text-white" : "bg-gray-300"
             }`}
           >

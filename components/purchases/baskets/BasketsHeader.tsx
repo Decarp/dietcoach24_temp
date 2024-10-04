@@ -1,7 +1,7 @@
+import Button from "@/components/Button";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { classNames } from "@/utils/classNames";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import React from "react";
+import { CalendarDateRangeIcon } from "@heroicons/react/24/solid";
 
 const BasketsHeader = ({
   baskets,
@@ -48,25 +48,16 @@ const BasketsHeader = ({
           {numBaskets} {numBaskets === 1 ? "Einkauf" : "Einkäufe"} mit{" "}
           {numProducts} Lebensmitteln
         </h3>
-        {/* <div className="relative group">
-          <InformationCircleIcon className="ml-1 h-5 w-5 text-gray-400 cursor-pointer" />
-          <div className="absolute left-0 bottom-full mb-1 hidden group-hover:block px-2 py-1 bg-gray-500 text-white text-xs rounded-md">
-            only matched products
-          </div>
-        </div> */}
       </div>
-      <button
-        className={classNames(
-          // "mt-1.5 ml-8 text-sm px-2 py-1 rounded-md border border-gray-300",
-          "mt-2.5 ml-8 text-sm px-2 py-1 rounded-md border border-gray-300",
-          areLastNWeeksSelected()
-            ? "bg-primary text-white"
-            : "bg-gray-100 text-gray-500"
-        )}
+      <Button
         onClick={selectLastNWeeks}
+        className={classNames(
+          "mt-2.5 ml-8 text-sm px-2 py-1 rounded-md border"
+        )}
+        icon={<CalendarDateRangeIcon className="h-5 w-5" />}
       >
-        Neueste {8} Wochen wählen
-      </button>
+        {!areLastNWeeksSelected() ? "8 Wochen auswählen" : "8 Wochen abwählen"}
+      </Button>
     </div>
   );
 };

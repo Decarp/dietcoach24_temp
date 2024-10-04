@@ -11,13 +11,18 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { UserCircleIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowLeftStartOnRectangleIcon,
+  ArrowRightEndOnRectangleIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/solid";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useMemo } from "react";
 import { MdOutlineSupervisedUserCircle } from "react-icons/md";
+import Button from "./Button";
 
 const navigation = [
   { name: "Patienten", href: "/patients" },
@@ -111,17 +116,24 @@ export default function Header({ children }: { children: ReactNode }) {
                   </div>
                   <MenuItems
                     transition
-                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                   >
                     {status === "authenticated" &&
                       userNavigation.map((item) => (
                         <MenuItem key={item.name}>
-                          <button
+                          <Button
                             onClick={item.action}
                             className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100"
+                            icon={
+                              item.name === "Anmelden" ? (
+                                <ArrowRightEndOnRectangleIcon className="h-5 w-5" />
+                              ) : (
+                                <ArrowLeftStartOnRectangleIcon className="h-5 w-5" />
+                              )
+                            }
                           >
                             {item.name}
-                          </button>
+                          </Button>
                         </MenuItem>
                       ))}
                   </MenuItems>

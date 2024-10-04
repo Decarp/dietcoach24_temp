@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { createSession } from "@/utils/createSession";
+import Button from "@/components/Button";
+import { UserPlusIcon } from "@heroicons/react/24/solid";
 
 export default function Register() {
   const router = useRouter();
@@ -176,12 +178,12 @@ export default function Register() {
               required
             />
           </div>
-          <button
-            type="submit"
-            className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary hover:bg-green-800"
+          <Button
+            onClick={() => {}}
+            icon={<UserPlusIcon className="h-5 w-5" />}
           >
             Registrieren
-          </button>
+          </Button>
         </form>
       </div>
     </main>

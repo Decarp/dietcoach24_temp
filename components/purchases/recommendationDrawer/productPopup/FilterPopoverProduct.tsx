@@ -50,7 +50,7 @@ const FilterPopoverProduct = ({
                     type="checkbox"
                     checked={selectedCategories.major.includes(category.major)}
                     onChange={() => updateCategories(category.major, "major")}
-                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
                   />
                   <label className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">
                     {category.major}
@@ -66,7 +66,7 @@ const FilterPopoverProduct = ({
                           type="checkbox"
                           checked={selectedCategories.sub.includes(subCategory)}
                           onChange={() => updateCategories(subCategory, "sub")}
-                          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
                         />
                         <label className="ml-3 whitespace-nowrap pr-6 text-sm text-gray-900">
                           {subCategory}

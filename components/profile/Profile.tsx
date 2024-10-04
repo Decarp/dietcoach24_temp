@@ -29,9 +29,9 @@ export default function Profile() {
   });
 
   return (
-    <div className="bg-white h-screen -m-8 p-8 border-x border-b border-gray-300 h-[calc(100vh-179px)]">
+    <div className="bg-white h-screen -m-8 p-8 border-x border-b border-gray-300 h-[calc(100vh-176px)]">
       {isLoading ? (
-        <Spinner />
+        <Spinner className="mt-4" />
       ) : (
         <>
           <h2 className="text-xl font-semibold">Profil</h2>

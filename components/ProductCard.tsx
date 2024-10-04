@@ -172,7 +172,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {variant === "default" && (
         <input
           type="checkbox"
-          className="h-4 w-4 mx-auto mr-4 rounded border-gray-300 text-primary focus:ring-primary"
+          className="h-4 w-4 mx-auto mr-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
           checked={selected}
           onChange={handleProductCheckboxChange}
         />

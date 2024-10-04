@@ -9,16 +9,14 @@ import { useCounterStore } from "@/providers/useStoreProvider";
 import { BasketProduct, Sessions } from "@/types/types";
 import { fetchBasketProducts } from "@/utils/fetchBasketProducts";
 import { fetchSessions } from "@/utils/fetchSessions";
-import {
-  CalendarDateRangeIcon,
-  ShoppingCartIcon,
-} from "@heroicons/react/24/outline";
+import { CalendarDateRangeIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import DateRangePickerComp from "./DateRangePickerComp";
+import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 
 const ChartEnergyMacro = dynamic(
   () => import("@/components/charts/ChartEnergyMacro"),
@@ -385,7 +383,7 @@ const Analysis = () => {
   return (
     <div className="bg-white -ml-8 -mr-8 border-x border-gray-300 pt-6 bg-gray-50 flex flex-col flex-1 px-8 border-b h-[calc(100vh-184px)]">
       <AnalysisHeader />
-      <div className="-mx-8 flex-1 max-h-[calc(100vh-320px)] overflow-y-auto pb-6 px-8">
+      <div className="-mx-8 flex-1 max-h-[calc(100vh-300px)] overflow-y-auto pb-6 px-8">
         <DateRangePickerComp
           range1ProductCount={range1ProductCount}
           range2ProductCount={range2ProductCount}
@@ -395,7 +393,7 @@ const Analysis = () => {
         <div>
           {(isLoadingBasketProductsComparisonNew ||
             isLoadingBasketProductsComparisonOld ||
-            isProcessing) && <Spinner />}
+            isProcessing) && <Spinner className="mt-4" />}
           {!isLoadingBasketProductsComparisonNew &&
           !isLoadingBasketProductsComparisonOld &&
           !isProcessing &&
@@ -496,17 +494,17 @@ const Analysis = () => {
             !isLoadingBasketProductsComparisonNew &&
             !isLoadingBasketProductsComparisonOld &&
             !isProcessing && (
-              <div className="flex mt-10 px-4 justify-center w-full">
+              <div className="flex mt-12 px-4 justify-center w-full">
                 <div className="text-center">
                   <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
-                  <h3 className="mt-2 text-sm font-semibold text-gray-900">
+                  <h3 className="mt-6 text-sm font-semibold text-gray-900">
                     Keine Einkäufe ausgewählt
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-gray-500">
                     Bitte wählen Sie mindestens zwei Einkäufe aus, um Analysen
                     anzuzeigen.
                   </p>
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-gray-500">
                     Selektieren Sie dazu ein entsprechendes Zeitfenster.
                   </p>
                 </div>

@@ -44,7 +44,7 @@ const NutriScoreMenu = ({
                     value={score}
                     checked={isChecked(score)}
                     onChange={() => handleNutriScoreChange(score)}
-                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300"
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 cursor-pointer"
                   />
                   <label
                     className="block px-4 py-2 text-sm font-medium text-gray-900 data-[focus]:bg-gray-100"

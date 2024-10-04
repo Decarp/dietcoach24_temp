@@ -1,6 +1,6 @@
 import DatabaseProductCard from "@/components/DatabaseProductCard";
 import { DatabaseProduct } from "@/types/types";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 
 export default function RecommendedAlternativesSection({
   products,
@@ -21,18 +21,17 @@ export default function RecommendedAlternativesSection({
         </div>
       </div>
 
-      <div className="max-h-[320px] overflow-y-scroll shadow-inner border-b border-gray-300">
+      <div className="max-h-[320px] overflow-y-scroll shadow-inner">
         {products.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full p-4">
             <div className="text-center">
               <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
-              <h3 className="mt-2 text-sm font-semibold text-gray-900">
+              <h3 className="mt-6 text-sm font-semibold text-gray-900">
                 Keine Produkte ausgewählt
               </h3>
             </div>
           </div>
         )}
-
         <ul className="divide-y divide-gray-300">
           {products.map((product) => (
             <DatabaseProductCard

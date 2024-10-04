@@ -31,7 +31,7 @@ const AnalysisHeader = () => {
   return (
     <div
       className={`flex justify-between items-center min-w-[300px] xl:w-full ${
-        hideProducts ? "" : "xl:max-w-[800px]"
+        hideProducts ? "" : "xl:max-w-[900px]"
       }`}
     >
       <div className="w-full">
@@ -74,7 +74,7 @@ const AnalysisHeader = () => {
         </div>
 
         {/* Tabs */}
-        <div>
+        <div className="mt-[28px]">
           <div className="sm:hidden">
             <label htmlFor="current-tab" className="sr-only">
               Select a tab
@@ -93,7 +93,7 @@ const AnalysisHeader = () => {
               ))}
             </select>
           </div>
-          <div className="hidden sm:block border-b border-gray-300 -mx-4 sm:-mx-6 lg:-mx-6 lg:-mx-8 xl:-mx-6 overflow-x-auto overflow-y-hidden	">
+          <div className="hidden sm:block border-b border-gray-300 -mx-4 sm:-mx-6 lg:-mx-6 lg:-mx-8 xl:-mx-6 overflow-x-auto overflow-y-hidden">
             <nav className="-mb-px flex space-x-4 xl:space-x-6 px-6">
               {tabs.map((tab) => (
                 <button

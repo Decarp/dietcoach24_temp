@@ -8,7 +8,7 @@ export const Spinner: React.FC<SpinnerProps> = ({ className }) => {
   return (
     <div
       role="status"
-      className={`flex items-center justify-center mt-6 z-10 ${className}`}
+      className={`flex items-center justify-center z-10 ${className}`}
     >
       <svg
         aria-hidden="true"
