@@ -37,6 +37,9 @@ export default function RecommendationDrawer({
     selectedAlternativeProducts,
     selectedSessionId,
     setSelectedSessionId,
+    setSelectedBasketProductIds,
+    setSelectedBasketProductsFlat,
+    setSelectedAlternativeProducts,
   } = useCounterStore((state) => state);
 
   // Fetch existing sessions
@@ -89,6 +92,9 @@ export default function RecommendationDrawer({
     onSuccess: () => {
       toast.success("Empfehlung erfolgreich erstellt", { duration: 3000 });
       setOpen(false);
+      setSelectedBasketProductIds([]);
+      setSelectedBasketProductsFlat([]);
+      setSelectedAlternativeProducts([]);
       refetch();
     },
     onError: (error: any) => {
