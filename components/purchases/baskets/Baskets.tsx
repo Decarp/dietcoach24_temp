@@ -18,6 +18,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import BasketsHeader from "./BasketsHeader";
+import { nutriScoreColorMap } from "@/data/nutriScoreColorMap";
 
 const Baskets = () => {
   const { data: session } = useSession();
@@ -199,22 +200,34 @@ const Baskets = () => {
                             : ""
                         )}
                       >
-                        <Image
-                          src="/migros-logo-square.png"
-                          alt="Migros logo"
-                          width={48}
-                          height={48}
-                          className={classNames(
-                            "border border-gray-300 h-12 w-12 p-2 flex-none rounded-md",
-                            selectedBasketIds.includes(basket.basketId)
-                              ? "bg-white text-primary"
-                              : "bg-gray-50 text-primary"
-                          )}
-                        />
+                        <div className="relative flex-none">
+                          <Image
+                            src="/migros-logo-square.png"
+                            alt="Migros logo"
+                            width={48}
+                            height={48}
+                            className={classNames(
+                              "border border-gray-300 h-12 w-12 p-2 flex-none rounded-md",
+                              selectedBasketIds.includes(basket.basketId)
+                                ? "bg-white text-primary"
+                                : "bg-gray-50 text-primary"
+                            )}
+                          />
+                          <div
+                            className={classNames(
+                              "shadow absolute top-0 -m-2 right-0 inline-flex items-center rounded-md px-1 text-xs font-medium",
+                              (basket.avgNutriScore &&
+                                nutriScoreColorMap[basket.avgNutriScore]) ||
+                                "bg-gray-200 text-gray-700 border border-gray-300"
+                            )}
+                          >
+                            {basket.avgNutriScore ? basket.avgNutriScore : "-"}
+                          </div>
+                        </div>
                         <div className="min-w-0 flex-1">
                           <p
                             className={classNames(
-                              "text-base font-semibold leading-6",
+                              "text-base font-semibold leading-6 flex-0",
                               selectedBasketIds.includes(basket.basketId)
                                 ? "text-white"
                                 : "text-gray-900"
@@ -222,6 +235,7 @@ const Baskets = () => {
                           >
                             Einkauf {basket.index + 1}
                           </p>
+
                           <p
                             className={classNames(
                               "truncate text-sm leading-5",

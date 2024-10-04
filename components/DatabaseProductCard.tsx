@@ -82,7 +82,7 @@ const DatabaseProductCard: React.FC<DatabaseProductCardProps> = ({
         )}
         <div
           className={classNames(
-            "shadow absolute bottom-0 right-0 m-1.5 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium",
+            "shadow absolute top-0 -m-2 right-0 inline-flex items-center rounded-md px-1 text-xs font-medium",
             nutriScoreClass
           )}
         >

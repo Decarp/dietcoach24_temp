@@ -3,6 +3,7 @@ import { useCounterStore } from "@/providers/useStoreProvider";
 import { BasketProductFlat, Nutrients } from "@/types/types";
 import { classNames } from "@/utils/classNames";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { nutriScoreColorMap } from "@/data/nutriScoreColorMap";
 
 const nutrientKeyMap: { [key: string]: keyof Nutrients } = {
   Kalorien: "kcal",
@@ -13,14 +14,6 @@ const nutrientKeyMap: { [key: string]: keyof Nutrients } = {
   Zucker: "sugars",
   Nahrungsfasern: "fibres",
   Salz: "salt",
-};
-
-const nutriScoreColorMap: { [key: string]: string } = {
-  A: "bg-green-700 border border-green-800 text-white",
-  B: "bg-green-500 border border-green-600 text-white",
-  C: "bg-yellow-500 border border-yellow-600 text-white",
-  D: "bg-orange-500 border border-orange-600 text-white",
-  E: "bg-red-600 border border-red-700 text-white",
 };
 
 type ProductCardProps = {
@@ -113,7 +106,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
         <div
           className={classNames(
-            "shadow absolute bottom-0 right-0 m-1.5 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium",
+            "shadow absolute top-0 -m-2 right-0 inline-flex items-center rounded-md px-1 text-xs font-medium",
             nutriScoreClass
           )}
         >
