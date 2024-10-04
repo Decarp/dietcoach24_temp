@@ -156,7 +156,7 @@ const Baskets = () => {
     <div
       className={`pt-6 -ml-8 bg-white border-l flex flex-col border-b border-gray-300 min-w-64 xl:w-64 xl:shrink-0 h-[calc(100vh-185px)] transform transition-all duration-1000 ease-in-out ${
         hideBaskets
-          ? "opacity-0 -translate-x-10 -ml-64"
+          ? "opacity-0 -translate-x-10 -ml-[256px]"
           : "opacity-100 translate-x-0"
       }`}
     >
