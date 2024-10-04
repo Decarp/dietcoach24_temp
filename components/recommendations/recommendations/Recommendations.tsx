@@ -154,7 +154,7 @@ const Recommendations = () => {
                 Keine Sitzung ausgewählt
               </h3>
               <p className="mt-2 text-sm text-gray-500">
-                Bitte wählen Sie eine Sitzung aus, um Empfehlungen anzuzeigen.
+                Wählen Sie eine Sitzung aus, um Empfehlungen anzuzeigen.
               </p>
             </div>
           </div>

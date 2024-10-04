@@ -307,7 +307,7 @@ export const createCounterStore = (
       if (highlight) {
         setTimeout(() => {
           set(() => ({ highlightBorder: false }));
-        }, 3000); // Reset after 3 seconds
+        }, 5000); // Reset after 5 seconds
       }
     },
     setHideBaskets: (hide: boolean) => set(() => ({ hideBaskets: hide })),

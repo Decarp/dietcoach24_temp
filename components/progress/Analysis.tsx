@@ -501,7 +501,7 @@ const Analysis = () => {
                     Keine Einkäufe ausgewählt
                   </h3>
                   <p className="mt-2 text-sm text-gray-500">
-                    Bitte wählen Sie mindestens zwei Einkäufe aus, um Analysen
+                    Wählen Sie mindestens zwei Einkäufe aus, um Analysen
                     anzuzeigen.
                   </p>
                   <p className="mt-2 text-sm text-gray-500">

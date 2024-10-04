@@ -54,9 +54,8 @@ export default function SelectedProductsSection({
                 Keine Produkte ausgewählt
               </h3>
               <p className="mt-2 text-sm text-gray-500">
-                Bitte wählen Sie gekaufte Produkte aus den Einkäufen Ihres
-                Kunden aus, zu denen Sie ihrem Kunden Empfehlungen geben
-                möchten.
+                Wählen Sie gekaufte Produkte aus den Einkäufen Ihres Kunden aus,
+                zu denen Sie ihrem Kunden Empfehlungen geben möchten.
               </p>
             </div>
           </div>
@@ -81,7 +80,7 @@ export default function SelectedProductsSection({
           }}
           icon={<PlusIcon className="h-5 w-5" />}
         >
-          Produkte auswählen
+          Gekaufte Produkte auswählen
         </Button>
       </div>
     </div>

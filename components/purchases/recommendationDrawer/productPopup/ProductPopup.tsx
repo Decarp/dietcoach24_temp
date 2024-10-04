@@ -323,7 +323,7 @@ export default function ProductPopup({
                         Keine Produkte ausgewählt
                       </h3>
                       <p className="mt-2 text-sm text-gray-500">
-                        Bitte wählen Sie eine Kategorie oder geben Sie einen
+                        Wählen Sie eine Kategorie oder geben Sie einen
                         Suchbegriff ein.
                       </p>
                     </div>

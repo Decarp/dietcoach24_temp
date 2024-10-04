@@ -102,7 +102,7 @@ export default function RecommendationDrawer({
     event.preventDefault();
 
     if (!selectedSessionId) {
-      toast.error("Bitte wähle eine Sitzung aus", { duration: 3000 });
+      toast.error("Wählen Sie zuerst eine Sitzung aus", { duration: 3000 });
       return;
     }
 
@@ -132,7 +132,7 @@ export default function RecommendationDrawer({
         text: freitextState,
       };
     } else {
-      toast.error("Bitte wähle eine Variante aus", { duration: 3000 });
+      toast.error("Wählen Sie zuerst eine Variante aus", { duration: 3000 });
       return;
     }
 

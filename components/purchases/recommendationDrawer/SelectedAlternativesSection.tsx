@@ -47,8 +47,7 @@ export default function SelectedAlternativesSection() {
                 Keine Produkte ausgewählt
               </h3>
               <p className="mt-2 text-sm text-gray-500">
-                Bitte wählen Sie Produkte aus, um sie ihrem Kunden
-                vorzuschlagen.
+                Wählen Sie Produkte aus, um sie ihrem Kunden vorzuschlagen.
               </p>
             </div>
           </div>
@@ -71,7 +70,7 @@ export default function SelectedAlternativesSection() {
           onClick={() => handlePopopOpen(true)}
           icon={<PlusIcon className="h-5 w-5" />}
         >
-          Produkte auswählen
+          Alternative Produkte auswählen
         </Button>
       </div>
     </div>

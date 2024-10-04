@@ -213,8 +213,8 @@ const Products = () => {
                   Keine Lebensmittelkategorie ausgewählt
                 </h3>
                 <p className="mt-2 text-sm text-gray-500">
-                  Bitte wählen Sie mindestens eine Lebensmittelkategorie aus, um
-                  die Lebensmittel anzuzeigen.
+                  Wählen Sie mindestens eine Lebensmittelkategorie aus, um die
+                  Lebensmittel anzuzeigen.
                 </p>
               </div>
             </div>
@@ -222,7 +222,7 @@ const Products = () => {
         <ul
           role="list"
           className={`divide-y divide-gray-300 ${
-            highlightBorder ? "border-4 border-orange-500" : ""
+            highlightBorder && "bg-orange-100 border-8 animate-pulse-border"
           }`}
         >
           {sortedProducts.map((product) => (
