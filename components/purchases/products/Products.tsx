@@ -89,11 +89,14 @@ const Products = () => {
     selectedCategories,
     selectedSortCriteria,
     selectedBasketProductIds,
-    setSelectedSortCriteria,
+    setSelectedBasketProductIds,
+    selectedBasketProductsFlat,
+    setSelectedBasketProductsFlat,
     basketProducts,
     basketProductsFlat,
     setBasketProductsFlat,
     highlightBorder,
+    setSelectedSortCriteria,
   } = useCounterStore((state) => state);
 
   const { isLoading } = useQuery<BasketProduct[]>({
@@ -165,6 +168,45 @@ const Products = () => {
     subs,
   }));
 
+  // Determine if all products are selected
+  const areAllProductsSelected = sortedProducts.every((product) =>
+    selectedBasketProductIds.some((item) => item.gtin === product.gtin)
+  );
+
+  // Handle checkbox change event
+  const handleSelectAllChange = () => {
+    if (areAllProductsSelected) {
+      // Unselect all products
+      const newSelectedBasketProductIds = selectedBasketProductIds.filter(
+        (item) => !sortedProducts.some((product) => product.gtin === item.gtin)
+      );
+      const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
+        (product) => !sortedProducts.some((p) => p.gtin === product.gtin)
+      );
+      setSelectedBasketProductIds(newSelectedBasketProductIds);
+      setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
+    } else {
+      // Select all products
+      const newSelectedBasketProductIds = [...selectedBasketProductIds];
+      const newSelectedBasketProductsFlat = [...selectedBasketProductsFlat];
+
+      sortedProducts.forEach((product) => {
+        if (
+          !selectedBasketProductIds.some((item) => item.gtin === product.gtin)
+        ) {
+          newSelectedBasketProductIds.push({
+            basketId: product.basketId,
+            gtin: product.gtin,
+          });
+          newSelectedBasketProductsFlat.push(product);
+        }
+      });
+
+      setSelectedBasketProductIds(newSelectedBasketProductIds);
+      setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
+    }
+  };
+
   return (
     <div
       className={`relative pt-6 -mr-8 bg-white border-r flex flex-col shrink-0 border-t border-b border-gray-300 min-w-60 md:max-w-96 xl:w-96 lg:border-t-0 lg:pr-8 xl:pr-6 h-[calc(100vh-185px)] transform transition-all duration-1000 ease-in-out ${
@@ -186,18 +228,23 @@ const Products = () => {
           setSelectedSortCriteria={setSelectedSortCriteria}
         />
 
-        <div>
-          <button
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-            onClick={() => setAscending(!ascending)}
-          >
-            {ascending ? (
-              <ArrowUpIcon className="h-5 w-5 text-gray-400 hover:scale-125 transform-transition" />
-            ) : (
-              <ArrowDownIcon className="h-5 w-5 text-gray-400 hover:scale-125 transform-transition" />
-            )}
-          </button>
-        </div>
+        <button
+          className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+          onClick={() => setAscending(!ascending)}
+        >
+          {ascending ? (
+            <ArrowUpIcon className="h-5 w-5 text-gray-400 hover:scale-125 transform-transition" />
+          ) : (
+            <ArrowDownIcon className="h-5 w-5 text-gray-400 hover:scale-125 transform-transition" />
+          )}
+        </button>
+
+        <input
+          type="checkbox"
+          className="h-4 w-4 mx-auto mr-1 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+          checked={areAllProductsSelected}
+          onChange={handleSelectAllChange}
+        />
       </div>
 
       <div className="-mr-6 flex-1 overflow-y-auto min-h-0 shadow-inner border-b border-gray-300">
