@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { DatabaseProduct } from "@/types/types";
 
 export async function GET(request: NextRequest) {
-  // Extract the 'gtin' query parameter from the URL
   const searchParams = request.nextUrl.searchParams;
   const gtin = searchParams.get("gtin");
 
@@ -13,9 +12,14 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  // Attention: The query is currently hardcoded to MIGROS products, as per the environment variable.
+  // This is because we only have MIGROS products in the study, and the backend API changed during the development.
+  // If in the future we want to support other supermarkets, somethings needs to be changed here,
+  // and potentially in other places, depending on the GTIN logic.
+
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_DB_URL}/products/${gtin}`,
+      `${process.env.NEXT_PUBLIC_DB_URL}/products/${process.env.NEXT_PUBLIC_DB_MIGROS_IDENTIFIER}/${gtin}`,
       {
         method: "GET",
       }

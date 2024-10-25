@@ -36,3 +36,10 @@ yarn-error.log*
 next-env.d.ts
 
 .env
+
+.venv/
+venv/
+.idea/
+
+study/
+requirements.txt
