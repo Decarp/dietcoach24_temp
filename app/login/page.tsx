@@ -27,8 +27,6 @@ export default function Login() {
 
       setLoading(false);
 
-      console.log("login result", result);
-
       if (result?.error) {
         // Check for specific error types or messages
         if (result.status === 401) {

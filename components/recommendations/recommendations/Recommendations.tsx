@@ -28,12 +28,8 @@ const Recommendations = () => {
   const patientId = pathname.split("/")[2];
 
   const { data: session } = useSession();
-  const { selectedSessionId, setSelectedSessionId } = useCounterStore(
-    (state) => ({
-      selectedSessionId: state.selectedSessionId,
-      setSelectedSessionId: state.setSelectedSessionId,
-    })
-  );
+
+  const { selectedSessionId } = useCounterStore((state) => state);
 
   // Fetch existing sessions
   const { data: consultationSession, refetch } = useQuery<Session>({
@@ -42,8 +38,6 @@ const Recommendations = () => {
       fetchSession(selectedSessionId ?? 0, session?.accessToken || ""),
     enabled: selectedSessionId !== null && !!session?.accessToken,
   });
-
-  const queryClient = useQueryClient();
 
   // Get all product IDs from recommendations
   const alternativeProductIds =

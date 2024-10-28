@@ -19,6 +19,7 @@ export type CounterState = {
   selectedBasketProductsFlat: BasketProductFlat[];
   selectedAlternativeProducts: DatabaseProduct[];
   selectedSessionId: number | null;
+  selectedSessionIndex: number | null;
   currentTab: string;
   patientId: string | null;
   basketProducts: BasketProduct[];
@@ -40,6 +41,7 @@ export type CounterActions = {
   setSelectedBasketProductsFlat: (products: BasketProductFlat[]) => void;
   setSelectedAlternativeProducts: (products: DatabaseProduct[]) => void;
   setSelectedSessionId: (id: number | null) => void;
+  setSelectedSessionIndex: (index: number | null) => void;
   setCurrentTab: (tab: string) => void;
   setPatientId: (id: string | null) => void;
   setBasketProducts: (products: BasketProduct[]) => void;
@@ -69,6 +71,7 @@ export const initCounterStore = (): CounterState => {
     selectedBasketProductsFlat: [],
     selectedAlternativeProducts: [],
     selectedSessionId: null,
+    selectedSessionIndex: null,
     currentTab: "energy",
     patientId: null,
     basketProducts: [],
@@ -91,6 +94,7 @@ export const defaultInitState: CounterState = {
   selectedBasketProductsFlat: [],
   selectedAlternativeProducts: [],
   selectedSessionId: null,
+  selectedSessionIndex: null,
   currentTab: "energy",
   patientId: null,
   basketProducts: [],
@@ -171,6 +175,8 @@ export const createCounterStore = (
       set(() => ({ selectedAlternativeProducts: products })),
     setSelectedSessionId: (id: number | null) =>
       set(() => ({ selectedSessionId: id })),
+    setSelectedSessionIndex: (index: number | null) =>
+      set(() => ({ selectedSessionIndex: index })),
     updateCategories: (
       category: string,
       level: "major" | "sub",

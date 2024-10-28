@@ -17,6 +17,7 @@ import SortMenu from "./SortMenu";
 import { categories } from "@/data/categories";
 import Button from "@/components/Button";
 import { PlusIcon } from "@heroicons/react/24/solid";
+import CompletedPopup from "../recommendationDrawer/CompletedPopup";
 
 const sortProducts = (
   products: BasketProductFlat[],
@@ -82,6 +83,7 @@ const Products = () => {
 
   const [ascending, setAscending] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [completedPopupOpen, setCompletedPopupOpen] = useState(false);
 
   const {
     hideProducts,
@@ -159,6 +161,9 @@ const Products = () => {
 
   const handleDrawerOpen = (open: boolean) => {
     setDrawerOpen(open);
+    if (!open && completedPopupOpen) {
+      setCompletedPopupOpen(false);
+    }
   };
 
   const categoriesWithSub: { major: string; subs: string[] }[] = Object.entries(
@@ -291,7 +296,17 @@ const Products = () => {
           </Button>
         </div>
       )}
-      <RecommendationDrawer open={drawerOpen} setOpen={handleDrawerOpen} />
+
+      <RecommendationDrawer
+        open={drawerOpen}
+        setOpen={handleDrawerOpen}
+        onSuccess={() => setCompletedPopupOpen(true)}
+      />
+
+      <CompletedPopup
+        open={completedPopupOpen}
+        setOpen={setCompletedPopupOpen}
+      />
     </div>
   );
 };

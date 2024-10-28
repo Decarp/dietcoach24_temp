@@ -23,9 +23,11 @@ import TabSection from "./tabSection/TabSection";
 export default function RecommendationDrawer({
   open,
   setOpen,
+  onSuccess,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
+  onSuccess: () => void;
 }) {
   const { data: userSession } = useSession();
   const pathname = usePathname();
@@ -36,7 +38,9 @@ export default function RecommendationDrawer({
     selectedBasketProductsFlat,
     selectedAlternativeProducts,
     selectedSessionId,
+    selectedSessionIndex,
     setSelectedSessionId,
+    setSelectedSessionIndex,
     setSelectedBasketProductIds,
     setSelectedBasketProductsFlat,
     setSelectedAlternativeProducts,
@@ -57,6 +61,7 @@ export default function RecommendationDrawer({
       });
       // Set the latest session as the selected session
       setSelectedSessionId(latestSession.sessionId);
+      setSelectedSessionIndex(latestSession.index);
     }
   }, [sessions, setSelectedSessionId]);
 
@@ -90,8 +95,11 @@ export default function RecommendationDrawer({
         selectedSessionId?.toString()
       ),
     onSuccess: () => {
-      toast.success("Empfehlung erfolgreich erstellt", { duration: 3000 });
+      // toast.success("Empfehlung erfolgreich erstellt", { duration: 3000 });
       setOpen(false);
+      setTimeout(() => {
+        onSuccess();
+      }, 500);
       setSelectedBasketProductIds([]);
       setSelectedBasketProductsFlat([]);
       setSelectedAlternativeProducts([]);
@@ -108,7 +116,10 @@ export default function RecommendationDrawer({
     event.preventDefault();
 
     if (!selectedSessionId) {
-      toast.error("Wählen Sie zuerst eine Sitzung aus", { duration: 3000 });
+      toast.error(
+        'Bitte wählen Sie zuerst eine Sitzung im Tab "Empfehlungen" aus',
+        { duration: 3000 }
+      );
       return;
     }
 

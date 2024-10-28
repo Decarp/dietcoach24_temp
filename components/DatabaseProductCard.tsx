@@ -44,8 +44,6 @@ const DatabaseProductCard: React.FC<DatabaseProductCardProps> = ({
   onRemove,
   onAdd,
 }) => {
-  console.log("selectedNutrient", selectedNutrient);
-
   const { selectedAlternativeProducts } = useCounterStore((state) => state);
 
   const nutriScoreClass =

@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 import SessionsHeader from "./SessionsHeader";
 import { deleteSession } from "@/utils/deleteSession";
 import toast from "react-hot-toast";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import DeleteModal from "@/components/DeleteModal";
 
 const SessionsComp = () => {
@@ -34,19 +34,24 @@ const SessionsComp = () => {
     queryFn: () => fetchSessions(patientId, session?.accessToken),
   });
 
-  const { selectedSessionId, setSelectedSessionId } = useCounterStore(
-    (state) => state
-  );
+  const {
+    selectedSessionId,
+    selectedSessionIndex,
+    setSelectedSessionId,
+    setSelectedSessionIndex,
+  } = useCounterStore((state) => state);
 
   const sessionTimestamps = getSessionTimestamp(patient, sessions);
   const queryClient = useQueryClient();
 
+  const previousSessionCount = useRef(sessionTimestamps.length);
+
   // Automatically select the newest session if none is selected
   useEffect(() => {
     if (sessionTimestamps.length > 0 && selectedSessionId === null) {
-      const newestSession =
-        sessionTimestamps[sessionTimestamps.length - 1].sessionId;
-      setSelectedSessionId(newestSession);
+      const newestSession = sessionTimestamps[sessionTimestamps.length - 1];
+      setSelectedSessionId(newestSession.sessionId);
+      setSelectedSessionIndex(newestSession.index);
     }
   }, [sessionTimestamps, selectedSessionId, setSelectedSessionId]);
 
@@ -57,14 +62,33 @@ const SessionsComp = () => {
       !sessionTimestamps.some((s) => s.sessionId === selectedSessionId)
     ) {
       if (sessionTimestamps.length > 0) {
-        const newestSession =
-          sessionTimestamps[sessionTimestamps.length - 1].sessionId;
-        setSelectedSessionId(newestSession);
+        const newestSession = sessionTimestamps[sessionTimestamps.length - 1];
+        setSelectedSessionId(newestSession.sessionId);
+        setSelectedSessionIndex(newestSession.index);
       } else {
         setSelectedSessionId(null); // If no sessions left
+        setSelectedSessionIndex(null);
       }
     }
-  }, [sessionTimestamps, selectedSessionId, setSelectedSessionId]);
+  }, [
+    sessionTimestamps,
+    selectedSessionId,
+    setSelectedSessionId,
+    setSelectedSessionIndex,
+  ]);
+
+  // Automatically select the newly created session
+  useEffect(() => {
+    if (sessionTimestamps.length > previousSessionCount.current) {
+      // New session detected, select the latest one
+      const newestSession = sessionTimestamps[sessionTimestamps.length - 1];
+      setSelectedSessionId(newestSession.sessionId);
+      setSelectedSessionIndex(newestSession.index);
+    }
+
+    // Update the previous session count
+    previousSessionCount.current = sessionTimestamps.length;
+  }, [sessionTimestamps, setSelectedSessionId, setSelectedSessionIndex]);
 
   // Delete session mutation
   const deleteMutation = useMutation({
@@ -88,6 +112,9 @@ const SessionsComp = () => {
 
   const handleSessionClick = (sessionId: number) => {
     setSelectedSessionId(sessionId);
+    setSelectedSessionIndex(
+      sessionTimestamps.findIndex((s) => s.sessionId === sessionId)
+    );
   };
 
   // State for DeleteModal

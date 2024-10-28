@@ -4,9 +4,9 @@ import { addWeeks, fromUnixTime, getUnixTime } from "date-fns";
 export const getSessionTimestamp = (
   patient?: Patient,
   sessions?: Sessions
-): { sessionId: number; timestamp: number }[] => {
+): Sessions => {
   const ffqTimestamp = patient?.medicalHistory.ffqDate || 0;
-  const sessionTimestamps: { sessionId: number; timestamp: number }[] = [];
+  const sessionTimestamps: Sessions = [];
 
   if (sessions && sessions.length > 0) {
     sessions.forEach((session, index) => {
@@ -18,7 +18,11 @@ export const getSessionTimestamp = (
       } else {
         timestamp = session.timestamp; // Subsequent sessions: original timestamp
       }
-      sessionTimestamps.push({ sessionId: session.sessionId, timestamp });
+      sessionTimestamps.push({
+        sessionId: session.sessionId,
+        index: session.index,
+        timestamp,
+      });
     });
   }
 
