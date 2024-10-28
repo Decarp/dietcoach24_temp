@@ -20,8 +20,8 @@ export default function Register() {
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Check if the invite code is "Bern"
-    if (inviteCode !== "Bern") {
+    // Check if the invite code is "HSG2024"
+    if (inviteCode !== "HSG2024") {
       toast.error("Falscher Einladungscode. Bitte versuchen Sie es erneut.");
       return;
     }
