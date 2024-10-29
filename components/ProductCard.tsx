@@ -5,7 +5,7 @@ import { classNames } from "@/utils/classNames";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { nutriScoreColorMap } from "@/data/nutriScoreColorMap";
 
-const nutrientKeyMap: { [key: string]: keyof Nutrients } = {
+export const nutrientKeyMap: { [key: string]: keyof Nutrients } = {
   Kalorien: "kcal",
   Proteine: "proteins",
   Fette: "fats",

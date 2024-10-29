@@ -1,14 +1,7 @@
+import { sortCriteria } from "@/data/sortCriteria";
+import { useCounterStore } from "@/providers/useStoreProvider";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-
-const nutrients = [
-  "Protein",
-  "Kohlenhydrate",
-  "Fett",
-  "Ballaststoffe",
-  "Zucker",
-  "Natrium",
-];
 
 export default function NutrientDropdown({
   selectedOption,
@@ -17,8 +10,11 @@ export default function NutrientDropdown({
   selectedOption: string;
   setSelectedOption: (option: string) => void;
 }) {
+  const { setSelectedSortCriteria } = useCounterStore((state) => state);
+
   const handleSelection = (option: string, close: () => void) => {
     setSelectedOption(option);
+    setSelectedSortCriteria(option);
     close();
   };
 
@@ -37,7 +33,7 @@ export default function NutrientDropdown({
       <PopoverPanel className="absolute right-0 z-10 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none">
         {({ close }) => (
           <div className="py-1">
-            {nutrients.map((nutrient) => (
+            {sortCriteria.map((nutrient) => (
               <button
                 key={nutrient}
                 onClick={() => handleSelection(nutrient, close)}
