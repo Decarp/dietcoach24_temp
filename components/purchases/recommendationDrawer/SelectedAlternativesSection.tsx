@@ -3,7 +3,7 @@ import { useCounterStore } from "@/providers/useStoreProvider";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
-import ProductPopup from "./productPopup/ProductPopup";
+import ProductPopup from "@/components/purchases/productPopup/ProductPopup";
 import Button from "@/components/Button";
 
 export default function SelectedAlternativesSection() {
