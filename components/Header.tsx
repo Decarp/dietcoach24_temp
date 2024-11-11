@@ -83,6 +83,7 @@ export default function Header({ children }: { children: ReactNode }) {
                         key={item.name}
                         href={item.href}
                         aria-current={item.current ? "page" : undefined}
+                        target="_blank"
                         className={classNames(
                           item.current
                             ? "border-primary text-primary"
@@ -167,6 +168,7 @@ export default function Header({ children }: { children: ReactNode }) {
                     as="a"
                     href={item.href}
                     aria-current={item.current ? "page" : undefined}
+                    target="_blank"
                     className={classNames(
                       item.current
                         ? "border-primary bg-green-50 text-green-700"
