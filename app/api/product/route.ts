@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { DatabaseProduct } from "@/types/types";
 
+// Helper function to create the Basic Auth header
+function createBasicAuthHeader(username: string, password: string): string {
+  const credentials = `${username}:${password}`;
+  return `Basic ${Buffer.from(credentials).toString("base64")}`;
+}
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const gtin = searchParams.get("gtin");
@@ -18,10 +24,18 @@ export async function GET(request: NextRequest) {
   // and potentially in other places, depending on the GTIN logic.
 
   try {
+    const authHeader = createBasicAuthHeader(
+      process.env.NEXT_PUBLIC_DB_USERNAME || "",
+      process.env.NEXT_PUBLIC_DB_PASSWORD || ""
+    );
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_DB_URL}/products/${process.env.NEXT_PUBLIC_DB_MIGROS_IDENTIFIER}/${gtin}`,
       {
         method: "GET",
+        headers: {
+          Authorization: authHeader,
+        },
       }
     );
 
