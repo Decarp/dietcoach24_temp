@@ -1,4 +1,4 @@
-import { sortCriteria } from "@/data/sortCriteria";
+import { sortCriteria } from "@/constants/sortCriteria";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 

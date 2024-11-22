@@ -1,4 +1,4 @@
-import { sortCriteria } from "@/data/sortCriteria";
+import { sortCriteria } from "@/constants/sortCriteria";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";

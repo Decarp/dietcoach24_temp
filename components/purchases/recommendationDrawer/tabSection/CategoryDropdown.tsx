@@ -1,4 +1,4 @@
-import { categories } from "@/data/categories";
+import { categories } from "@/constants/categories";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 

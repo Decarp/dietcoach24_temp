@@ -1,10 +1,10 @@
 import DiffDot from "@/components/charts/DiffDot";
 import AnalysisHeader from "@/components/progress/AnalysisHeader";
 import { Spinner } from "@/components/Spinner";
-import { getChartEnergyCategoriesData } from "@/getData/getChartEnergyCategoriesData";
-import { getChartEnergyMacroCategoriesData } from "@/getData/getChartEnergyMacroCategoriesData";
-import { getChartEnergyMacroData } from "@/getData/getChartEnergyMacroData";
-import { getChartEnergyMicroCategoriesData } from "@/getData/getChartEnergyMicroCategoriesData";
+import { getChartEnergyCategoriesData } from "@/utils/getChartEnergyCategoriesData";
+import { getChartEnergyMacroCategoriesData } from "@/utils/getChartEnergyMacroCategoriesData";
+import { getChartEnergyMacroData } from "@/utils/getChartEnergyMacroData";
+import { getChartEnergyMicroCategoriesData } from "@/utils/getChartEnergyMicroCategoriesData";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { BasketProduct, Sessions } from "@/types/types";
 import { fetchBasketProducts } from "@/utils/fetchBasketProducts";

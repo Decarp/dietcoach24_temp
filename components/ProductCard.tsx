@@ -3,7 +3,7 @@ import { useCounterStore } from "@/providers/useStoreProvider";
 import { BasketProductFlat, Nutrients } from "@/types/types";
 import { classNames } from "@/utils/classNames";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { nutriScoreColorMap } from "@/data/nutriScoreColorMap";
+import { nutriScoreColorMap } from "@/constants/nutriScoreColorMap";
 
 export const nutrientKeyMap: { [key: string]: keyof Nutrients } = {
   Kalorien: "kcal",

@@ -1,17 +1,13 @@
-// app/layout.tsx
-
+import ClientWrapper from "@/components/ClientWrapper";
+import Header from "@/components/Header";
+import Provider from "@/providers/Providers";
+import AuthProvider from "@/providers/SessionProvider";
+import { CounterStoreProvider } from "@/providers/useStoreProvider";
+import "dotenv/config";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/Header";
-import { CounterStoreProvider } from "@/providers/useStoreProvider";
-import ClientWrapper from "@/components/ClientWrapper";
 import { Toaster } from "react-hot-toast";
-import Provider from "@/utils/Providers";
-import "dotenv/config";
-import { getServerSession } from "next-auth";
-import AuthProvider from "@/providers/SessionProvider";
-import { getSession } from "next-auth/react";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { Spinner } from "@/components/Spinner";
-import { categories } from "@/data/categories";
+import { categories } from "@/constants/categories";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import {
   CategorySelection,

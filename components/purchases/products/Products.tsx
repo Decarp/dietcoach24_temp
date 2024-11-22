@@ -1,7 +1,7 @@
 import ProductCard from "@/components/ProductCard";
 import ProductsHeader from "@/components/purchases/products/ProductsHeader";
 import { Spinner } from "@/components/Spinner";
-import { sortCriteria } from "@/data/sortCriteria";
+import { sortCriteria } from "@/constants/sortCriteria";
 import { useCounterStore } from "@/providers/useStoreProvider";
 import { BasketProduct, BasketProductFlat } from "@/types/types";
 import { fetchBasketProducts } from "@/utils/fetchBasketProducts";
@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import RecommendationDrawer from "../recommendationDrawer/RecommendationDrawer";
 import FilterPopover from "./FilterPopover";
 import SortMenu from "./SortMenu";
-import { categories } from "@/data/categories";
+import { categories } from "@/constants/categories";
 import Button from "@/components/Button";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import CompletedPopup from "../recommendationDrawer/CompletedPopup";

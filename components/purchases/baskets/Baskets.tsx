@@ -18,7 +18,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import BasketsHeader from "./BasketsHeader";
-import { nutriScoreColorMap } from "@/data/nutriScoreColorMap";
+import { nutriScoreColorMap } from "@/constants/nutriScoreColorMap";
 
 const Baskets = () => {
   const { data: session } = useSession();
