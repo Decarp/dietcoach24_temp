@@ -1,6 +1,6 @@
 export const mapBasketProductsResponse = (
   basketsResponse: any[],
-  productsResponse: any[]
+  productsResponse: any[],
 ) => {
   // Reduce the productsResponse to an object with basket index as key
   const productsMap = productsResponse.reduce((acc: any, basket: any) => {

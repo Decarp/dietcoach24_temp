@@ -3,7 +3,7 @@ import { BasketProduct, Product } from "@/types/types";
 export const fetchBasketProducts = async (
   patientId: string,
   selectedBasketIds: string[],
-  token: string
+  token: string,
 ): Promise<BasketProduct[]> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/basket-products`,
@@ -17,7 +17,7 @@ export const fetchBasketProducts = async (
       body: JSON.stringify({
         basketIds: selectedBasketIds,
       }),
-    }
+    },
   );
 
   if (!response.ok) {

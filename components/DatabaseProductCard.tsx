@@ -51,7 +51,7 @@ const DatabaseProductCard: React.FC<DatabaseProductCardProps> = ({
     "bg-gray-200 text-gray-700";
 
   const isSelected = selectedAlternativeProducts.some(
-    (altProduct) => altProduct.productId === product.productId
+    (altProduct) => altProduct.productId === product.productId,
   );
 
   return (
@@ -59,13 +59,13 @@ const DatabaseProductCard: React.FC<DatabaseProductCardProps> = ({
       key={product.productId}
       className={classNames(
         "pl-6 items-center gap-x-4 px-3 py-5 space-y-4",
-        isSelected && variant === "default" ? "bg-primary text-white" : ""
+        isSelected && variant === "default" ? "bg-primary text-white" : "",
       )}
     >
       <p
         className={classNames(
           "text-base font-semibold leading-6",
-          isSelected && variant === "default" ? "text-white" : "text-gray-900"
+          isSelected && variant === "default" ? "text-white" : "text-gray-900",
         )}
       >
         {product.de.name}
@@ -88,7 +88,7 @@ const DatabaseProductCard: React.FC<DatabaseProductCardProps> = ({
           <div
             className={classNames(
               "shadow absolute top-0 -m-2 right-0 inline-flex items-center rounded-md px-1 text-xs font-medium",
-              nutriScoreClass
+              nutriScoreClass,
             )}
           >
             {product.nutriScoreV2023Detail.nutriScoreCalculated}
@@ -106,11 +106,12 @@ const DatabaseProductCard: React.FC<DatabaseProductCardProps> = ({
                   isSelected && variant === "default"
                     ? "text-white"
                     : "text-gray-700",
-                  selectedNutrient === label && selectedNutrientColor
+                  selectedNutrient === label && selectedNutrientColor,
                 )}
               >
                 <p>
-                  {label === "Gesättigte Fettsäuren" ? "Ges. Fette" : label}:{" "}
+                  {label === "Gesättigte Fettsäuren" ? "Ges. Fette" : label}
+                  :{" "}
                 </p>
                 <p className="font-medium">
                   {roundNutrientValue(product.nutrients[key])}
@@ -124,8 +125,8 @@ const DatabaseProductCard: React.FC<DatabaseProductCardProps> = ({
                           selectedNutrient === label
                             ? "font-normal"
                             : isSelected
-                            ? "font-normal"
-                            : "font-normal text-gray-500"
+                              ? "font-normal"
+                              : "font-normal text-gray-500"
                         }
                       >
                         {" "}

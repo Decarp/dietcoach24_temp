@@ -9,7 +9,7 @@ import {
 
 const aggregateMacroCategories = (
   products: Product[],
-  selectedMacro: MacroCategory
+  selectedMacro: MacroCategory,
 ): ChartEnergyCategoriesResponse[] => {
   const categories: { [key: string]: ChartEnergyCategoriesResponse } = {};
 
@@ -49,12 +49,12 @@ const aggregateMacroCategories = (
 
 const mapChartEnergyMacroCategoriesResponse = (
   chartMacroCategoriesResponse: ChartEnergyCategoriesResponse[],
-  language: LanguageOptions = "de"
+  language: LanguageOptions = "de",
 ): ChartEnergyCategoriesData[] => {
   // Calculate the total grams for the selected macro across all categories
   const totalGrams = chartMacroCategoriesResponse.reduce(
     (sum, item) => sum + (item.grams || 0),
-    0
+    0,
   );
 
   // Map the response to include percentage instead of grams
@@ -66,16 +66,16 @@ const mapChartEnergyMacroCategoriesResponse = (
 
 export const getChartEnergyMacroCategoriesData = (
   products: BasketProduct[],
-  selectedMacro: MacroCategory // Client side selection
+  selectedMacro: MacroCategory, // Client side selection
 ): ChartEnergyCategoriesData[] => {
   const productsFlattened = products.flatMap((basket) => basket.products);
 
   const dynamicChartEnergyMacroCategoriesResponse = aggregateMacroCategories(
     productsFlattened,
-    selectedMacro
+    selectedMacro,
   );
 
   return mapChartEnergyMacroCategoriesResponse(
-    dynamicChartEnergyMacroCategoriesResponse
+    dynamicChartEnergyMacroCategoriesResponse,
   );
 };

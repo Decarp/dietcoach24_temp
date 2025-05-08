@@ -5,7 +5,7 @@ import { de } from "date-fns/locale";
 export const mapBasketsResponse = (basketsResponse: Basket[]): Baskets => {
   // Sort the basketsResponse by timestamp in descending order
   const sortedBasketsResponse = basketsResponse.sort(
-    (a: Basket, b: Basket) => b.timestamp - a.timestamp
+    (a: Basket, b: Basket) => b.timestamp - a.timestamp,
   );
 
   // Reduce to group baskets by monthYear

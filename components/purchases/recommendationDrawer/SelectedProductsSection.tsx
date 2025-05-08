@@ -21,12 +21,12 @@ export default function SelectedProductsSection({
 
   const handleRemoveProduct = (gtin: number, basketId: string) => {
     const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
-      (product) => !(product.gtin === gtin && product.basketId === basketId)
+      (product) => !(product.gtin === gtin && product.basketId === basketId),
     );
     setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
 
     const newSelectedBasketProductIds = selectedBasketProductIds.filter(
-      (id) => !(id.gtin === gtin && id.basketId === basketId)
+      (id) => !(id.gtin === gtin && id.basketId === basketId),
     );
     setSelectedBasketProductIds(newSelectedBasketProductIds);
   };

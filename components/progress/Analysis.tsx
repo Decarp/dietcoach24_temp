@@ -22,25 +22,25 @@ const ChartEnergyMacro = dynamic(
   () => import("@/components/charts/ChartEnergyMacro"),
   {
     ssr: false,
-  }
+  },
 );
 const ChartEnergyCategories = dynamic(
   () => import("@/components/charts/ChartEnergyCategories"),
   {
     ssr: false,
-  }
+  },
 );
 const ChartEnergyMacroCategories = dynamic(
   () => import("@/components/charts/ChartEnergyMacroCategories"),
   {
     ssr: false,
-  }
+  },
 );
 const ChartEnergyMicroCategories = dynamic(
   () => import("@/components/charts/ChartEnergyMicroCategories"),
   {
     ssr: false,
-  }
+  },
 );
 
 const Analysis = () => {
@@ -69,7 +69,7 @@ const Analysis = () => {
       fetchBasketProducts(
         patientId,
         selectedBasketIds,
-        session?.accessToken || ""
+        session?.accessToken || "",
       ),
     enabled: selectedBasketIds.length > 0 && !!session?.accessToken,
   });
@@ -83,7 +83,7 @@ const Analysis = () => {
       fetchBasketProducts(
         patientId,
         selectedComparisonBasketIds,
-        session?.accessToken || ""
+        session?.accessToken || "",
       ),
     enabled: selectedComparisonBasketIds.length > 0 && !!session?.accessToken,
   });
@@ -106,14 +106,14 @@ const Analysis = () => {
 
   const chartEnergyCategoriesData = useMemo(() => {
     const data = getChartEnergyCategoriesData(
-      basketProductsComparisonNew || []
+      basketProductsComparisonNew || [],
     );
     return data.sort((a, b) => a.name.localeCompare(b.name));
   }, [basketProductsComparisonNew]);
 
   const chartComparisonEnergyCategoriesData = useMemo(() => {
     const data = getChartEnergyCategoriesData(
-      basketProductsComparisonOld || []
+      basketProductsComparisonOld || [],
     );
     return data.sort((a, b) => a.name.localeCompare(b.name));
   }, [basketProductsComparisonOld]);
@@ -121,28 +121,28 @@ const Analysis = () => {
   const chartEnergyMacroCategoriesData = useMemo(() => {
     return getChartEnergyMacroCategoriesData(
       basketProductsComparisonNew || [],
-      selectedMacro
+      selectedMacro,
     );
   }, [basketProductsComparisonNew, selectedMacro]);
 
   const chartComparisonEnergyMacroCategoriesData = useMemo(() => {
     return getChartEnergyMacroCategoriesData(
       basketProductsComparisonOld || [],
-      selectedMacro
+      selectedMacro,
     );
   }, [basketProductsComparisonOld, selectedMacro]);
 
   const chartEnergyMicroCategoriesData = useMemo(() => {
     return getChartEnergyMicroCategoriesData(
       basketProductsComparisonNew || [],
-      selectedMicro
+      selectedMicro,
     );
   }, [basketProductsComparisonNew, selectedMicro]);
 
   const chartComparisonEnergyMicroCategoriesData = useMemo(() => {
     return getChartEnergyMicroCategoriesData(
       basketProductsComparisonOld || [],
-      selectedMicro
+      selectedMicro,
     );
   }, [basketProductsComparisonOld, selectedMicro]);
 
@@ -151,7 +151,7 @@ const Analysis = () => {
       if (chartEnergyCategoriesData.length > 0) {
         // Find the category with the highest value
         const defaultCategory = chartEnergyCategoriesData.reduce(
-          (max, category) => (category.value > max.value ? category : max)
+          (max, category) => (category.value > max.value ? category : max),
         ).name;
 
         setSelectedCategories({ major: [defaultCategory], sub: [] });
@@ -163,7 +163,7 @@ const Analysis = () => {
       if (chartEnergyMacroCategoriesData.length > 0) {
         // Find the category with the highest value
         const defaultCategory = chartEnergyMacroCategoriesData.reduce(
-          (max, category) => (category.value > max.value ? category : max)
+          (max, category) => (category.value > max.value ? category : max),
         ).name;
         setSelectedCategories({ major: [defaultCategory], sub: [] });
       }
@@ -174,7 +174,7 @@ const Analysis = () => {
       if (chartEnergyMicroCategoriesData.length > 0) {
         // Find the category with the highest value
         const defaultCategory = chartEnergyMicroCategoriesData.reduce(
-          (max, category) => (category.value > max.value ? category : max)
+          (max, category) => (category.value > max.value ? category : max),
         ).name;
         setSelectedCategories({ major: [defaultCategory], sub: [] });
       }
@@ -198,12 +198,12 @@ const Analysis = () => {
       }
       // Calculate the percentage difference primary
       const comparisonItem = chartComparisonEnergyMacroData.find(
-        (item) => item.name === selectedSortCriteria
+        (item) => item.name === selectedSortCriteria,
       );
 
       if (comparisonItem) {
         const selectedItem = chartEnergyMacroData.find(
-          (item) => item.name === selectedSortCriteria
+          (item) => item.name === selectedSortCriteria,
         );
 
         if (selectedItem) {
@@ -231,11 +231,11 @@ const Analysis = () => {
       if (chartEnergyCategoriesData.length > 0) {
         if (selectedCategories.major.length == 1) {
           const selectedItem = chartEnergyCategoriesData.find(
-            (item) => item.name === selectedCategories.major[0]
+            (item) => item.name === selectedCategories.major[0],
           );
 
           const comparisonItem = chartComparisonEnergyCategoriesData.find(
-            (item) => item.name === selectedCategories.major[0]
+            (item) => item.name === selectedCategories.major[0],
           );
 
           if (selectedItem && comparisonItem) {
@@ -255,11 +255,11 @@ const Analysis = () => {
       if (chartEnergyMacroCategoriesData.length > 0) {
         if (selectedCategories.major.length == 1) {
           const selectedItem = chartEnergyMacroCategoriesData.find(
-            (item) => item.name === selectedCategories.major[0]
+            (item) => item.name === selectedCategories.major[0],
           );
 
           const comparisonItem = chartComparisonEnergyMacroCategoriesData.find(
-            (item) => item.name === selectedCategories.major[0]
+            (item) => item.name === selectedCategories.major[0],
           );
 
           if (selectedItem && comparisonItem) {
@@ -279,11 +279,11 @@ const Analysis = () => {
       if (chartEnergyMicroCategoriesData.length > 0) {
         if (selectedCategories.major.length == 1) {
           const selectedItem = chartEnergyMicroCategoriesData.find(
-            (item) => item.name === selectedCategories.major[0]
+            (item) => item.name === selectedCategories.major[0],
           );
 
           const comparisonItem = chartComparisonEnergyMicroCategoriesData.find(
-            (item) => item.name === selectedCategories.major[0]
+            (item) => item.name === selectedCategories.major[0],
           );
 
           if (selectedItem && comparisonItem) {
@@ -368,13 +368,13 @@ const Analysis = () => {
   const range1ProductCount =
     basketProductsComparisonNew?.reduce(
       (sum, basket) => sum + basket.products.length,
-      0
+      0,
     ) || 0;
 
   const range2ProductCount =
     basketProductsComparisonOld?.reduce(
       (sum, basket) => sum + basket.products.length,
-      0
+      0,
     ) || 0;
 
   const range1BasketCount = basketProductsComparisonNew?.length || 0;

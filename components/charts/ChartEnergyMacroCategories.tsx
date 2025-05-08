@@ -59,7 +59,7 @@ export default function ChartEnergyMacroCategories({
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
   const { selectedCategories, updateCategories } = useCounterStore(
-    (state) => state
+    (state) => state,
   );
 
   const totalValue = useMemo(() => {
@@ -69,7 +69,7 @@ export default function ChartEnergyMacroCategories({
   useEffect(() => {
     const updatedIndices = data
       .map((item, index) =>
-        selectedCategories.major.includes(item.name) ? index : -1
+        selectedCategories.major.includes(item.name) ? index : -1,
       )
       .filter((index) => index !== -1);
     setActiveIndices(updatedIndices);
@@ -88,7 +88,7 @@ export default function ChartEnergyMacroCategories({
       setActiveIndices((prevIndices) =>
         prevIndices.includes(index)
           ? prevIndices.filter((i) => i !== index)
-          : [...prevIndices, index]
+          : [...prevIndices, index],
       );
     }
   };

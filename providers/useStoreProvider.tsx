@@ -13,7 +13,7 @@ import {
 export type CounterStoreApi = ReturnType<typeof createCounterStore>;
 
 export const CounterStoreContext = createContext<CounterStoreApi | undefined>(
-  undefined
+  undefined,
 );
 
 export interface CounterStoreProviderProps {
@@ -36,7 +36,7 @@ export const CounterStoreProvider = ({
 };
 
 export const useCounterStore = <T,>(
-  selector: (store: CounterStore) => T
+  selector: (store: CounterStore) => T,
 ): T => {
   const counterStoreContext = useContext(CounterStoreContext);
 

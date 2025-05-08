@@ -41,12 +41,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const handleProductCheckboxChange = () => {
     if (isProductSelected(product.gtin)) {
       const newSelectedBasketProductIds = selectedBasketProductIds.filter(
-        (item) => item.gtin !== product.gtin
+        (item) => item.gtin !== product.gtin,
       );
       setSelectedBasketProductIds(newSelectedBasketProductIds);
 
       const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
-        (p) => p.gtin !== product.gtin
+        (p) => p.gtin !== product.gtin,
       );
       setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);
     } else {
@@ -89,7 +89,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       key={product.gtin}
       className={classNames(
         "pl-6 flex items-center gap-x-4 px-3 py-5",
-        selected && variant === "default" ? "bg-primary text-white" : ""
+        selected && variant === "default" ? "bg-primary text-white" : "",
       )}
     >
       <div className="relative flex-none">
@@ -107,7 +107,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div
           className={classNames(
             "shadow absolute top-0 -m-2 right-0 inline-flex items-center rounded-md px-1 text-xs font-medium",
-            nutriScoreClass
+            nutriScoreClass,
           )}
         >
           {product.nutrients.nutriScore}
@@ -118,7 +118,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <p
             className={classNames(
               "text-base font-semibold leading-6",
-              selected && variant === "default" ? "text-white" : "text-gray-900"
+              selected && variant === "default"
+                ? "text-white"
+                : "text-gray-900",
             )}
           >
             {product.name}
@@ -126,7 +128,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <p
             className={classNames(
               "text-sm font-normal leading-6",
-              selected && variant === "default" ? "text-white" : "text-gray-700"
+              selected && variant === "default"
+                ? "text-white"
+                : "text-gray-700",
             )}
           >
             Menge:{" "}
@@ -143,7 +147,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 "text-sm font-normal leading-6",
                 selected && variant === "default"
                   ? "text-white"
-                  : "text-gray-700"
+                  : "text-gray-700",
               )}
             >
               {selectedSortCriteria}:{" "}

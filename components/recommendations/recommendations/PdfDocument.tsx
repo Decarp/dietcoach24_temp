@@ -273,7 +273,7 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({
                                   </View>
                                 </View>
                               </View>
-                            )
+                            ),
                           )}
                       </View>
                     </View>

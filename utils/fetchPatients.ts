@@ -8,7 +8,7 @@ export const fetchPatients = async (token?: string): Promise<Patient[]> => {
       headers: {
         Authentication: token || "",
       },
-    }
+    },
   );
 
   if (!response.ok) {

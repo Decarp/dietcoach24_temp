@@ -5,11 +5,11 @@ export const getBasketTimestamps = (patient?: Patient, sessions?: Sessions) => {
   const ffqTimestamp = patient?.medicalHistory.ffqDate;
 
   const ffqTimestampMinus8Weeks = getUnixTime(
-    subWeeks(fromUnixTime(ffqTimestamp || 0), 8)
+    subWeeks(fromUnixTime(ffqTimestamp || 0), 8),
   );
 
   const ffqTimestampPlus8Weeks = getUnixTime(
-    addWeeks(fromUnixTime(ffqTimestamp || 0), 8)
+    addWeeks(fromUnixTime(ffqTimestamp || 0), 8),
   );
   if (sessions === undefined) {
     return {

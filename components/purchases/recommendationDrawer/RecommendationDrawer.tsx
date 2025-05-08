@@ -87,12 +87,12 @@ export default function RecommendationDrawer({
 
   const mutation = useMutation({
     mutationFn: (
-      formData: Omit<Recommendation, "recommendationId" | "index">
+      formData: Omit<Recommendation, "recommendationId" | "index">,
     ) =>
       createRecommendation(
         formData,
         userSession?.accessToken || "",
-        selectedSessionId?.toString()
+        selectedSessionId?.toString(),
       ),
     onSuccess: () => {
       // toast.success("Empfehlung erfolgreich erstellt", { duration: 3000 });
@@ -118,7 +118,7 @@ export default function RecommendationDrawer({
     if (!selectedSessionId) {
       toast.error(
         'Bitte wählen Sie zuerst eine Sitzung im Tab "Empfehlungen" aus',
-        { duration: 3000 }
+        { duration: 3000 },
       );
       return;
     }
@@ -159,7 +159,7 @@ export default function RecommendationDrawer({
       suggestions: {
         current: selectedBasketProductsFlat.map((product) => product.gtin),
         alternatives: selectedAlternativeProducts.map(
-          (product) => product.gtins[0]
+          (product) => product.gtins[0],
         ),
       },
       notes: notes || "",

@@ -3,7 +3,7 @@ import { addWeeks, fromUnixTime, getUnixTime } from "date-fns";
 
 export const getSessionTimestamp = (
   patient?: Patient,
-  sessions?: Sessions
+  sessions?: Sessions,
 ): Sessions => {
   const ffqTimestamp = patient?.medicalHistory.ffqDate || 0;
   const sessionTimestamps: Sessions = [];

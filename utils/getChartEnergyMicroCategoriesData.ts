@@ -9,7 +9,7 @@ import {
 
 const aggregateMicroCategories = (
   products: Product[],
-  selectedMicro: MicroCategory
+  selectedMicro: MicroCategory,
 ): ChartEnergyCategoriesResponse[] => {
   const categories: { [key: string]: ChartEnergyCategoriesResponse } = {};
 
@@ -46,12 +46,12 @@ const aggregateMicroCategories = (
 
 const mapChartEnergyMicroCategoriesResponse = (
   chartMicroCategoriesResponse: ChartEnergyCategoriesResponse[],
-  language: LanguageOptions = "de"
+  language: LanguageOptions = "de",
 ): ChartEnergyCategoriesData[] => {
   // Calculate the total grams for the selected micro across all categories
   const totalGrams = chartMicroCategoriesResponse.reduce(
     (sum, item) => sum + (item.grams || 0),
-    0
+    0,
   );
 
   // Map the response to include percentage instead of grams
@@ -63,16 +63,16 @@ const mapChartEnergyMicroCategoriesResponse = (
 
 export const getChartEnergyMicroCategoriesData = (
   products: BasketProduct[],
-  selectedMicro: MicroCategory // Client side selection
+  selectedMicro: MicroCategory, // Client side selection
 ): ChartEnergyCategoriesData[] => {
   const productsFlattened = products.flatMap((basket) => basket.products);
 
   const dynamicChartEnergyMicroCategoriesResponse = aggregateMicroCategories(
     productsFlattened,
-    selectedMicro
+    selectedMicro,
   );
 
   return mapChartEnergyMicroCategoriesResponse(
-    dynamicChartEnergyMicroCategoriesResponse
+    dynamicChartEnergyMicroCategoriesResponse,
   );
 };

@@ -7,7 +7,7 @@ export const deleteSession = async (sessionId: number, accessToken: string) => {
         Authentication: accessToken,
         "Session-Id": sessionId.toString(),
       },
-    }
+    },
   );
 
   if (!response.ok) {

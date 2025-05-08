@@ -20,25 +20,25 @@ const ChartEnergyMacro = dynamic(
   () => import("@/components/charts/ChartEnergyMacro"),
   {
     ssr: false,
-  }
+  },
 );
 const ChartEnergyCategories = dynamic(
   () => import("@/components/charts/ChartEnergyCategories"),
   {
     ssr: false,
-  }
+  },
 );
 const ChartEnergyMacroCategories = dynamic(
   () => import("@/components/charts/ChartEnergyMacroCategories"),
   {
     ssr: false,
-  }
+  },
 );
 const ChartEnergyMicroCategories = dynamic(
   () => import("@/components/charts/ChartEnergyMicroCategories"),
   {
     ssr: false,
-  }
+  },
 );
 
 const Analysis = () => {
@@ -70,7 +70,7 @@ const Analysis = () => {
       fetchBasketProducts(
         patientId,
         selectedBasketIds,
-        session?.accessToken || ""
+        session?.accessToken || "",
       ),
     enabled: selectedBasketIds.length > 0 && !!session?.accessToken,
   });
@@ -120,7 +120,7 @@ const Analysis = () => {
       if (chartEnergyCategoriesData.length > 0) {
         // Find the category with the highest value
         const defaultCategory = chartEnergyCategoriesData.reduce(
-          (max, category) => (category.value > max.value ? category : max)
+          (max, category) => (category.value > max.value ? category : max),
         ).name;
 
         setSelectedCategories({ major: [defaultCategory], sub: [] });
@@ -132,7 +132,7 @@ const Analysis = () => {
       if (chartEnergyMacroCategoriesData.length > 0) {
         // Find the category with the highest value
         const defaultCategory = chartEnergyMacroCategoriesData.reduce(
-          (max, category) => (category.value > max.value ? category : max)
+          (max, category) => (category.value > max.value ? category : max),
         ).name;
         setSelectedCategories({ major: [defaultCategory], sub: [] });
       }
@@ -143,7 +143,7 @@ const Analysis = () => {
       if (chartEnergyMicroCategoriesData.length > 0) {
         // Find the category with the highest value
         const defaultCategory = chartEnergyMicroCategoriesData.reduce(
-          (max, category) => (category.value > max.value ? category : max)
+          (max, category) => (category.value > max.value ? category : max),
         ).name;
         setSelectedCategories({ major: [defaultCategory], sub: [] });
       }

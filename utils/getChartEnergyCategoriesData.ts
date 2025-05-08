@@ -7,7 +7,7 @@ import {
 } from "@/types/types";
 
 const aggregateCategories = (
-  products: Product[]
+  products: Product[],
 ): ChartEnergyCategoriesResponse[] => {
   const categories: { [key: string]: ChartEnergyCategoriesResponse } = {};
 
@@ -35,18 +35,18 @@ const aggregateCategories = (
 
   // Sort categories alphabetically
   return Object.values(categories).sort((a, b) =>
-    a.name.en.localeCompare(b.name.en)
+    a.name.en.localeCompare(b.name.en),
   );
 };
 
 const mapChartEnergyCategoriesResponse = (
   chartMacroCategoriesResponse: ChartEnergyCategoriesResponse[],
-  language: LanguageOptions = "de"
+  language: LanguageOptions = "de",
 ): ChartEnergyCategoriesData[] => {
   // Calculate the total grams across all categories
   const totalGrams = chartMacroCategoriesResponse.reduce(
     (sum, item) => sum + (item.grams || 0),
-    0
+    0,
   );
 
   // Map the response to include percentage instead of grams
@@ -57,7 +57,7 @@ const mapChartEnergyCategoriesResponse = (
 };
 
 export const getChartEnergyCategoriesData = (
-  products: BasketProduct[]
+  products: BasketProduct[],
 ): ChartEnergyCategoriesData[] => {
   const productsFlattened = products.flatMap((basket) => basket.products || []);
 

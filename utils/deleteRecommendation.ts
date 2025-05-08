@@ -1,6 +1,6 @@
 export const deleteRecommendation = async (
   recommendationId: number,
-  token: string
+  token: string,
 ) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/recommendation`,
@@ -10,7 +10,7 @@ export const deleteRecommendation = async (
         Authentication: token,
         "Recommendation-Id": recommendationId.toString(),
       },
-    }
+    },
   );
 
   if (!response.ok) {

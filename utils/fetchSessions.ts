@@ -2,7 +2,7 @@ import { Sessions } from "@/types/types";
 
 export const fetchSessions = async (
   patientId: string,
-  token?: string
+  token?: string,
 ): Promise<Sessions> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/sessions`,
@@ -12,7 +12,7 @@ export const fetchSessions = async (
         Authentication: token || "",
         "Participant-Id": patientId,
       },
-    }
+    },
   );
 
   if (!response.ok) {

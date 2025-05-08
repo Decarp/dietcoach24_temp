@@ -52,7 +52,7 @@ export const NutriScoreTable = () => {
       fetchNutrientTable(
         patientId,
         selectedBasketIds,
-        session?.accessToken || ""
+        session?.accessToken || "",
       ),
     enabled: selectedBasketIds.length > 0 && !!session?.accessToken,
   });
@@ -180,7 +180,7 @@ const CategoryCellRenderer: FunctionComponent<CustomCellRendererProps> = ({
 }) => {
   // Check if category is defined and is an array
   const isMajorCategory = Array.isArray(Category) && Category.length === 1;
-  const categoryText = isMajorCategory ? Category[0] : Category?.[1] ?? "";
+  const categoryText = isMajorCategory ? Category[0] : (Category?.[1] ?? "");
 
   return (
     <div className="flex flex-row-reverse items-center justify-start gap-2">
@@ -221,7 +221,7 @@ const CheckboxCellRenderer: FunctionComponent<
 
   useEffect(() => {
     const checkboxElement = document.querySelector(
-      `input[type="checkbox"][data-category="${category}"]`
+      `input[type="checkbox"][data-category="${category}"]`,
     ) as HTMLInputElement;
 
     if (checkboxElement) {

@@ -18,8 +18,8 @@ export default function SelectedAlternativesSection() {
   const handleRemoveProduct = (gtin: number) => {
     setSelectedAlternativeProducts(
       selectedAlternativeProducts.filter(
-        (product) => product.productId !== gtin
-      )
+        (product) => product.productId !== gtin,
+      ),
     );
   };
 

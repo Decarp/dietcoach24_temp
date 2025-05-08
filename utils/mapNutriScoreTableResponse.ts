@@ -1,14 +1,14 @@
 import { NutrientTableItem, NutrientTableResponseItem } from "@/types/types";
 
 export const mapNutriScoreTableResponse = (
-  data: NutrientTableResponseItem[]
+  data: NutrientTableResponseItem[],
 ): NutrientTableItem[] => {
   const sortedByMajorCategory = data.sort((a, b) =>
-    a.MajorCategory.de.localeCompare(b.MajorCategory.de)
+    a.MajorCategory.de.localeCompare(b.MajorCategory.de),
   );
 
   const filtered = sortedByMajorCategory.filter(
-    (item) => item.MajorCategory.de !== "Ausgeschlossen"
+    (item) => item.MajorCategory.de !== "Ausgeschlossen",
   );
 
   // Filter out rows where all values are null

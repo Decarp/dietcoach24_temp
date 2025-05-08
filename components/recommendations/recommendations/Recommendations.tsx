@@ -42,17 +42,17 @@ const Recommendations = () => {
   // Get all product IDs from recommendations
   const alternativeProductIds =
     consultationSession?.recommendations.flatMap(
-      (recommendation) => recommendation.suggestions.alternatives
+      (recommendation) => recommendation.suggestions.alternatives,
     ) || [];
 
   const currentProductIds =
     consultationSession?.recommendations.flatMap(
-      (recommendation) => recommendation.suggestions.current
+      (recommendation) => recommendation.suggestions.current,
     ) || [];
 
   // Concatenate all product IDs and remove duplicates
   const allProductIds = Array.from(
-    new Set([...alternativeProductIds, ...currentProductIds])
+    new Set([...alternativeProductIds, ...currentProductIds]),
   );
 
   // Fetch all products for the given GTINs
@@ -69,7 +69,7 @@ const Recommendations = () => {
       const enrichedCurrentProducts = recommendation.suggestions.current
         .map((gtin) => {
           return fullProducts?.find((product) =>
-            product.gtins.includes(Number(gtin))
+            product.gtins.includes(Number(gtin)),
           );
         })
         .filter((product): product is DatabaseProduct => product !== undefined); // Filter out undefined
@@ -78,11 +78,11 @@ const Recommendations = () => {
         recommendation.suggestions.alternatives
           .map((gtin) => {
             return fullProducts?.find((product) =>
-              product.gtins.includes(Number(gtin))
+              product.gtins.includes(Number(gtin)),
             );
           })
           .filter(
-            (product): product is DatabaseProduct => product !== undefined
+            (product): product is DatabaseProduct => product !== undefined,
           ); // Filter out undefined
 
       return {

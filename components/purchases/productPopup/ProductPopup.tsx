@@ -36,7 +36,7 @@ type CategoryKeys = keyof typeof categories.de;
 const sortProducts = (
   products: DatabaseProduct[],
   selectedSortCriteria: string,
-  ascending: boolean
+  ascending: boolean,
 ) => {
   const getSortValue = (product: DatabaseProduct) => {
     switch (selectedSortCriteria) {
@@ -64,7 +64,7 @@ const sortProducts = (
   return [...products].sort((a, b) =>
     ascending
       ? getSortValue(a) - getSortValue(b)
-      : getSortValue(b) - getSortValue(a)
+      : getSortValue(b) - getSortValue(a),
   );
 };
 
@@ -77,7 +77,7 @@ export default function ProductPopup({
 }) {
   const [ascending, setAscending] = useState(true);
   const [availableProducts, setAvailableProducts] = useState<DatabaseProduct[]>(
-    []
+    [],
   );
   const [sortedProducts, setSortedProducts] = useState<DatabaseProduct[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -91,7 +91,7 @@ export default function ProductPopup({
     });
 
   const categoriesWithSub: { major: string; subs: string[] }[] = Object.entries(
-    categories.de
+    categories.de,
   ).map(([major, subs]) => ({
     major,
     subs,
@@ -125,13 +125,13 @@ export default function ProductPopup({
 
   if (selectedProductCategories.major.length > 0) {
     selectedProductCategories.major.forEach((major) =>
-      queryParams.append("dietcoach-category-l1-de", major)
+      queryParams.append("dietcoach-category-l1-de", major),
     );
   }
 
   if (selectedProductCategories.sub.length > 0) {
     selectedProductCategories.sub.forEach((sub) =>
-      queryParams.append("dietcoach-category-l2-de", sub)
+      queryParams.append("dietcoach-category-l2-de", sub),
     );
   }
 
@@ -149,7 +149,7 @@ export default function ProductPopup({
     if (data) {
       setAvailableProducts(data.products);
       setSortedProducts(
-        sortProducts(data.products, selectedSortCriteria, ascending)
+        sortProducts(data.products, selectedSortCriteria, ascending),
       );
       setTotalPages(data.meta.totalPages);
     }
@@ -167,8 +167,8 @@ export default function ProductPopup({
   const handleRemoveProduct = (gtin: number) => {
     setSelectedAlternativeProducts(
       selectedAlternativeProducts.filter(
-        (product) => product.productId !== gtin
-      )
+        (product) => product.productId !== gtin,
+      ),
     );
   };
 
@@ -204,12 +204,12 @@ export default function ProductPopup({
         if (newSub.includes(category)) {
           newSub = newSub.filter((sub) => sub !== category);
           const parentMajor = Object.keys(categories.de).find((major) =>
-            categories.de[major as CategoryKeys].includes(category)
+            categories.de[major as CategoryKeys].includes(category),
           );
           if (
             parentMajor &&
             !newSub.some((sub) =>
-              categories.de[parentMajor as CategoryKeys].includes(sub)
+              categories.de[parentMajor as CategoryKeys].includes(sub),
             )
           ) {
             newMajor = newMajor.filter((major) => major !== parentMajor);
@@ -217,7 +217,7 @@ export default function ProductPopup({
         } else {
           newSub.push(category);
           const parentMajor = Object.keys(categories.de).find((major) =>
-            categories.de[major as CategoryKeys].includes(category)
+            categories.de[major as CategoryKeys].includes(category),
           );
           if (parentMajor && !newMajor.includes(parentMajor)) {
             newMajor.push(parentMajor);

@@ -113,7 +113,7 @@ const SessionsComp = () => {
   const handleSessionClick = (sessionId: number) => {
     setSelectedSessionId(sessionId);
     setSelectedSessionIndex(
-      sessionTimestamps.findIndex((s) => s.sessionId === sessionId)
+      sessionTimestamps.findIndex((s) => s.sessionId === sessionId),
     );
   };
 
@@ -145,7 +145,9 @@ const SessionsComp = () => {
                 key={sessionId}
                 className={classNames(
                   "pl-8 flex items-center justify-between gap-x-4 px-3 py-5 cursor-pointer hover:scale-105 transition-transform",
-                  selectedSessionId === sessionId ? "bg-primary text-white" : ""
+                  selectedSessionId === sessionId
+                    ? "bg-primary text-white"
+                    : "",
                 )}
               >
                 <div
@@ -157,7 +159,7 @@ const SessionsComp = () => {
                       "border border-gray-300 h-12 w-12 p-2 flex-none rounded-md",
                       selectedSessionId === sessionId
                         ? "bg-white text-primary"
-                        : "bg-gray-50 text-primary"
+                        : "bg-gray-50 text-primary",
                     )}
                   />
                   <div className="min-w-0 flex-1">
@@ -166,7 +168,7 @@ const SessionsComp = () => {
                         "text-base font-semibold leading-6",
                         selectedSessionId === sessionId
                           ? "text-white"
-                          : "text-gray-900"
+                          : "text-gray-900",
                       )}
                     >
                       Sitzung {sessionTimestamps.length - index}
@@ -176,7 +178,7 @@ const SessionsComp = () => {
                         "truncate text-sm leading-5",
                         selectedSessionId === sessionId
                           ? "text-white"
-                          : "text-gray-500"
+                          : "text-gray-500",
                       )}
                     >
                       {formatDateLong(timestamp)}
@@ -189,7 +191,7 @@ const SessionsComp = () => {
                     "h-6 w-6 flex-shrink-0 cursor-pointer mr-2",
                     selectedSessionId === sessionId
                       ? "text-white hover:text-red-500 hover:scale-110 transition-transform"
-                      : "text-gray-500 hover:text-red-500 hover:scale-110 transition-transform"
+                      : "text-gray-500 hover:text-red-500 hover:scale-110 transition-transform",
                   )}
                   onClick={(e) => {
                     e.stopPropagation();

@@ -49,7 +49,7 @@ export type CounterActions = {
   updateCategories: (
     category: string,
     level: "major" | "sub",
-    replace?: boolean
+    replace?: boolean,
   ) => void;
   setSelectedMacro: (macro: MacroCategory) => void;
   setSelectedMicro: (micro: MicroCategory) => void;
@@ -107,7 +107,7 @@ export const defaultInitState: CounterState = {
 };
 
 export const createCounterStore = (
-  initState: CounterState = defaultInitState
+  initState: CounterState = defaultInitState,
 ) => {
   return createStore<CounterStore>()((set) => ({
     ...initState,
@@ -120,16 +120,16 @@ export const createCounterStore = (
                 product.basketId === id.basketId &&
                 product.gtin === id.gtin &&
                 (cats.major.includes(product.dietCoachCategoryL1.de) ||
-                  cats.sub.includes(product.dietCoachCategoryL2.de))
-            )
+                  cats.sub.includes(product.dietCoachCategoryL2.de)),
+            ),
           );
 
         const newSelectedBasketProductsFlat = state.basketProductsFlat.filter(
           (product) =>
             newSelectedBasketProductIds.some(
               (id) =>
-                product.basketId === id.basketId && product.gtin === id.gtin
-            )
+                product.basketId === id.basketId && product.gtin === id.gtin,
+            ),
         );
 
         return {
@@ -154,8 +154,8 @@ export const createCounterStore = (
           (product) =>
             ids.some(
               (id) =>
-                product.basketId === id.basketId && product.gtin === id.gtin
-            )
+                product.basketId === id.basketId && product.gtin === id.gtin,
+            ),
         );
 
         return {
@@ -180,7 +180,7 @@ export const createCounterStore = (
     updateCategories: (
       category: string,
       level: "major" | "sub",
-      replace: boolean = false
+      replace: boolean = false,
     ) =>
       set((state) => {
         let newCategories = { ...state.selectedCategories };
@@ -192,7 +192,7 @@ export const createCounterStore = (
           } else {
             // For sub-category, replace sub and make sure the corresponding major category is selected
             const majorCategory = state.basketProductsFlat.find(
-              (product) => product.dietCoachCategoryL2.de === category
+              (product) => product.dietCoachCategoryL2.de === category,
             )?.dietCoachCategoryL1.de;
 
             newCategories = {
@@ -206,40 +206,40 @@ export const createCounterStore = (
             if (newCategories.major.includes(category)) {
               // Deselect major category and all its sub-categories
               newCategories.major = newCategories.major.filter(
-                (i) => i !== category
+                (i) => i !== category,
               );
               newCategories.sub = newCategories.sub.filter(
                 (sub) =>
                   !state.basketProductsFlat.some(
                     (product) =>
                       product.dietCoachCategoryL1.de === category &&
-                      product.dietCoachCategoryL2.de === sub
-                  )
+                      product.dietCoachCategoryL2.de === sub,
+                  ),
               );
             } else {
               // Select major category and all its sub-categories
               newCategories.major.push(category);
               const newSubCategories = state.basketProductsFlat
                 .filter(
-                  (product) => product.dietCoachCategoryL1.de === category
+                  (product) => product.dietCoachCategoryL1.de === category,
                 )
                 .map((product) => product.dietCoachCategoryL2.de);
 
               // Use Set to ensure sub-categories are unique
               newCategories.sub = Array.from(
-                new Set([...newCategories.sub, ...newSubCategories])
+                new Set([...newCategories.sub, ...newSubCategories]),
               );
             }
           } else {
             if (newCategories.sub.includes(category)) {
               // Deselect sub-category
               newCategories.sub = newCategories.sub.filter(
-                (i) => i !== category
+                (i) => i !== category,
               );
 
               // Check if all sub-categories of this major category are deselected
               const majorCategory = state.basketProductsFlat.find(
-                (product) => product.dietCoachCategoryL2.de === category
+                (product) => product.dietCoachCategoryL2.de === category,
               )?.dietCoachCategoryL1.de;
 
               if (
@@ -247,12 +247,12 @@ export const createCounterStore = (
                 !state.basketProductsFlat.some(
                   (product) =>
                     product.dietCoachCategoryL1.de === majorCategory &&
-                    newCategories.sub.includes(product.dietCoachCategoryL2.de)
+                    newCategories.sub.includes(product.dietCoachCategoryL2.de),
                 )
               ) {
                 // Deselect the major category
                 newCategories.major = newCategories.major.filter(
-                  (i) => i !== majorCategory
+                  (i) => i !== majorCategory,
                 );
               }
             } else {
@@ -261,7 +261,7 @@ export const createCounterStore = (
 
               // Automatically select the major category
               const majorCategory = state.basketProductsFlat.find(
-                (product) => product.dietCoachCategoryL2.de === category
+                (product) => product.dietCoachCategoryL2.de === category,
               )?.dietCoachCategoryL1.de;
 
               if (
@@ -285,16 +285,16 @@ export const createCounterStore = (
                 product.basketId === id.basketId &&
                 product.gtin === id.gtin &&
                 (newCategories.major.includes(product.dietCoachCategoryL1.de) ||
-                  newCategories.sub.includes(product.dietCoachCategoryL2.de))
-            )
+                  newCategories.sub.includes(product.dietCoachCategoryL2.de)),
+            ),
           );
 
         const newSelectedBasketProductsFlat = state.basketProductsFlat.filter(
           (product) =>
             newSelectedBasketProductIds.some(
               (id) =>
-                product.basketId === id.basketId && product.gtin === id.gtin
-            )
+                product.basketId === id.basketId && product.gtin === id.gtin,
+            ),
         );
 
         return {

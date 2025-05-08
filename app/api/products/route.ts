@@ -17,7 +17,7 @@ export async function GET(request: Request) {
   try {
     const authHeader = createBasicAuthHeader(
       process.env.NEXT_PUBLIC_DB_USERNAME || "",
-      process.env.NEXT_PUBLIC_DB_PASSWORD || ""
+      process.env.NEXT_PUBLIC_DB_PASSWORD || "",
     );
 
     const res = await fetch(`${DB_URL}/products/?${queryString}`, {
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
     if (!res.ok) {
       return NextResponse.json(
         { error: `Error fetching data: ${res.statusText}` },
-        { status: res.status }
+        { status: res.status },
       );
     }
 
@@ -40,7 +40,7 @@ export async function GET(request: Request) {
     console.error("Fetch error:", error);
     return NextResponse.json(
       { error: (error as Error).message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

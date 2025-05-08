@@ -32,12 +32,12 @@ export default function ChartEnergyMacro({
   const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
 
   const { selectedSortCriteria, setSelectedSortCriteria } = useCounterStore(
-    (state) => state
+    (state) => state,
   );
 
   useEffect(() => {
     const updatedIndex = data.findIndex(
-      (item) => item.name === selectedSortCriteria
+      (item) => item.name === selectedSortCriteria,
     );
     setActiveIndex(updatedIndex !== -1 ? updatedIndex : undefined);
   }, [selectedSortCriteria, data]);

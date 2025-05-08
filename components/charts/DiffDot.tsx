@@ -31,7 +31,7 @@ export default function DiffDot({
   variant?: "default" | "sort" | "categoryMultiColor" | "categorySingleColor";
 }) {
   const { selectedSortCriteria, selectedCategories } = useCounterStore(
-    (state) => state
+    (state) => state,
   );
 
   const selectedCategory = selectedCategories.major[0];

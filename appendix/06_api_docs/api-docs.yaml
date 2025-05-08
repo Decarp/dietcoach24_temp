@@ -1,11 +1,11 @@
 openapi: 3.0.0
 info:
   title: Diet Coach API
-  version: '1.0.0'
+  version: "1.0.0"
 servers:
-  - url: 'https://diet-coach.interactions.ics.unisg.ch/dietcoach/backend'
+  - url: "https://diet-coach.interactions.ics.unisg.ch/dietcoach/backend"
     description: Diet Coach API Server
-  - url: 'https://nutristorage.ch/api'
+  - url: "https://nutristorage.ch/api"
     description: NutriStorage API Server
 components:
   securitySchemes:
@@ -127,14 +127,14 @@ components:
         recommendations:
           type: array
           items:
-            $ref: '#/components/schemas/Recommendation'
+            $ref: "#/components/schemas/Recommendation"
     Recommendation:
       type: object
       properties:
         recommendationId:
           type: integer
         rule:
-          $ref: '#/components/schemas/Rule'
+          $ref: "#/components/schemas/Rule"
         basketIds:
           type: array
           items:
@@ -169,7 +169,7 @@ components:
       type: object
       properties:
         rule:
-          $ref: '#/components/schemas/Rule'
+          $ref: "#/components/schemas/Rule"
         basketIds:
           type: array
           items:
@@ -209,11 +209,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DieticianRegistration'
+              $ref: "#/components/schemas/DieticianRegistration"
       responses:
-        '200':
+        "200":
           description: Dietician registered successfully
-        '400':
+        "400":
           description: Bad request
   /user/login:
     post:
@@ -225,15 +225,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserLogin'
+              $ref: "#/components/schemas/UserLogin"
       responses:
-        '200':
+        "200":
           description: Login successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthToken'
-        '401':
+                $ref: "#/components/schemas/AuthToken"
+        "401":
           description: Unauthorized
   /dietician/profile:
     get:
@@ -243,13 +243,13 @@ paths:
       security:
         - Authentication: []
       responses:
-        '200':
+        "200":
           description: Dietician profile retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DieticianRegistration'
-        '401':
+                $ref: "#/components/schemas/DieticianRegistration"
+        "401":
           description: Unauthorized
   /dietician/participants:
     get:
@@ -259,15 +259,15 @@ paths:
       security:
         - Authentication: []
       responses:
-        '200':
+        "200":
           description: Participants retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Participant'
-        '401':
+                  $ref: "#/components/schemas/Participant"
+        "401":
           description: Unauthorized
   /dietician/participant:
     get:
@@ -283,15 +283,15 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Participant details retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ParticipantDetails'
-        '401':
+                $ref: "#/components/schemas/ParticipantDetails"
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Participant not found
     post:
       tags:
@@ -306,11 +306,11 @@ paths:
           schema:
             type: string
       responses:
-        '201':
+        "201":
           description: Participant added successfully
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
     delete:
       tags:
@@ -325,11 +325,11 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        "204":
           description: Participant deleted successfully
-        '401':
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Participant not found
   /dietician/baskets:
     get:
@@ -355,15 +355,15 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Baskets retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Basket'
-        '401':
+                  $ref: "#/components/schemas/Basket"
+        "401":
           description: Unauthorized
   /dietician/basket-products:
     post:
@@ -392,15 +392,15 @@ paths:
               required:
                 - basketIds
       responses:
-        '200':
+        "200":
           description: Basket products retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Product'
-        '401':
+                  $ref: "#/components/schemas/Product"
+        "401":
           description: Unauthorized
   /dietician/nutrient-table:
     post:
@@ -429,13 +429,13 @@ paths:
               required:
                 - basketIds
       responses:
-        '200':
+        "200":
           description: Nutrient table retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NutrientTable'
-        '401':
+                $ref: "#/components/schemas/NutrientTable"
+        "401":
           description: Unauthorized
   /dietician/sessions:
     get:
@@ -451,15 +451,15 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Sessions retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Session'
-        '401':
+                  $ref: "#/components/schemas/Session"
+        "401":
           description: Unauthorized
   /dietician/session:
     get:
@@ -475,15 +475,15 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Session details retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SessionDetails'
-        '401':
+                $ref: "#/components/schemas/SessionDetails"
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Session not found
     post:
       tags:
@@ -498,11 +498,11 @@ paths:
           schema:
             type: string
       responses:
-        '201':
+        "201":
           description: Session created successfully
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
     delete:
       tags:
@@ -517,11 +517,11 @@ paths:
           schema:
             type: integer
       responses:
-        '204':
+        "204":
           description: Session deleted successfully
-        '401':
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Session not found
   /dietician/session-note:
     put:
@@ -551,13 +551,13 @@ paths:
                     personal:
                       type: string
       responses:
-        '200':
+        "200":
           description: Session notes updated successfully
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Session not found
   /dietician/recommendation:
     get:
@@ -573,17 +573,17 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Recommendations retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recommendation'
-        '401':
+                  $ref: "#/components/schemas/Recommendation"
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Session not found
     post:
       tags:
@@ -602,15 +602,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecommendationRequest'
+              $ref: "#/components/schemas/RecommendationRequest"
       responses:
-        '201':
+        "201":
           description: Recommendation created successfully
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Session not found
     put:
       tags:
@@ -629,15 +629,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecommendationRequest'
+              $ref: "#/components/schemas/RecommendationRequest"
       responses:
-        '200':
+        "200":
           description: Recommendation updated successfully
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Recommendation not found
     delete:
       tags:
@@ -652,11 +652,11 @@ paths:
           schema:
             type: integer
       responses:
-        '204':
+        "204":
           description: Recommendation deleted successfully
-        '401':
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Recommendation not found
   /products:
     get:
@@ -684,17 +684,17 @@ paths:
       security:
         - basicAuth: []
       responses:
-        '200':
+        "200":
           description: Products retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Product'
-        '401':
+                  $ref: "#/components/schemas/Product"
+        "401":
           description: Unauthorized
-  '/products/{retailer}/{productId}':
+  "/products/{retailer}/{productId}":
     get:
       tags:
         - NutriStorage
@@ -713,12 +713,11 @@ paths:
       security:
         - basicAuth: []
       responses:
-        '200':
+        "200":
           description: Product details retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductDetails'
-        '404':
+                $ref: "#/components/schemas/ProductDetails"
+        "404":
           description: Product not found
-

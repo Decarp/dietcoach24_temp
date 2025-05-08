@@ -42,13 +42,13 @@ export default function ChartEnergyCategories({
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
   const { selectedCategories, updateCategories } = useCounterStore(
-    (state) => state
+    (state) => state,
   );
 
   useEffect(() => {
     const updatedIndices = data
       .map((item, index) =>
-        selectedCategories.major.includes(item.name) ? index : -1
+        selectedCategories.major.includes(item.name) ? index : -1,
       )
       .filter((index) => index !== -1);
     setActiveIndices(updatedIndices);

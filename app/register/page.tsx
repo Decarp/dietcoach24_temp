@@ -52,7 +52,7 @@ export default function Register() {
         // Call the createPatient API with the selected patient ID and token from the response
         const createPatientResponse = await createPatient(
           patientId,
-          responseData.token
+          responseData.token,
         );
 
         // check if 201 response
@@ -67,7 +67,7 @@ export default function Register() {
         // Initialize a first consultation session
         const createSessionResponse = await createSession(
           patientId,
-          responseData.token
+          responseData.token,
         );
 
         if (createSessionResponse.ok) {
@@ -87,6 +87,7 @@ export default function Register() {
         toast.error(errorData.message || "Registrierung fehlgeschlagen.");
       }
     } catch (error) {
+      console.error("Error during registration:", error);
       toast.error("Ein Error ist aufgetreten. Bitte versuchen Sie es erneut.");
     }
   };

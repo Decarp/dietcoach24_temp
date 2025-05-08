@@ -49,7 +49,7 @@ const Baskets = () => {
 
   const { startTimestamp, endTimestamp } = getBasketTimestamps(
     patient,
-    sessions
+    sessions,
   );
 
   const { isLoading, error, data } = useQuery<Basket[]>({
@@ -59,7 +59,7 @@ const Baskets = () => {
         patientId,
         startTimestamp,
         endTimestamp || "",
-        session?.accessToken || ""
+        session?.accessToken || "",
       ),
     enabled: !!session?.accessToken && !!startTimestamp && !!endTimestamp,
   });
@@ -78,7 +78,7 @@ const Baskets = () => {
       const selectedBaskets = Object.values(baskets)
         .flat()
         .filter((basket: Basket) =>
-          isAfter(fromUnixTime(basket.timestamp), earliestDate)
+          isAfter(fromUnixTime(basket.timestamp), earliestDate),
         )
         .map((basket: Basket) => basket.basketId);
 
@@ -106,7 +106,7 @@ const Baskets = () => {
     const expectedSelectedBaskets = Object.values(baskets)
       .flat()
       .filter((basket: Basket) =>
-        isAfter(fromUnixTime(basket.timestamp), earliestDate)
+        isAfter(fromUnixTime(basket.timestamp), earliestDate),
       )
       .map((basket: Basket) => basket.basketId);
 
@@ -126,12 +126,12 @@ const Baskets = () => {
   const handleBasketCheckboxChange = (basketId: string) => {
     if (selectedBasketIds.includes(basketId)) {
       setSelectedBasketIds(
-        selectedBasketIds.filter((item) => item !== basketId)
+        selectedBasketIds.filter((item) => item !== basketId),
       );
       setSelectedBasketProductIds(
         selectedBasketProductIds.filter(
-          (product) => product.basketId !== basketId
-        )
+          (product) => product.basketId !== basketId,
+        ),
       );
     } else {
       setSelectedBasketIds([...selectedBasketIds, basketId]);
@@ -147,7 +147,7 @@ const Baskets = () => {
       ]);
     } else {
       setSelectedBasketIds(
-        selectedBasketIds.filter((id) => !basketIds.includes(id))
+        selectedBasketIds.filter((id) => !basketIds.includes(id)),
       );
     }
   };
@@ -173,7 +173,7 @@ const Baskets = () => {
           <nav aria-label="Baskets List" className="overflow-y-auto">
             {Object.keys(baskets).map((letter) => {
               const allSelected = baskets[letter].every((basket: any) =>
-                selectedBasketIds.includes(basket.basketId)
+                selectedBasketIds.includes(basket.basketId),
               );
 
               return (
@@ -199,7 +199,7 @@ const Baskets = () => {
                           "pl-8 flex items-center gap-x-4 px-3 py-5",
                           selectedBasketIds.includes(basket.basketId)
                             ? "bg-primary text-white"
-                            : ""
+                            : "",
                         )}
                       >
                         <div className="relative flex-none">
@@ -212,7 +212,7 @@ const Baskets = () => {
                               "border border-gray-300 h-12 w-12 p-2 flex-none rounded-md",
                               selectedBasketIds.includes(basket.basketId)
                                 ? "bg-white text-primary"
-                                : "bg-gray-50 text-primary"
+                                : "bg-gray-50 text-primary",
                             )}
                           />
                           <div
@@ -220,7 +220,7 @@ const Baskets = () => {
                               "shadow absolute top-0 -m-2 right-0 inline-flex items-center rounded-md px-1 text-xs font-medium",
                               (basket.avgNutriScore &&
                                 nutriScoreColorMap[basket.avgNutriScore]) ||
-                                "bg-gray-200 text-gray-700 border border-gray-300"
+                                "bg-gray-200 text-gray-700 border border-gray-300",
                             )}
                           >
                             {basket.avgNutriScore ? basket.avgNutriScore : "-"}
@@ -232,7 +232,7 @@ const Baskets = () => {
                               "text-base font-semibold leading-6 flex-0",
                               selectedBasketIds.includes(basket.basketId)
                                 ? "text-white"
-                                : "text-gray-900"
+                                : "text-gray-900",
                             )}
                           >
                             Einkauf {basket.index + 1}
@@ -243,7 +243,7 @@ const Baskets = () => {
                               "truncate text-sm leading-5",
                               selectedBasketIds.includes(basket.basketId)
                                 ? "text-white"
-                                : "text-gray-500"
+                                : "text-gray-500",
                             )}
                           >
                             {formatDate(basket.timestamp)}

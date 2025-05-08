@@ -20,19 +20,19 @@ const BasketsHeader = ({
         ? Object.values(baskets)
             .flat()
             .filter((basket: any) =>
-              selectedBasketIds.includes(basket.basketId)
+              selectedBasketIds.includes(basket.basketId),
             )
         : Object.values(baskets).flat();
 
     const numBaskets: number = selectedBaskets.length;
     const numProducts: number = selectedBaskets.reduce(
       (acc: number, basket: any) => acc + basket.numProducts,
-      0
+      0,
     );
     const avgNutriScore: number =
       selectedBaskets.reduce(
         (acc: number, basket: any) => acc + basket.avgNutriscore,
-        0
+        0,
       ) / numBaskets;
 
     return { numBaskets, numProducts, avgNutriScore };
@@ -52,7 +52,7 @@ const BasketsHeader = ({
       <Button
         onClick={selectLastNWeeks}
         className={classNames(
-          "mt-2.5 ml-8 text-sm px-2 py-1 rounded-md border"
+          "mt-2.5 ml-8 text-sm px-2 py-1 rounded-md border",
         )}
         icon={<CalendarDateRangeIcon className="h-5 w-5" />}
       >

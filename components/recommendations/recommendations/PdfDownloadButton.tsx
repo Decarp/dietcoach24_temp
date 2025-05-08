@@ -21,7 +21,7 @@ type PdfDownloadButtonProps = {
 const fetchBase64Image = async (imageUrl: string): Promise<string | null> => {
   try {
     const response = await fetch(
-      `/api/images?url=${encodeURIComponent(imageUrl)}`
+      `/api/images?url=${encodeURIComponent(imageUrl)}`,
     );
     if (!response.ok) {
       console.error("Error fetching base64 image:", response.statusText);
@@ -57,7 +57,7 @@ const PdfDownloadButton: React.FC<PdfDownloadButtonProps> = ({
                 base64Image,
               };
               return updatedProduct;
-            })
+            }),
           );
 
           const alternativeProductsWithBase64 = await Promise.all(
@@ -69,7 +69,7 @@ const PdfDownloadButton: React.FC<PdfDownloadButtonProps> = ({
                 base64Image,
               };
               return updatedProduct;
-            })
+            }),
           );
 
           return {
@@ -79,7 +79,7 @@ const PdfDownloadButton: React.FC<PdfDownloadButtonProps> = ({
               alternatives: alternativeProductsWithBase64,
             },
           };
-        })
+        }),
       );
 
     const pdfDoc = (

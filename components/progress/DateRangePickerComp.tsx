@@ -51,11 +51,11 @@ export default function DateRangePickerComp({
   const ffqTimestamp = patient?.medicalHistory.ffqDate || 0;
 
   const ffqTimestampMinus8Weeks = getUnixTime(
-    subWeeks(fromUnixTime(ffqTimestamp || 0), 8)
+    subWeeks(fromUnixTime(ffqTimestamp || 0), 8),
   );
 
   const ffqTimestampPlus8Weeks = getUnixTime(
-    addWeeks(fromUnixTime(ffqTimestamp || 0), 8)
+    addWeeks(fromUnixTime(ffqTimestamp || 0), 8),
   );
 
   const [range1Dates, setRange1Dates] = useState<[Dayjs | null, Dayjs | null]>([
@@ -90,7 +90,7 @@ export default function DateRangePickerComp({
         patientId,
         getUnixTimestamp(range1Dates[0]),
         getUnixTimestamp(range1Dates[1]),
-        session?.accessToken || ""
+        session?.accessToken || "",
       ),
     enabled: !!session?.accessToken && !!range1Dates[0] && !!range1Dates[1],
   });
@@ -106,7 +106,7 @@ export default function DateRangePickerComp({
         patientId,
         getUnixTimestamp(range2Dates[0]),
         getUnixTimestamp(range2Dates[1]),
-        session?.accessToken || ""
+        session?.accessToken || "",
       ),
     enabled: !!session?.accessToken && !!range2Dates[0] && !!range2Dates[1],
   });
@@ -120,7 +120,7 @@ export default function DateRangePickerComp({
   useEffect(() => {
     if (range2Baskets) {
       setSelectedComparisonBasketIds(
-        range2Baskets.map((basket) => basket.basketId)
+        range2Baskets.map((basket) => basket.basketId),
       );
     }
   }, [range2Baskets, setSelectedComparisonBasketIds]);

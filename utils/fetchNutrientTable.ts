@@ -3,7 +3,7 @@ import { NutrientTableResponseItem } from "@/types/types";
 export const fetchNutrientTable = async (
   patientId: string,
   selectedBasketIds: string[],
-  token: string
+  token: string,
 ): Promise<NutrientTableResponseItem[]> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/nutrient-table`,
@@ -17,7 +17,7 @@ export const fetchNutrientTable = async (
       body: JSON.stringify({
         basketIds: selectedBasketIds,
       }),
-    }
+    },
   );
 
   if (!response.ok) {

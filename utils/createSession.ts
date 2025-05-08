@@ -1,6 +1,6 @@
 export const createSession = async (
   patientId: string,
-  token: string
+  token: string,
 ): Promise<Response> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/session`,
@@ -10,7 +10,7 @@ export const createSession = async (
         Authentication: token,
         "Participant-Id": patientId,
       },
-    }
+    },
   );
 
   if (!response.ok) {

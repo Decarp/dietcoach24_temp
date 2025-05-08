@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     if (!imageUrl) {
       return NextResponse.json(
         { error: "No image URL provided" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     if (!response.ok) {
       return NextResponse.json(
         { error: "Failed to fetch image" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     console.error("Error in image API:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

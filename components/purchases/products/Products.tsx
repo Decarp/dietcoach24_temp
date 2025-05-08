@@ -22,7 +22,7 @@ import CompletedPopup from "../recommendationDrawer/CompletedPopup";
 const sortProducts = (
   products: BasketProductFlat[],
   selectedSortCriteria: string,
-  ascending: boolean
+  ascending: boolean,
 ) => {
   const getSortValue = (product: BasketProductFlat) => {
     switch (selectedSortCriteria) {
@@ -62,17 +62,20 @@ const sortProducts = (
 };
 
 const groupProductsByGtin = (
-  products: BasketProductFlat[]
+  products: BasketProductFlat[],
 ): BasketProductFlat[] => {
-  const grouped = products.reduce((acc, product) => {
-    const gtin = product.gtin;
-    if (!acc[gtin]) {
-      acc[gtin] = { ...product };
-    } else {
-      acc[gtin].quantity += product.quantity;
-    }
-    return acc;
-  }, {} as { [gtin: number]: BasketProductFlat });
+  const grouped = products.reduce(
+    (acc, product) => {
+      const gtin = product.gtin;
+      if (!acc[gtin]) {
+        acc[gtin] = { ...product };
+      } else {
+        acc[gtin].quantity += product.quantity;
+      }
+      return acc;
+    },
+    {} as { [gtin: number]: BasketProductFlat },
+  );
   return Object.values(grouped);
 };
 
@@ -107,7 +110,7 @@ const Products = () => {
       fetchBasketProducts(
         patientId,
         selectedBasketIds,
-        session?.accessToken || ""
+        session?.accessToken || "",
       ),
     enabled: selectedBasketIds.length > 0 && !!session?.accessToken,
   });
@@ -120,7 +123,7 @@ const Products = () => {
         basketTimestamp: basket.timestamp,
         ...product,
       }));
-    }
+    },
   );
 
   useEffect(() => {
@@ -139,10 +142,10 @@ const Products = () => {
           (product) =>
             (selectedCategories.major.length === 0 ||
               selectedCategories.major.includes(
-                product.dietCoachCategoryL1.de
+                product.dietCoachCategoryL1.de,
               )) &&
             (selectedCategories.sub.length === 0 ||
-              selectedCategories.sub.includes(product.dietCoachCategoryL2.de))
+              selectedCategories.sub.includes(product.dietCoachCategoryL2.de)),
         );
 
   const groupedProducts = groupProductsByGtin(filteredProducts);
@@ -150,7 +153,7 @@ const Products = () => {
   const sortedProducts = sortProducts(
     groupedProducts,
     selectedSortCriteria,
-    ascending
+    ascending,
   );
 
   useEffect(() => {
@@ -167,7 +170,7 @@ const Products = () => {
   };
 
   const categoriesWithSub: { major: string; subs: string[] }[] = Object.entries(
-    categories.de
+    categories.de,
   ).map(([major, subs]) => ({
     major,
     subs,
@@ -175,7 +178,7 @@ const Products = () => {
 
   // Determine if all products are selected
   const areAllProductsSelected = sortedProducts.every((product) =>
-    selectedBasketProductIds.some((item) => item.gtin === product.gtin)
+    selectedBasketProductIds.some((item) => item.gtin === product.gtin),
   );
 
   // Handle checkbox change event
@@ -183,10 +186,10 @@ const Products = () => {
     if (areAllProductsSelected) {
       // Unselect all products
       const newSelectedBasketProductIds = selectedBasketProductIds.filter(
-        (item) => !sortedProducts.some((product) => product.gtin === item.gtin)
+        (item) => !sortedProducts.some((product) => product.gtin === item.gtin),
       );
       const newSelectedBasketProductsFlat = selectedBasketProductsFlat.filter(
-        (product) => !sortedProducts.some((p) => p.gtin === product.gtin)
+        (product) => !sortedProducts.some((p) => p.gtin === product.gtin),
       );
       setSelectedBasketProductIds(newSelectedBasketProductIds);
       setSelectedBasketProductsFlat(newSelectedBasketProductsFlat);

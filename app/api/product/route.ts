@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   if (!gtin) {
     return NextResponse.json(
       { error: "gtin query parameter is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
   try {
     const authHeader = createBasicAuthHeader(
       process.env.NEXT_PUBLIC_DB_USERNAME || "",
-      process.env.NEXT_PUBLIC_DB_PASSWORD || ""
+      process.env.NEXT_PUBLIC_DB_PASSWORD || "",
     );
 
     const res = await fetch(
@@ -36,13 +36,13 @@ export async function GET(request: NextRequest) {
         headers: {
           Authorization: authHeader,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       return NextResponse.json(
         { error: `Error fetching data: ${res.statusText}` },
-        { status: res.status }
+        { status: res.status },
       );
     }
 
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
     console.error("Fetch error:", error);
     return NextResponse.json(
       { error: (error as Error).message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

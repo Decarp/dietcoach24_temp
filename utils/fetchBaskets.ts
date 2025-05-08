@@ -4,7 +4,7 @@ export const fetchBaskets = async (
   patientId: string,
   startTimestamp: string,
   endTimestamp: string,
-  token: string
+  token: string,
 ): Promise<Basket[]> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/baskets`,
@@ -16,7 +16,7 @@ export const fetchBaskets = async (
         "Start-Timestamp": startTimestamp,
         "End-Timestamp": endTimestamp,
       },
-    }
+    },
   );
 
   if (!response.ok) {

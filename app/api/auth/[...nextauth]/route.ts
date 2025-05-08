@@ -1,6 +1,12 @@
 import NextAuth, { User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+const backend_username = process.env.NEXT_PUBLIC_BACKEND_USERNAME;
+const backend_password = process.env.NEXT_PUBLIC_BACKEND_PASSWORD;
+const basicAuth = Buffer.from(
+  `${backend_username}:${backend_password}`,
+).toString("base64");
+
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
@@ -18,12 +24,15 @@ const handler = NextAuth({
           `${process.env.NEXT_PUBLIC_API_URL}/user/login`,
           {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Basic ${basicAuth}`,
+            },
             body: JSON.stringify({
               email: credentials?.email,
               password: credentials?.password,
             }),
-          }
+          },
         );
 
         if (!res.ok) {

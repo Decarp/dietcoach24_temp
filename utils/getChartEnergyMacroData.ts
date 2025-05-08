@@ -40,12 +40,12 @@ const aggregateMacros = (products: Product[]): ChartEnergyMacroResponse[] => {
 
 const mapChartEnergyMacroResponse = (
   chartMacroResponse: ChartEnergyMacroResponse[],
-  language: LanguageOptions = "de"
+  language: LanguageOptions = "de",
 ): ChartEnergyMacroData[] => {
   // Calculate the total grams across all macros, ensure it's a valid number
   const totalGrams = chartMacroResponse.reduce(
     (sum, item) => sum + (item.grams || 0),
-    0
+    0,
   );
 
   // Map the response to include percentage instead of grams
@@ -58,7 +58,7 @@ const mapChartEnergyMacroResponse = (
 };
 
 export const getChartEnergyMacroData = (
-  products: BasketProduct[]
+  products: BasketProduct[],
 ): ChartEnergyMacroData[] => {
   const productsFlattened = products.flatMap((basket) => basket.products);
 

@@ -35,11 +35,11 @@ export default function TabSection({
   setCurrentTab: (tab: string) => void;
   variante1State: Variante1State;
   setVariante1State: (
-    state: Variante1State | ((prevState: Variante1State) => Variante1State)
+    state: Variante1State | ((prevState: Variante1State) => Variante1State),
   ) => void;
   variante2State: Variante2State;
   setVariante2State: (
-    state: Variante2State | ((prevState: Variante2State) => Variante2State)
+    state: Variante2State | ((prevState: Variante2State) => Variante2State),
   ) => void;
   freitextState: string;
   setFreitextState: (state: string) => void;

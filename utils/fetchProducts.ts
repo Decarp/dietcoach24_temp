@@ -1,7 +1,7 @@
 import { DatabaseProducts } from "@/types/types";
 
 export async function fetchProducts(
-  queryParams: URLSearchParams
+  queryParams: URLSearchParams,
 ): Promise<DatabaseProducts> {
   const DB_URL = process.env.DB_URL;
 

@@ -5,7 +5,7 @@ import { Recommendation } from "@/types/types";
 export const createRecommendation = async (
   data: Omit<Recommendation, "recommendationId" | "index">,
   token: string,
-  sessionId?: string
+  sessionId?: string,
 ): Promise<Recommendation> => {
   const response = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/dietician/recommendation`,
@@ -21,7 +21,7 @@ export const createRecommendation = async (
         "Session-Id": sessionId ? sessionId : "1",
         "Content-Type": "application/json",
       },
-    }
+    },
   );
 
   if (response.status !== 201) {
