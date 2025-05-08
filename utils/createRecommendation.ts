@@ -2,6 +2,10 @@ import axios from 'axios';
 import { Omit } from 'lodash';
 import { Recommendation } from '@/types/types';
 
+const backend_username = process.env.NEXT_PUBLIC_BACKEND_USERNAME;
+const backend_password = process.env.NEXT_PUBLIC_BACKEND_PASSWORD;
+const basicAuth = Buffer.from(`${backend_username}:${backend_password}`).toString('base64');
+
 export const createRecommendation = async (
     data: Omit<Recommendation, 'recommendationId' | 'index'>,
     token: string,
@@ -20,6 +24,7 @@ export const createRecommendation = async (
                 Authentication: token,
                 'Session-Id': sessionId ? sessionId : '1',
                 'Content-Type': 'application/json',
+                Authorization: `Basic ${basicAuth}`,
             },
         },
     );

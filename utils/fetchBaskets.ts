@@ -1,10 +1,14 @@
 import { Basket } from '@/types/types';
 
+const backend_username = process.env.NEXT_PUBLIC_BACKEND_USERNAME;
+const backend_password = process.env.NEXT_PUBLIC_BACKEND_PASSWORD;
+const basicAuth = Buffer.from(`${backend_username}:${backend_password}`).toString('base64');
+
 export const fetchBaskets = async (
     patientId: string,
     startTimestamp: string,
     endTimestamp: string,
-    token: string,
+    token: string
 ): Promise<Basket[]> => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/dietician/baskets`, {
         method: 'GET',
@@ -13,6 +17,7 @@ export const fetchBaskets = async (
             'Participant-Id': patientId,
             'Start-Timestamp': startTimestamp,
             'End-Timestamp': endTimestamp,
+            Authorization: `Basic ${basicAuth}`,
         },
     });
 
