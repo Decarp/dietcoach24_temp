@@ -1,723 +1,723 @@
 openapi: 3.0.0
 info:
-  title: Diet Coach API
-  version: "1.0.0"
+    title: Diet Coach API
+    version: '1.0.0'
 servers:
-  - url: "https://diet-coach.interactions.ics.unisg.ch/dietcoach/backend"
-    description: Diet Coach API Server
-  - url: "https://nutristorage.ch/api"
-    description: NutriStorage API Server
+    - url: 'https://diet-coach.interactions.ics.unisg.ch/dietcoach/backend'
+      description: Diet Coach API Server
+    - url: 'https://nutristorage.ch/api'
+      description: NutriStorage API Server
 components:
-  securitySchemes:
-    Authentication:
-      type: apiKey
-      in: header
-      name: Authentication
-    basicAuth:
-      type: http
-      scheme: basic
-  schemas:
-    DieticianRegistration:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-          format: password
-        firstName:
-          type: string
-        lastName:
-          type: string
-      required:
-        - email
-        - password
-        - firstName
-        - lastName
-    UserLogin:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-          format: password
-      required:
-        - email
-        - password
-    AuthToken:
-      type: object
-      properties:
-        token:
-          type: string
-    Participant:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-    ParticipantDetails:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        email:
-          type: string
-        otherDetails:
-          type: object
-    Basket:
-      type: object
-      properties:
-        basketId:
-          type: string
-        timestamp:
-          type: integer
-        items:
-          type: array
-          items:
-            type: string
-    Product:
-      type: object
-      properties:
-        productId:
-          type: string
-        name:
-          type: string
-        price:
-          type: number
-    NutrientTable:
-      type: object
-      properties:
-        nutrients:
-          type: array
-          items:
+    securitySchemes:
+        Authentication:
+            type: apiKey
+            in: header
+            name: Authentication
+        basicAuth:
+            type: http
+            scheme: basic
+    schemas:
+        DieticianRegistration:
             type: object
             properties:
-              nutrientName:
-                type: string
-              amount:
-                type: number
-              unit:
-                type: string
-    Session:
-      type: object
-      properties:
-        sessionId:
-          type: integer
-        date:
-          type: string
-          format: date-time
-        notes:
-          type: string
-    SessionDetails:
-      type: object
-      properties:
-        sessionId:
-          type: integer
-        date:
-          type: string
-          format: date-time
-        notes:
-          type: string
-        recommendations:
-          type: array
-          items:
-            $ref: "#/components/schemas/Recommendation"
-    Recommendation:
-      type: object
-      properties:
-        recommendationId:
-          type: integer
-        rule:
-          $ref: "#/components/schemas/Rule"
-        basketIds:
-          type: array
-          items:
-            type: string
-        suggestions:
-          type: object
-          properties:
-            current:
-              type: array
-              items:
-                type: integer
-            alternatives:
-              type: array
-              items:
-                type: integer
-        notes:
-          type: string
-    Rule:
-      type: object
-      properties:
-        variant:
-          type: string
-        mode:
-          type: string
-        nutrient:
-          type: string
-        category:
-          type: string
-        text:
-          type: string
-    RecommendationRequest:
-      type: object
-      properties:
-        rule:
-          $ref: "#/components/schemas/Rule"
-        basketIds:
-          type: array
-          items:
-            type: string
-        suggestions:
-          type: object
-          properties:
-            current:
-              type: array
-              items:
-                type: integer
-            alternatives:
-              type: array
-              items:
-                type: integer
-        notes:
-          type: string
-    ProductDetails:
-      type: object
-      properties:
-        productId:
-          type: string
-        name:
-          type: string
-        retailer:
-          type: string
-        nutriScore:
-          type: string
-paths:
-  /dietician/register:
-    post:
-      tags:
-        - Dietician
-      summary: Register a new dietician
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DieticianRegistration"
-      responses:
-        "200":
-          description: Dietician registered successfully
-        "400":
-          description: Bad request
-  /user/login:
-    post:
-      tags:
-        - User
-      summary: User login
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserLogin"
-      responses:
-        "200":
-          description: Login successful
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AuthToken"
-        "401":
-          description: Unauthorized
-  /dietician/profile:
-    get:
-      tags:
-        - Dietician
-      summary: Get dietician profile
-      security:
-        - Authentication: []
-      responses:
-        "200":
-          description: Dietician profile retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DieticianRegistration"
-        "401":
-          description: Unauthorized
-  /dietician/participants:
-    get:
-      tags:
-        - Dietician
-      summary: Get list of participants
-      security:
-        - Authentication: []
-      responses:
-        "200":
-          description: Participants retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Participant"
-        "401":
-          description: Unauthorized
-  /dietician/participant:
-    get:
-      tags:
-        - Dietician
-      summary: Get participant details
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Participant-Id
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Participant details retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ParticipantDetails"
-        "401":
-          description: Unauthorized
-        "404":
-          description: Participant not found
-    post:
-      tags:
-        - Dietician
-      summary: Add a participant
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Participant-Id
-          required: true
-          schema:
-            type: string
-      responses:
-        "201":
-          description: Participant added successfully
-        "400":
-          description: Bad request
-        "401":
-          description: Unauthorized
-    delete:
-      tags:
-        - Dietician
-      summary: Remove a participant
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Participant-Id
-          required: true
-          schema:
-            type: string
-      responses:
-        "204":
-          description: Participant deleted successfully
-        "401":
-          description: Unauthorized
-        "404":
-          description: Participant not found
-  /dietician/baskets:
-    get:
-      tags:
-        - Dietician
-      summary: Get baskets for a participant
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Participant-Id
-          required: true
-          schema:
-            type: string
-        - in: header
-          name: Start-Timestamp
-          required: false
-          schema:
-            type: integer
-        - in: header
-          name: End-Timestamp
-          required: false
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Baskets retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Basket"
-        "401":
-          description: Unauthorized
-  /dietician/basket-products:
-    post:
-      tags:
-        - Dietician
-      summary: Get products in baskets
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Participant-Id
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                basketIds:
-                  type: array
-                  items:
+                email:
                     type: string
-              required:
-                - basketIds
-      responses:
-        "200":
-          description: Basket products retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Product"
-        "401":
-          description: Unauthorized
-  /dietician/nutrient-table:
-    post:
-      tags:
-        - Dietician
-      summary: Get nutrient table for baskets
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Participant-Id
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                basketIds:
-                  type: array
-                  items:
+                    format: email
+                password:
                     type: string
-              required:
-                - basketIds
-      responses:
-        "200":
-          description: Nutrient table retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NutrientTable"
-        "401":
-          description: Unauthorized
-  /dietician/sessions:
-    get:
-      tags:
-        - Dietician
-      summary: Get sessions for a participant
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Participant-Id
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Sessions retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
+                    format: password
+                firstName:
+                    type: string
+                lastName:
+                    type: string
+            required:
+                - email
+                - password
+                - firstName
+                - lastName
+        UserLogin:
+            type: object
+            properties:
+                email:
+                    type: string
+                    format: email
+                password:
+                    type: string
+                    format: password
+            required:
+                - email
+                - password
+        AuthToken:
+            type: object
+            properties:
+                token:
+                    type: string
+        Participant:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+        ParticipantDetails:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                email:
+                    type: string
+                otherDetails:
+                    type: object
+        Basket:
+            type: object
+            properties:
+                basketId:
+                    type: string
+                timestamp:
+                    type: integer
                 items:
-                  $ref: "#/components/schemas/Session"
-        "401":
-          description: Unauthorized
-  /dietician/session:
-    get:
-      tags:
-        - Dietician
-      summary: Get session details
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Session-Id
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Session details retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SessionDetails"
-        "401":
-          description: Unauthorized
-        "404":
-          description: Session not found
-    post:
-      tags:
-        - Dietician
-      summary: Create a new session for a participant
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Participant-Id
-          required: true
-          schema:
-            type: string
-      responses:
-        "201":
-          description: Session created successfully
-        "400":
-          description: Bad request
-        "401":
-          description: Unauthorized
-    delete:
-      tags:
-        - Dietician
-      summary: Delete a session
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Session-Id
-          required: true
-          schema:
-            type: integer
-      responses:
-        "204":
-          description: Session deleted successfully
-        "401":
-          description: Unauthorized
-        "404":
-          description: Session not found
-  /dietician/session-note:
-    put:
-      tags:
-        - Dietician
-      summary: Update session notes
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Session-Id
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
+                    type: array
+                    items:
+                        type: string
+        Product:
+            type: object
+            properties:
+                productId:
+                    type: string
+                name:
+                    type: string
+                price:
+                    type: number
+        NutrientTable:
+            type: object
+            properties:
+                nutrients:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            nutrientName:
+                                type: string
+                            amount:
+                                type: number
+                            unit:
+                                type: string
+        Session:
+            type: object
+            properties:
+                sessionId:
+                    type: integer
+                date:
+                    type: string
+                    format: date-time
                 notes:
-                  type: object
-                  properties:
-                    patient:
+                    type: string
+        SessionDetails:
+            type: object
+            properties:
+                sessionId:
+                    type: integer
+                date:
+                    type: string
+                    format: date-time
+                notes:
+                    type: string
+                recommendations:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Recommendation'
+        Recommendation:
+            type: object
+            properties:
+                recommendationId:
+                    type: integer
+                rule:
+                    $ref: '#/components/schemas/Rule'
+                basketIds:
+                    type: array
+                    items:
+                        type: string
+                suggestions:
+                    type: object
+                    properties:
+                        current:
+                            type: array
+                            items:
+                                type: integer
+                        alternatives:
+                            type: array
+                            items:
+                                type: integer
+                notes:
+                    type: string
+        Rule:
+            type: object
+            properties:
+                variant:
+                    type: string
+                mode:
+                    type: string
+                nutrient:
+                    type: string
+                category:
+                    type: string
+                text:
+                    type: string
+        RecommendationRequest:
+            type: object
+            properties:
+                rule:
+                    $ref: '#/components/schemas/Rule'
+                basketIds:
+                    type: array
+                    items:
+                        type: string
+                suggestions:
+                    type: object
+                    properties:
+                        current:
+                            type: array
+                            items:
+                                type: integer
+                        alternatives:
+                            type: array
+                            items:
+                                type: integer
+                notes:
+                    type: string
+        ProductDetails:
+            type: object
+            properties:
+                productId:
+                    type: string
+                name:
+                    type: string
+                retailer:
+                    type: string
+                nutriScore:
+                    type: string
+paths:
+    /dietician/register:
+        post:
+            tags:
+                - Dietician
+            summary: Register a new dietician
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DieticianRegistration'
+            responses:
+                '200':
+                    description: Dietician registered successfully
+                '400':
+                    description: Bad request
+    /user/login:
+        post:
+            tags:
+                - User
+            summary: User login
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserLogin'
+            responses:
+                '200':
+                    description: Login successful
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthToken'
+                '401':
+                    description: Unauthorized
+    /dietician/profile:
+        get:
+            tags:
+                - Dietician
+            summary: Get dietician profile
+            security:
+                - Authentication: []
+            responses:
+                '200':
+                    description: Dietician profile retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DieticianRegistration'
+                '401':
+                    description: Unauthorized
+    /dietician/participants:
+        get:
+            tags:
+                - Dietician
+            summary: Get list of participants
+            security:
+                - Authentication: []
+            responses:
+                '200':
+                    description: Participants retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Participant'
+                '401':
+                    description: Unauthorized
+    /dietician/participant:
+        get:
+            tags:
+                - Dietician
+            summary: Get participant details
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Participant-Id
+                  required: true
+                  schema:
                       type: string
-                    personal:
+            responses:
+                '200':
+                    description: Participant details retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ParticipantDetails'
+                '401':
+                    description: Unauthorized
+                '404':
+                    description: Participant not found
+        post:
+            tags:
+                - Dietician
+            summary: Add a participant
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Participant-Id
+                  required: true
+                  schema:
                       type: string
-      responses:
-        "200":
-          description: Session notes updated successfully
-        "400":
-          description: Bad request
-        "401":
-          description: Unauthorized
-        "404":
-          description: Session not found
-  /dietician/recommendation:
-    get:
-      tags:
-        - Dietician
-      summary: Get recommendations for a session
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Session-Id
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Recommendations retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Recommendation"
-        "401":
-          description: Unauthorized
-        "404":
-          description: Session not found
-    post:
-      tags:
-        - Dietician
-      summary: Create a recommendation
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Session-Id
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/RecommendationRequest"
-      responses:
-        "201":
-          description: Recommendation created successfully
-        "400":
-          description: Bad request
-        "401":
-          description: Unauthorized
-        "404":
-          description: Session not found
-    put:
-      tags:
-        - Dietician
-      summary: Update a recommendation
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Recommendation-Id
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/RecommendationRequest"
-      responses:
-        "200":
-          description: Recommendation updated successfully
-        "400":
-          description: Bad request
-        "401":
-          description: Unauthorized
-        "404":
-          description: Recommendation not found
-    delete:
-      tags:
-        - Dietician
-      summary: Delete a recommendation
-      security:
-        - Authentication: []
-      parameters:
-        - in: header
-          name: Recommendation-Id
-          required: true
-          schema:
-            type: integer
-      responses:
-        "204":
-          description: Recommendation deleted successfully
-        "401":
-          description: Unauthorized
-        "404":
-          description: Recommendation not found
-  /products:
-    get:
-      tags:
-        - NutriStorage
-      summary: Get list of products
-      parameters:
-        - in: query
-          name: retailer
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: page
-          schema:
-            type: integer
-        - in: query
-          name: limit
-          schema:
-            type: integer
-        - in: query
-          name: nutri-score-cutoff
-          schema:
-            type: string
-      security:
-        - basicAuth: []
-      responses:
-        "200":
-          description: Products retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Product"
-        "401":
-          description: Unauthorized
-  "/products/{retailer}/{productId}":
-    get:
-      tags:
-        - NutriStorage
-      summary: Get product details
-      parameters:
-        - in: path
-          name: retailer
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: productId
-          required: true
-          schema:
-            type: string
-      security:
-        - basicAuth: []
-      responses:
-        "200":
-          description: Product details retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProductDetails"
-        "404":
-          description: Product not found
+            responses:
+                '201':
+                    description: Participant added successfully
+                '400':
+                    description: Bad request
+                '401':
+                    description: Unauthorized
+        delete:
+            tags:
+                - Dietician
+            summary: Remove a participant
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Participant-Id
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '204':
+                    description: Participant deleted successfully
+                '401':
+                    description: Unauthorized
+                '404':
+                    description: Participant not found
+    /dietician/baskets:
+        get:
+            tags:
+                - Dietician
+            summary: Get baskets for a participant
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Participant-Id
+                  required: true
+                  schema:
+                      type: string
+                - in: header
+                  name: Start-Timestamp
+                  required: false
+                  schema:
+                      type: integer
+                - in: header
+                  name: End-Timestamp
+                  required: false
+                  schema:
+                      type: integer
+            responses:
+                '200':
+                    description: Baskets retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Basket'
+                '401':
+                    description: Unauthorized
+    /dietician/basket-products:
+        post:
+            tags:
+                - Dietician
+            summary: Get products in baskets
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Participant-Id
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                basketIds:
+                                    type: array
+                                    items:
+                                        type: string
+                            required:
+                                - basketIds
+            responses:
+                '200':
+                    description: Basket products retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Product'
+                '401':
+                    description: Unauthorized
+    /dietician/nutrient-table:
+        post:
+            tags:
+                - Dietician
+            summary: Get nutrient table for baskets
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Participant-Id
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                basketIds:
+                                    type: array
+                                    items:
+                                        type: string
+                            required:
+                                - basketIds
+            responses:
+                '200':
+                    description: Nutrient table retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NutrientTable'
+                '401':
+                    description: Unauthorized
+    /dietician/sessions:
+        get:
+            tags:
+                - Dietician
+            summary: Get sessions for a participant
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Participant-Id
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Sessions retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Session'
+                '401':
+                    description: Unauthorized
+    /dietician/session:
+        get:
+            tags:
+                - Dietician
+            summary: Get session details
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Session-Id
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                '200':
+                    description: Session details retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SessionDetails'
+                '401':
+                    description: Unauthorized
+                '404':
+                    description: Session not found
+        post:
+            tags:
+                - Dietician
+            summary: Create a new session for a participant
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Participant-Id
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '201':
+                    description: Session created successfully
+                '400':
+                    description: Bad request
+                '401':
+                    description: Unauthorized
+        delete:
+            tags:
+                - Dietician
+            summary: Delete a session
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Session-Id
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                '204':
+                    description: Session deleted successfully
+                '401':
+                    description: Unauthorized
+                '404':
+                    description: Session not found
+    /dietician/session-note:
+        put:
+            tags:
+                - Dietician
+            summary: Update session notes
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Session-Id
+                  required: true
+                  schema:
+                      type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                notes:
+                                    type: object
+                                    properties:
+                                        patient:
+                                            type: string
+                                        personal:
+                                            type: string
+            responses:
+                '200':
+                    description: Session notes updated successfully
+                '400':
+                    description: Bad request
+                '401':
+                    description: Unauthorized
+                '404':
+                    description: Session not found
+    /dietician/recommendation:
+        get:
+            tags:
+                - Dietician
+            summary: Get recommendations for a session
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Session-Id
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                '200':
+                    description: Recommendations retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Recommendation'
+                '401':
+                    description: Unauthorized
+                '404':
+                    description: Session not found
+        post:
+            tags:
+                - Dietician
+            summary: Create a recommendation
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Session-Id
+                  required: true
+                  schema:
+                      type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RecommendationRequest'
+            responses:
+                '201':
+                    description: Recommendation created successfully
+                '400':
+                    description: Bad request
+                '401':
+                    description: Unauthorized
+                '404':
+                    description: Session not found
+        put:
+            tags:
+                - Dietician
+            summary: Update a recommendation
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Recommendation-Id
+                  required: true
+                  schema:
+                      type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RecommendationRequest'
+            responses:
+                '200':
+                    description: Recommendation updated successfully
+                '400':
+                    description: Bad request
+                '401':
+                    description: Unauthorized
+                '404':
+                    description: Recommendation not found
+        delete:
+            tags:
+                - Dietician
+            summary: Delete a recommendation
+            security:
+                - Authentication: []
+            parameters:
+                - in: header
+                  name: Recommendation-Id
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                '204':
+                    description: Recommendation deleted successfully
+                '401':
+                    description: Unauthorized
+                '404':
+                    description: Recommendation not found
+    /products:
+        get:
+            tags:
+                - NutriStorage
+            summary: Get list of products
+            parameters:
+                - in: query
+                  name: retailer
+                  required: true
+                  schema:
+                      type: string
+                - in: query
+                  name: page
+                  schema:
+                      type: integer
+                - in: query
+                  name: limit
+                  schema:
+                      type: integer
+                - in: query
+                  name: nutri-score-cutoff
+                  schema:
+                      type: string
+            security:
+                - basicAuth: []
+            responses:
+                '200':
+                    description: Products retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Product'
+                '401':
+                    description: Unauthorized
+    '/products/{retailer}/{productId}':
+        get:
+            tags:
+                - NutriStorage
+            summary: Get product details
+            parameters:
+                - in: path
+                  name: retailer
+                  required: true
+                  schema:
+                      type: string
+                - in: path
+                  name: productId
+                  required: true
+                  schema:
+                      type: string
+            security:
+                - basicAuth: []
+            responses:
+                '200':
+                    description: Product details retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ProductDetails'
+                '404':
+                    description: Product not found
