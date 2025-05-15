@@ -33,14 +33,14 @@ export type Product = {
 
 export type DatabaseNutrients = {
     kcal: number;
-    proteins: number;
-    fats: number;
-    saturatedFats: number;
-    carbohydrates: number;
-    sugars: number;
-    fibers: number;
-    salt: number;
-    sodium: number;
+    proteinsG: number;
+    fatsG: number;
+    saturatedFatsG: number;
+    carbohydratesG: number;
+    sugarsG: number;
+    fibersG: number;
+    saltG: number;
+    sodiumMg: number;
 };
 
 export type NutriScoreV2023Detail = {

@@ -25,26 +25,26 @@ const sortProducts = (products: DatabaseProduct[], selectedSortCriteria: string,
             case 'Kalorien':
                 return product.nutrients.kcal;
             case 'Proteine':
-                return product.nutrients.proteins;
+                return product.nutrients.proteinsG;
             case 'Fette':
-                return product.nutrients.fats;
+                return product.nutrients.fatsG;
             case 'Gesättigte Fettsäuren':
-                return product.nutrients.saturatedFats;
+                return product.nutrients.saturatedFatsG;
             case 'Kohlenhydrate':
-                return product.nutrients.carbohydrates;
+                return product.nutrients.carbohydratesG;
             case 'Zucker':
-                return product.nutrients.sugars;
+                return product.nutrients.sugarsG;
             case 'Nahrungsfasern':
-                return product.nutrients.fibers;
+                return product.nutrients.fibersG;
             case 'Salz':
-                return product.nutrients.salt;
+                return product.nutrients.saltG;
             default:
                 return 0;
         }
     };
 
     return [...products].sort((a, b) =>
-        ascending ? getSortValue(a) - getSortValue(b) : getSortValue(b) - getSortValue(a),
+        ascending ? getSortValue(a) - getSortValue(b) : getSortValue(b) - getSortValue(a)
     );
 };
 
@@ -53,6 +53,7 @@ export default function ProductPopup({ open, setOpen }: { open: boolean; setOpen
     const [availableProducts, setAvailableProducts] = useState<DatabaseProduct[]>([]);
     const [sortedProducts, setSortedProducts] = useState<DatabaseProduct[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>('');
     const [nutriScoreCutOff, setNutriScoreCutOff] = useState('E');
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -65,7 +66,7 @@ export default function ProductPopup({ open, setOpen }: { open: boolean; setOpen
         ([major, subs]) => ({
             major,
             subs,
-        }),
+        })
     );
 
     const {
@@ -87,6 +88,22 @@ export default function ProductPopup({ open, setOpen }: { open: boolean; setOpen
         }
     };
 
+    // Debounce search term updates
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            setDebouncedSearchTerm(searchTerm);
+        }, 500); // 500ms delay
+
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, [searchTerm]);
+
+    // Reset to page 1 when search term changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [debouncedSearchTerm, selectedProductCategories, nutriScoreCutOff]);
+
     const queryParams = new URLSearchParams({
         retailer: 'Migros',
         page: currentPage.toString(),
@@ -102,11 +119,11 @@ export default function ProductPopup({ open, setOpen }: { open: boolean; setOpen
         selectedProductCategories.sub.forEach((sub) => queryParams.append('dietcoach-category-l2-de', sub));
     }
 
-    if (searchTerm.length > 0) {
-        queryParams.append('search-de', searchTerm);
+    if (debouncedSearchTerm.length > 0) {
+        queryParams.append('search-de', debouncedSearchTerm);
     }
 
-    // Use useQuery hook to fetch data
+    // Use useQuery hook to fetch data with debounced search term
     const { data, isLoading, error } = useQuery<DatabaseProducts>({
         queryKey: ['products', queryParams.toString()], // Unique query key
         queryFn: () => fetchProducts(queryParams), // Fetch function
@@ -122,7 +139,6 @@ export default function ProductPopup({ open, setOpen }: { open: boolean; setOpen
 
     const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
-        setCurrentPage(1);
     };
 
     const handleAddProduct = (product: DatabaseProduct) => {
@@ -165,7 +181,7 @@ export default function ProductPopup({ open, setOpen }: { open: boolean; setOpen
                 if (newSub.includes(category)) {
                     newSub = newSub.filter((sub) => sub !== category);
                     const parentMajor = Object.keys(categories.de).find((major) =>
-                        categories.de[major as CategoryKeys].includes(category),
+                        categories.de[major as CategoryKeys].includes(category)
                     );
                     if (
                         parentMajor &&
@@ -176,7 +192,7 @@ export default function ProductPopup({ open, setOpen }: { open: boolean; setOpen
                 } else {
                     newSub.push(category);
                     const parentMajor = Object.keys(categories.de).find((major) =>
-                        categories.de[major as CategoryKeys].includes(category),
+                        categories.de[major as CategoryKeys].includes(category)
                     );
                     if (parentMajor && !newMajor.includes(parentMajor)) {
                         newMajor.push(parentMajor);
@@ -258,6 +274,9 @@ export default function ProductPopup({ open, setOpen }: { open: boolean; setOpen
                                     onChange={handleSearchTermChange}
                                     className="w-full px-4 py-2 border-gray-300 rounded-md focus:ring-primary focus:border-primary"
                                 />
+                                {searchTerm !== debouncedSearchTerm && (
+                                    <p className="text-xs text-gray-500 mt-1">Suche wird ausgeführt...</p>
+                                )}
                             </div>
                             <div
                                 ref={scrollableContainerRef}
@@ -267,7 +286,7 @@ export default function ProductPopup({ open, setOpen }: { open: boolean; setOpen
                                     <Spinner className="mt-4" />
                                 ) : selectedProductCategories.major.length === 0 &&
                                   selectedProductCategories.sub.length === 0 &&
-                                  searchTerm.length === 0 ? (
+                                  debouncedSearchTerm.length === 0 ? (
                                     <div className="flex items-center justify-center h-full">
                                         <div className="text-center">
                                             <ShoppingCartIcon className="mx-auto h-12 w-12 text-gray-400" />
