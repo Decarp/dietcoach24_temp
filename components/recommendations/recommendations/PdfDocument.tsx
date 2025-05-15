@@ -120,7 +120,7 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({ session, enrichedRecommendati
                                                                 <View>
                                                                     <Text style={styles.tableCell}>
                                                                         Kohlenhydrate:{' '}
-                                                                        {currentProduct.nutrients.carbohydrates}g
+                                                                        {currentProduct.nutrients.carbohydratesG}g
                                                                         <Text
                                                                             style={{ fontWeight: 700, color: 'gray' }}
                                                                         >
@@ -129,7 +129,7 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({ session, enrichedRecommendati
                                                                         </Text>
                                                                     </Text>
                                                                     <Text style={styles.tableCell}>
-                                                                        Fett: {currentProduct.nutrients.fats}g
+                                                                        Fett: {currentProduct.nutrients.fatsG}g
                                                                         <Text
                                                                             style={{ fontWeight: 700, color: 'gray' }}
                                                                         >
@@ -138,7 +138,7 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({ session, enrichedRecommendati
                                                                         </Text>
                                                                     </Text>
                                                                     <Text style={styles.tableCell}>
-                                                                        Protein: {currentProduct.nutrients.proteins}g
+                                                                        Protein: {currentProduct.nutrients.proteinsG}g
                                                                         <Text
                                                                             style={{ fontWeight: 700, color: 'gray' }}
                                                                         >
@@ -147,8 +147,8 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({ session, enrichedRecommendati
                                                                         </Text>
                                                                     </Text>
                                                                     <Text style={styles.tableCell}>
-                                                                        Ballaststoffe: {currentProduct.nutrients.fibers}
-                                                                        g
+                                                                        Ballaststoffe:{' '}
+                                                                        {currentProduct.nutrients.fibersG}g
                                                                         <Text
                                                                             style={{ fontWeight: 700, color: 'gray' }}
                                                                         >
@@ -157,7 +157,7 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({ session, enrichedRecommendati
                                                                         </Text>
                                                                     </Text>
                                                                     <Text style={styles.tableCell}>
-                                                                        Zucker: {currentProduct.nutrients.sugars}g
+                                                                        Zucker: {currentProduct.nutrients.sugarsG}g
                                                                         <Text
                                                                             style={{ fontWeight: 700, color: 'gray' }}
                                                                         >
@@ -191,7 +191,7 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({ session, enrichedRecommendati
                                                                 <View>
                                                                     <Text style={styles.tableCell}>
                                                                         Kohlenhydrate:{' '}
-                                                                        {alternativeProduct.nutrients.carbohydrates}g
+                                                                        {alternativeProduct.nutrients.carbohydratesG}g
                                                                         <Text
                                                                             style={{
                                                                                 fontWeight: 700,
@@ -203,7 +203,7 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({ session, enrichedRecommendati
                                                                         </Text>
                                                                     </Text>
                                                                     <Text style={styles.tableCell}>
-                                                                        Fett: {alternativeProduct.nutrients.fats}g
+                                                                        Fett: {alternativeProduct.nutrients.fatsG}g
                                                                         <Text
                                                                             style={{
                                                                                 fontWeight: 700,
@@ -215,8 +215,8 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({ session, enrichedRecommendati
                                                                         </Text>
                                                                     </Text>
                                                                     <Text style={styles.tableCell}>
-                                                                        Protein: {alternativeProduct.nutrients.proteins}
-                                                                        g
+                                                                        Protein:{' '}
+                                                                        {alternativeProduct.nutrients.proteinsG}g
                                                                         <Text
                                                                             style={{
                                                                                 fontWeight: 700,
@@ -229,7 +229,7 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({ session, enrichedRecommendati
                                                                     </Text>
                                                                     <Text style={styles.tableCell}>
                                                                         Ballaststoffe:{' '}
-                                                                        {alternativeProduct.nutrients.fibers}g
+                                                                        {alternativeProduct.nutrients.fibersG}g
                                                                         <Text
                                                                             style={{
                                                                                 fontWeight: 700,
@@ -241,7 +241,7 @@ const PdfDocument: React.FC<PdfDocumentProps> = ({ session, enrichedRecommendati
                                                                         </Text>
                                                                     </Text>
                                                                     <Text style={styles.tableCell}>
-                                                                        Zucker: {alternativeProduct.nutrients.sugars}g
+                                                                        Zucker: {alternativeProduct.nutrients.sugarsG}g
                                                                         <Text
                                                                             style={{
                                                                                 fontWeight: 700,
